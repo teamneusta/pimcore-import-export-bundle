@@ -1,0 +1,78 @@
+{
+  "name": "teamneusta/pimcore-import-export-bundle",
+  "description": "Export documents to YAML, so that they can be used in fixtures",
+  "license": "GPL-3.0-or-later",
+  "type": "pimcore-bundle",
+  "authors": [
+    {
+      "name": "team neusta GmbH",
+      "email": "info@team-neusta.de",
+      "homepage": "https://www.team-neusta.de/"
+    }
+  ],
+  "require": {
+    "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
+    "pimcore/pimcore": "^11.0",
+    "teamneusta/converter-bundle": "^1.7",
+    "teamneusta/pimcore-fixture-bundle": "^2.2"
+  },
+  "require-dev": {
+    "ergebnis/composer-normalize": "^2.42.0",
+    "friendsofphp/php-cs-fixer": "^3.60",
+    "phpspec/prophecy-phpunit": "^2.2",
+    "phpstan/extension-installer": "^1.3.1",
+    "phpstan/phpstan": "^1.10.60",
+    "phpstan/phpstan-phpunit": "^1.3.16",
+    "phpstan/phpstan-symfony": "^1.3.8",
+    "phpunit/phpunit": "^9.5",
+    "pimcore/admin-ui-classic-bundle": "^1.6",
+    "teamneusta/pimcore-testing-framework": "^0.12"
+  },
+  "autoload": {
+    "psr-4": {
+      "Neusta\\Pimcore\\ImportExportBundle\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Neusta\\Pimcore\\ImportExportBundle\\Tests\\": "tests/"
+    },
+    "classmap": [
+      "tests/app/TestKernel.php"
+    ]
+  },
+  "config": {
+    "allow-plugins": {
+      "ergebnis/composer-normalize": true,
+      "phpstan/extension-installer": true
+    },
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "scripts": {
+    "cs:check": "@cs:fix --dry-run",
+    "cs:check:gitlab-ci": "php-cs-fixer fix --dry-run --ansi --verbose --diff --format=gitlab > .reports/php-cs-fixer.json",
+    "cs:fix": "php-cs-fixer fix --ansi --verbose --diff",
+    "phpstan": "phpstan analyse --ansi",
+    "phpstan:gitlab-ci": "phpstan analyse --ansi --no-interaction --no-progress --error-format=gitlab > .reports/phpstan.json",
+    "tests": "phpunit",
+    "tests:coverage:gitlab-ci": "phpunit --colors=never --coverage-text --coverage-clover .reports/clover.xml --coverage-cobertura .reports/cobertura.xml --log-junit .reports/junit.xml",
+    "twig:cs:check": "twig-cs-fixer lint templates/",
+    "twig:cs:fix": "twig-cs-fixer lint --fix templates/",
+    "twig:lint": "@php bin/console lint:twig templates/",
+    "yaml:lint": "yaml-lint --parse-tags config/"
+  },
+  "scripts-descriptions": {
+    "cs:check": "Checks PHP code style (but doesn't fix anything)",
+    "cs:check:gitlab-ci": "Checks PHP code style and creates output in GitLab format",
+    "cs:fix": "Checks and fixes PHP code style",
+    "phpstan": "Checks for code smells",
+    "phpstan:gitlab-ci": "Checks for code smells and creates output in GitLab format",
+    "tests": "Runs all phpunit tests",
+    "tests:coverage:gitlab-ci": "Runs all phpunit tests and creates coverage and log reports",
+    "twig:cs:check": "Checks code style of Twig templates",
+    "twig:cs:fix": "Checks and fixes code style of Twig templates",
+    "twig:lint": "Lints Twig templates",
+    "yaml:lint": "Lints Symfony YAML config files"
+  }
+}
