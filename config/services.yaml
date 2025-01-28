@@ -2,3 +2,58 @@ services:
   _defaults:
     autowire: true
     autoconfigure: true
+
+  Neusta\Pimcore\ImportExportBundle\Toolbox\:
+    resource: '../src/Toolbox'
+
+  ###########################################################
+  # Controller
+  ###########################################################
+  Neusta\Pimcore\ImportExportBundle\Controller\Admin\PageExportController:
+    public: true
+    tags: [ 'controller.service_arguments' ]
+
+  ###########################################################
+  # Import Populator (YamlExportPage -> Page)
+  ###########################################################
+  Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImportPopulator: ~
+
+  Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImporter:
+    arguments:
+      $yamlToPageConverter: '@neusta_import_page'
+
+  ###########################################################
+  # Export Populator (Page -> YamlExportPage)
+  ###########################################################
+  page.editables.populator:
+    class: Neusta\ConverterBundle\Populator\ArrayConvertingPopulator
+    arguments:
+      $converter: '@neusta_export_editable_converter'
+      $sourceArrayPropertyName: 'editables'
+      $targetPropertyName: 'editables'
+
+  page.property.language.populator:
+    class: Neusta\Pimcore\ConverterBundle\Populator\PropertyBasedMappingPopulator
+    arguments:
+      $propertyKey: 'language'
+      $targetProperty: 'language'
+
+  page.property.navigation_title.populator:
+    class: Neusta\Pimcore\ConverterBundle\Populator\PropertyBasedMappingPopulator
+    arguments:
+      $propertyKey: 'navigation_title'
+      $targetProperty: 'navigation_title'
+
+  page.property.navigation_name.populator:
+    class: Neusta\Pimcore\ConverterBundle\Populator\PropertyBasedMappingPopulator
+    arguments:
+      $propertyKey: 'navigation_name'
+      $targetProperty: 'navigation_name'
+
+  Neusta\Pimcore\ImportExportBundle\Documents\Export\PageExporter:
+    arguments:
+      $pageToYamlConverter: '@neusta_export_page'
+
+  Neusta\Pimcore\ImportExportBundle\EventListener\PimcoreAdminListener:
+    tags:
+      - { name: kernel.event_listener, event: pimcore.bundle_manager.paths.js, method: addJSFiles }

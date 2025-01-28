@@ -1,0 +1,5 @@
+page_export:
+    resource: '../../src/Controller/Admin/PageExportController.php'
+    type: annotation
+    options:
+        expose: true
