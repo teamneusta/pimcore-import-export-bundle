@@ -1,0 +1,59 @@
+neusta_converter:
+  converter:
+    ###########################################################
+    # Import Converter (YamlExportPage -> Page)
+    ###########################################################
+    neusta_import_page:
+      target: Pimcore\Model\Document\Page
+      populators:
+        - Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImportPopulator
+      properties:
+            id:
+                source: id
+                default: 0
+            key: ~
+            title:
+              source: title
+              default: 'no title'
+            controller:
+              source: controller
+              default: 'no controller'
+            type:
+              source: type
+              default: 'page'
+            published:
+              source: published
+              default: false
+            path:
+              source: path
+              default: '/'
+            parentId:
+              source: parentId
+              default: 0
+
+    ###########################################################
+    # Export Converter (Page -> YamlExportPage)
+    ###########################################################
+    neusta_export_page:
+      target: Neusta\Pimcore\ImportExportBundle\Documents\Export\YamlExportPage
+      populators:
+        - page.property.language.populator
+        - page.property.navigation_title.populator
+        - page.property.navigation_name.populator
+        - page.editables.populator
+      properties:
+            id: ~
+            key: ~
+            title: ~
+            controller: ~
+            type: ~
+            published: ~
+            path: ~
+            parentId: ~
+
+    neusta_export_editable_converter:
+      target: Neusta\Pimcore\ImportExportBundle\Documents\Export\YamlExportEditable
+      properties:
+        type: ~
+        name: ~
+        data: ~
