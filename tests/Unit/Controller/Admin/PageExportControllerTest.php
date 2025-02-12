@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Neusta\Pimcore\ImportExportBundle\Tests\Unit\Controller;
+namespace Neusta\Pimcore\ImportExportBundle\Tests\Unit\Controller\Admin;
 
 use Neusta\Pimcore\ImportExportBundle\Controller\Admin\PageExportController;
 use Neusta\Pimcore\ImportExportBundle\Documents\Export\PageExporter;
-use Neusta\Pimcore\Toolbox\Repository\PageRepository;
+use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\PageRepository;
 use PHPUnit\Framework\TestCase;
 use Pimcore\Model\Document\Page;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -19,7 +19,7 @@ class PageExportControllerTest extends TestCase
 
     private PageExportController $controller;
 
-    /** @var ObjectProphecy<\Neusta\TrinityPimcoreBundle\Fixture\Documents\Export\PageExporter> */
+    /** @var ObjectProphecy<PageExporter> */
     private $pageExporter;
 
     /** @var ObjectProphecy<PageRepository> */

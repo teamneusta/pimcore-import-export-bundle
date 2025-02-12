@@ -1,4 +1,4 @@
-page_export:
+neusta_pimcore_import_export_page_export:
     resource: '../../src/Controller/Admin/PageExportController.php'
     type: annotation
     options:

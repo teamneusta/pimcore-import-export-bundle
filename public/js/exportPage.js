@@ -1,4 +1,3 @@
-// /Resources/public/js/exportPage.js
 pimcore.registerNS("pimcore.plugin.page.export");
 
 pimcore.plugin.page.export = Class.create({
