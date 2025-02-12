@@ -46,7 +46,7 @@ class PageExportControllerTest extends TestCase
 
         $response = $this->controller->exportPage($this->request);
 
-        self::assertTrue($response instanceof Response);
+        self::assertInstanceOf(Response::class, $response);
         self::assertEquals(Response::HTTP_OK, $response->getStatusCode());
         self::assertEquals('application/json', $response->headers->get('Content-type'));
         self::assertEquals('TEST_YAML', $response->getContent());
@@ -60,7 +60,7 @@ class PageExportControllerTest extends TestCase
 
         $response = $this->controller->exportPage($this->request);
 
-        self::assertTrue($response instanceof JsonResponse);
+        self::assertInstanceOf(JsonResponse::class, $response);
         self::assertEquals(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
         self::assertEquals('"Problem"', $response->getContent());
     }
@@ -71,7 +71,7 @@ class PageExportControllerTest extends TestCase
 
         $response = $this->controller->exportPage($this->request);
 
-        self::assertTrue($response instanceof JsonResponse);
+        self::assertInstanceOf(JsonResponse::class, $response);
         self::assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
         self::assertEquals('"Page with id \u002217\u0022 was not found"', $response->getContent());
     }
