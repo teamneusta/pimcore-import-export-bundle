@@ -1,6 +1,6 @@
-pimcore.registerNS("pimcore.plugin.page.export");
+pimcore.registerNS("neusta_pimcore_import_export.plugin.page.export");
 
-pimcore.plugin.page.export = Class.create({
+neusta_pimcore_import_export.plugin.page.export = Class.create({
     initialize: function () {
         document.addEventListener(pimcore.events.prepareDocumentTreeContextMenu, this.onPrepareDocumentTreeContextMenu.bind(this));
     },
@@ -21,4 +21,4 @@ pimcore.plugin.page.export = Class.create({
 
 });
 
-var pimcorePluginPageExport = new pimcore.plugin.page.export();
+var pimcorePluginPageExport = new neusta_pimcore_import_export.plugin.page.export();
