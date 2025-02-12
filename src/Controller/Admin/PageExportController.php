@@ -21,11 +21,15 @@ final class PageExportController extends UserAwareController
     }
 
     /**
-     * @Route("/admin/page/export", name="page_export", methods={"GET"})
+     * @Route(
+     *     "/admin/neusta/import-export/page/export",
+     *     name="neusta_pimcore_import_export_page_export",
+     *     methods={"GET"}
+     * )
      */
     public function exportPage(Request $request): Response
     {
-        $pageId = $request->get('page_id');
+        $pageId = $request->query->getInt('page_id');
         $page = $this->pageRepository->getById($pageId);
 
         if (!$page instanceof Page) {

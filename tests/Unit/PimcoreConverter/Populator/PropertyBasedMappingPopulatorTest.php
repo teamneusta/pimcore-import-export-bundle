@@ -13,11 +13,6 @@ use Pimcore\Model\DataObject;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @internal
- *
- * @coversNothing
- */
 class PropertyBasedMappingPopulatorTest extends TestCase
 {
     use ProphecyTrait;
