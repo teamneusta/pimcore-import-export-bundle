@@ -4,7 +4,7 @@ namespace Neusta\Pimcore\ImportExportBundle\Documents\Export;
 
 class YamlExportPage
 {
-    public int $id;
+    public ?int $id = null;
     public int $parentId;
     public string $type = 'page';
     public bool $published = false;
