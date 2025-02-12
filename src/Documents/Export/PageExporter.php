@@ -32,7 +32,11 @@ class PageExporter
         return $this->serializer->serialize(
             [self::PAGE => $yamlExportPage],
             'yaml',
-            ['yaml_inline' => 4, 'yaml_indent' => 4, 'yaml_flags' => self::YAML_DUMP_FLAGS],
+            [
+                'yaml_inline' => 4, // how many levels should be used before inline YAML
+                'yaml_indent' => 0, // how many indentations should be used from the very beginning
+                'yaml_flags' => self::YAML_DUMP_FLAGS,
+            ]
         );
     }
 }
