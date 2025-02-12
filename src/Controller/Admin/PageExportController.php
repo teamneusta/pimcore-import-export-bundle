@@ -4,7 +4,6 @@ namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
 use Neusta\Pimcore\ImportExportBundle\Documents\Export\PageExporter;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\PageRepository;
-use Pimcore\Controller\UserAwareController;
 use Pimcore\Model\Document\Page;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -12,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class PageExportController extends UserAwareController
+final class PageExportController
 {
     public function __construct(
         private PageExporter $pageExporter,
@@ -20,13 +19,11 @@ final class PageExportController extends UserAwareController
     ) {
     }
 
-    /**
-     * @Route(
-     *     "/admin/neusta/import-export/page/export",
-     *     name="neusta_pimcore_import_export_page_export",
-     *     methods={"GET"}
-     * )
-     */
+    #[Route(
+        '/admin/neusta/import-export/page/export',
+        name: 'neusta_pimcore_import_export_page_export',
+        methods: ['GET']
+    )]
     public function exportPage(Request $request): Response
     {
         $pageId = $request->query->getInt('page_id');
