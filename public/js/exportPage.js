@@ -14,7 +14,7 @@ neusta_pimcore_import_export.plugin.page.export = Class.create({
             text: 'Export to yaml',
             iconCls: "pimcore_icon_export",
             handler: function () {
-                pimcore.helpers.download(Routing.generate('page_export', {page_id: document.data.id}));
+                pimcore.helpers.download(Routing.generate('neusta_pimcore_import_export_page_export', {page_id: document.data.id}));
             }
         }));
     },
