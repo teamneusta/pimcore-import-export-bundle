@@ -24,7 +24,7 @@ class PageExportControllerTest extends TestCase
 
     /** @var ObjectProphecy<PageRepository> */
     private $pageRepository;
-    private $request;
+    private Request $request;
 
     protected function setUp(): void
     {
