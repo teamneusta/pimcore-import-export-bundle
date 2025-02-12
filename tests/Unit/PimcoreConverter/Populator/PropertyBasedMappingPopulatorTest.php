@@ -37,7 +37,7 @@ class PropertyBasedMappingPopulatorTest extends TestCase
         $this->source->getProperty('language')->willReturn('de');
         $this->populator->populate($this->target, $this->source->reveal(), $this->context->reveal());
 
-        $this->source->getProperty('language')->shouldHaveBeenCalled();
+        self::assertSame('de', $this->target->testProperty);
     }
 
     /** @test */
