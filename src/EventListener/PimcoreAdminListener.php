@@ -8,11 +8,8 @@ final class PimcoreAdminListener
 {
     public function addJSFiles(PathsEvent $event): void
     {
-        $event->setPaths(array_merge(
-            $event->getPaths(),
-            [
-                '/bundles/neustapimcoreimportexport/js/exportPage.js',
-            ],
-        ));
+        $event->addPaths([
+            '/bundles/neustapimcoreimportexport/js/exportPage.js',
+        ]);
     }
 }

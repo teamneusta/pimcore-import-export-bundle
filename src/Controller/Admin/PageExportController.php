@@ -40,13 +40,13 @@ final class PageExportController extends UserAwareController
         }
 
         try {
-            $json = $this->pageExporter->toYaml($page);
+            $yaml = $this->pageExporter->toYaml($page);
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $response = new Response($json);
-        $response->headers->set('Content-type', 'application/json');
+        $response = new Response($yaml);
+        $response->headers->set('Content-type', 'application/yaml');
         $response->headers->set(
             'Content-Disposition',
             HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, $this->createFilename($page)),
