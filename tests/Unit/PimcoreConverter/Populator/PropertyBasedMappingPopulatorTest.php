@@ -34,8 +34,10 @@ class PropertyBasedMappingPopulatorTest extends TestCase
     /** @test */
     public function populateShouldPopulateTargetWithDataFromSourceWithoutLanguage(): void
     {
-        $this->source->getProperty('language')->willReturn('de')->shouldBeCalled();
+        $this->source->getProperty('language')->willReturn('de');
         $this->populator->populate($this->target, $this->source->reveal(), $this->context->reveal());
+
+        $this->source->getProperty('language')->shouldHaveBeenCalled();
     }
 
     /** @test */
