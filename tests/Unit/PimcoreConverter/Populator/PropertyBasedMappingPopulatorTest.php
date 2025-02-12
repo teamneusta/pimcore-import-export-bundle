@@ -16,11 +16,11 @@ class PropertyBasedMappingPopulatorTest extends TestCase
     use ProphecyTrait;
 
     /** @var ObjectProphecy<TestDataObject> */
-    private ObjectProphecy $target;
+    private $target;
     /** @var ObjectProphecy<DataObject> */
-    private ObjectProphecy $source;
+    private $source;
     /** @var ObjectProphecy<ContextWithLocale> */
-    private ObjectProphecy $context;
+    private $context;
     private PropertyBasedMappingPopulator $populator;
 
     protected function setUp(): void

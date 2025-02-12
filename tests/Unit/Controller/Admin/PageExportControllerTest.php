@@ -24,6 +24,7 @@ class PageExportControllerTest extends TestCase
 
     /** @var ObjectProphecy<PageRepository> */
     private $pageRepository;
+
     private Request $request;
 
     protected function setUp(): void
@@ -47,9 +48,9 @@ class PageExportControllerTest extends TestCase
         $response = $this->controller->exportPage($this->request);
 
         self::assertInstanceOf(Response::class, $response);
-        self::assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        self::assertEquals('application/json', $response->headers->get('Content-type'));
-        self::assertEquals('TEST_YAML', $response->getContent());
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('application/yaml', $response->headers->get('Content-type'));
+        self::assertSame('TEST_YAML', $response->getContent());
     }
 
     public function testExportPage_exceptional_case(): void
@@ -61,8 +62,8 @@ class PageExportControllerTest extends TestCase
         $response = $this->controller->exportPage($this->request);
 
         self::assertInstanceOf(JsonResponse::class, $response);
-        self::assertEquals(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
-        self::assertEquals('"Problem"', $response->getContent());
+        self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertSame('"Problem"', $response->getContent());
     }
 
     public function testExportPage_no_document_case(): void
@@ -72,7 +73,7 @@ class PageExportControllerTest extends TestCase
         $response = $this->controller->exportPage($this->request);
 
         self::assertInstanceOf(JsonResponse::class, $response);
-        self::assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
-        self::assertEquals('"Page with id \u002217\u0022 was not found"', $response->getContent());
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        self::assertSame('"Page with id \u002217\u0022 was not found"', $response->getContent());
     }
 }
