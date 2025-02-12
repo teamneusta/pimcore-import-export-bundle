@@ -3,7 +3,6 @@
 namespace Neusta\Pimcore\ImportExportBundle\Tests\Unit\PimcoreConverter\Populator;
 
 use Neusta\ConverterBundle\Exception\PopulationException;
-use Neusta\Pimcore\ImportExportBundle\PimcoreConverter\Context\ContextWithLocale;
 use Neusta\Pimcore\ImportExportBundle\PimcoreConverter\Populator\PropertyBasedMappingPopulator;
 use Neusta\Pimcore\ImportExportBundle\Tests\Unit\PimcoreConverter\Fixture\TestDataObject;
 use PHPUnit\Framework\TestCase;
@@ -15,27 +14,26 @@ class PropertyBasedMappingPopulatorTest extends TestCase
 {
     use ProphecyTrait;
 
+    private PropertyBasedMappingPopulator $populator;
+
     /** @var ObjectProphecy<TestDataObject> */
     private $target;
     /** @var ObjectProphecy<DataObject> */
     private $source;
-    /** @var ObjectProphecy<ContextWithLocale> */
-    private $context;
-    private PropertyBasedMappingPopulator $populator;
 
     protected function setUp(): void
     {
+        $this->populator = new PropertyBasedMappingPopulator('testProperty', 'language');
+
         $this->target = new TestDataObject();
         $this->source = $this->prophesize(DataObject::class);
-        $this->context = $this->prophesize(ContextWithLocale::class);
-        $this->populator = new PropertyBasedMappingPopulator('testProperty', 'language');
     }
 
     /** @test */
     public function populateShouldPopulateTargetWithDataFromSourceWithoutLanguage(): void
     {
         $this->source->getProperty('language')->willReturn('de');
-        $this->populator->populate($this->target, $this->source->reveal(), $this->context->reveal());
+        $this->populator->populate($this->target, $this->source->reveal());
 
         self::assertSame('de', $this->target->testProperty);
     }
@@ -48,6 +46,6 @@ class PropertyBasedMappingPopulatorTest extends TestCase
 
         $exception = new \RuntimeException('No property key language');
         $this->source->getProperty('language')->willThrow($exception)->shouldBeCalled();
-        $this->populator->populate($this->target, $this->source->reveal(), $this->context->reveal());
+        $this->populator->populate($this->target, $this->source->reveal());
     }
 }
