@@ -18,11 +18,50 @@
 
 ## Usage
 
-TODO
+After enabling the bundle you should see a new menu item in the context menu of Pimcore Admin Backend - Section Documents:
+
+![context_menu_import_export.png](docs/images/context_menu_import_export.png)
+
+(german translation)
+
+### Page Export
+The selected page will be exported into YAML format:
+```yaml
+page:
+    id: 123
+    parentId: 1
+    type: page
+    published: true
+    path: /
+    language: de
+    navigation_name: my-site
+    navigation_title: 'My Site'
+    key: my-site
+    title: 'My Site'
+    controller: 'App\DefaultController::indexAction'
+    editables:
+        main:
+            type: areablock
+            name: main
+            data: [{ key: '1', type: text-editor, hidden: false }]
+...
+```  
+
+In the same way you can re-import your yaml file again by selecting: `Import from YAML` in the context menu.
 
 ## Configuration
 
-TODO
+### Page Import
+To use the Page Importer, the CSRF protection for the PageImportController route must be avoided.
+
+To do this, create a file named `pimcore_admin.yaml` in the `config/packages` directory and add the following content:
+
+```yaml
+pimcore_admin:
+    csrf_protection:
+        excluded_routes:
+            - neusta_pimcore_import_export_page_import
+```
 
 ## Contribution
 

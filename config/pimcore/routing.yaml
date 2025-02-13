@@ -3,3 +3,9 @@ neusta_pimcore_import_export_page_export:
     type: attribute
     options:
         expose: true
+
+neusta_pimcore_import_export_page_import:
+    resource: '../../src/Controller/Admin/PageImportController.php'
+    type: attribute
+    options:
+        expose: true

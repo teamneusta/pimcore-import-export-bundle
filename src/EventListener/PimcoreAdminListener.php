@@ -10,6 +10,7 @@ final class PimcoreAdminListener
     {
         $event->addPaths([
             '/bundles/neustapimcoreimportexport/js/exportPage.js',
+            '/bundles/neustapimcoreimportexport/js/importPage.js',
         ]);
     }
 }
