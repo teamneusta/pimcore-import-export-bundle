@@ -11,7 +11,7 @@ class YamlExportPage
     public string $path;
     public string $language;
     public string $navigation_name;
-    public string $navigation_title;
+    public ?string $navigation_title = null;
     public string $key;
     public string $title;
     public string $controller;
