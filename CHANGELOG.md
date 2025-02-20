@@ -3,5 +3,5 @@
 ## 1.0.0
 
 - feature: Initial release
-- feature: Export Pimcore pages to YAML files
-- feature: Import Pimcore pages from YAML files
+- feature: Export Pimcore pages to YAML file
+- feature: Import Pimcore pages from YAML file
