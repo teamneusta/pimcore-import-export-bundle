@@ -33,7 +33,7 @@ final class PageImportController
             return new JsonResponse(['success' => false, 'message' => 'No file uploaded'], 400);
         }
 
-        $overwrite = filter_var($request->request->get('overwrite', false), FILTER_VALIDATE_BOOLEAN);
+        $overwrite = $request->request->getBoolean('overwrite');
 
         try {
             $page = $this->pageImporter->parseYaml($file->getContent());
