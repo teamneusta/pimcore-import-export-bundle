@@ -15,7 +15,7 @@ neusta_pimcore_import_export.plugin.page.import = Class.create({
             handler: function () {
                 let uploadDialog = new Ext.Window({
                     title: t('neusta_pimcore_import_export_import_dialog_title'),
-                    width: 400,
+                    width: 600,
                     layout: 'fit',
                     modal: true,
                     items: [
@@ -25,6 +25,7 @@ neusta_pimcore_import_export.plugin.page.import = Class.create({
                                 {
                                     xtype: 'filefield',
                                     name: 'file',
+                                    width: 450,
                                     fieldLabel: t('neusta_pimcore_import_export_import_dialog_file_label'),
                                     labelWidth: 100,
                                     allowBlank: false,
@@ -35,7 +36,6 @@ neusta_pimcore_import_export.plugin.page.import = Class.create({
                                     xtype: 'checkbox',
                                     name: 'overwrite',
                                     fieldLabel: t('neusta_pimcore_import_export_import_dialog_overwrite_label'),
-                                    labelWidth: 100
                                 }
                             ],
                             buttons: [
