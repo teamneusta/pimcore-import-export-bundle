@@ -54,7 +54,7 @@ In the same way you can re-import your yaml file again by selecting: `Import fro
 ### Page Import
 To use the Page Importer, the CSRF protection for the PageImportController route must be avoided.
 
-To do this, create a file named `pimcore_admin.yaml` in the `config/packages` directory and add the following content:
+To do this, create a file `config/packages/pimcore_admin.yaml` and add the following content:
 
 ```yaml
 pimcore_admin:
