@@ -48,7 +48,7 @@ neusta_pimcore_import_export.plugin.page.import = Class.create({
                                         }
 
                                         form.submit({
-                                            url: '/admin/neusta/import-export/page/import',
+                                            url: Routing.generate('neusta_pimcore_import_export_page_import'),
                                             method: 'POST',
                                             waitMsg: t('neusta_pimcore_import_export_import_dialog_wait_message'),
                                             headers: {
