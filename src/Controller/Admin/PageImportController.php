@@ -28,7 +28,7 @@ final class PageImportController
     public function import(Request $request): JsonResponse
     {
         $file = $request->files->get('file');
-        if (!$file || !$file instanceof UploadedFile) {
+        if (!$file instanceof UploadedFile) {
             return new JsonResponse(['success' => false, 'message' => 'No file uploaded'], 400);
         }
 
