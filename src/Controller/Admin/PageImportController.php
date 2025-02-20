@@ -36,9 +36,7 @@ final class PageImportController
         $overwrite = filter_var($request->request->get('overwrite', false), FILTER_VALIDATE_BOOLEAN);
 
         try {
-            $yamlContent = file_get_contents($file->getPathname());
-
-            $page = $this->pageImporter->parseYaml($yamlContent);
+            $page = $this->pageImporter->parseYaml($file->getContent());
 
             $message = $this->replaceIfExists($page, $overwrite);
 
