@@ -38,8 +38,8 @@ class PageImporter
 
         foreach ($config[YamlExportPage::PAGES] ?? [] as $configPage) {
             $page = null;
-            if (\is_array($configPage)) {
-                $page = $this->yamlToPageConverter->convert(new YamlExportPage($configPage));
+            if (\is_array($configPage[YamlExportPage::PAGE])) {
+                $page = $this->yamlToPageConverter->convert(new YamlExportPage($configPage[YamlExportPage::PAGE]));
                 if ($forcedSave) {
                     $page->save();
                 }
