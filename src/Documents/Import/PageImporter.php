@@ -4,14 +4,14 @@ namespace Neusta\Pimcore\ImportExportBundle\Documents\Import;
 
 use Neusta\ConverterBundle\Converter;
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
+use Neusta\ConverterBundle\Exception\ConverterException;
 use Neusta\Pimcore\ImportExportBundle\Documents\Export\YamlExportPage;
 use Pimcore\Model\Document\Page;
+use Pimcore\Model\Element\DuplicateFullPathException;
 use Symfony\Component\Yaml\Yaml;
 
 class PageImporter
 {
-    private const PAGE = 'page';
-
     /**
      * @param Converter<YamlExportPage, Page, GenericContext|null> $yamlToPageConverter
      */
@@ -20,20 +20,36 @@ class PageImporter
     ) {
     }
 
-    public function parseYaml(string $yamlInput, bool $forcedSave = true): mixed
+    /**
+     * @return array<Page>
+     *
+     * @throws ConverterException
+     * @throws DuplicateFullPathException
+     */
+    public function parseYaml(string $yamlInput, bool $forcedSave = true): array
     {
         $config = Yaml::parse($yamlInput);
 
-        if (!\is_array($config) || !\is_array($config[self::PAGE] ?? null)) {
-            throw new \DomainException('Given YAML is not a valid page.');
+        if (!\is_array($config) || !\is_array($config[YamlExportPage::PAGES] ?? null)) {
+            throw new \DomainException('Given YAML is not valid.');
         }
 
-        $page = $this->yamlToPageConverter->convert(new YamlExportPage($config[self::PAGE]));
-        if ($forcedSave) {
-            $page->save();
+        $pages = [];
+
+        foreach ($config[YamlExportPage::PAGES] ?? [] as $configPage) {
+            $page = null;
+            if (\is_array($configPage)) {
+                $page = $this->yamlToPageConverter->convert(new YamlExportPage($configPage));
+                if ($forcedSave) {
+                    $page->save();
+                }
+            }
+            if ($page) {
+                $pages[] = $page;
+            }
         }
 
-        return $page;
+        return $pages;
     }
 
     /**
