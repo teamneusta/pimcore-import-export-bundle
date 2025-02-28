@@ -52,16 +52,8 @@ In the same way you can re-import your yaml file again by selecting: `Import fro
 ## Configuration
 
 ### Page Import
-To use the Page Importer, the CSRF protection for the PageImportController route must be avoided.
 
-To do this, create a file `config/packages/pimcore_admin.yaml` and add the following content:
-
-```yaml
-pimcore_admin:
-    csrf_protection:
-        excluded_routes:
-            - neusta_pimcore_import_export_page_import
-```
+The import process will create a new page with the given data.
 
 ## Contribution
 

@@ -54,6 +54,9 @@ neusta_pimcore_import_export.plugin.page.import = Class.create({
                                             headers: {
                                                 'X-Requested-With': 'XMLHttpRequest' // ✅ important for AJAX-Requests
                                             },
+                                            params: {
+                                                'csrfToken': parent.pimcore.settings["csrfToken"]
+                                            },
                                             success: function (form, action) {
                                                 let response = Ext.decode(action.response.responseText);
                                                 pimcore.helpers.showNotification(t('neusta_pimcore_import_export_import_dialog_notification_success'), response.message, 'success');
