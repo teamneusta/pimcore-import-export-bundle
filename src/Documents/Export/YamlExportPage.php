@@ -4,19 +4,22 @@ namespace Neusta\Pimcore\ImportExportBundle\Documents\Export;
 
 class YamlExportPage
 {
+    public const PAGES = 'pages';
+    public const PAGE = 'page';
+
     public ?int $id = null;
-    public int $parentId;
+    public int $parentId = 0;
     public string $type = 'page';
     public bool $published = false;
-    public string $path;
-    public string $language;
-    public string $navigation_name;
+    public string $path = '';
+    public string $language = '';
+    public string $navigation_name = '';
     public ?string $navigation_title = null;
-    public string $key;
-    public string $title;
-    public string $controller;
+    public string $key = '';
+    public string $title = '';
+    public string $controller = '';
     /** @var array<YamlExportEditable> */
-    public array $editables;
+    public array $editables = [];
 
     /**
      * @param array<string, mixed>|null $yamlConfig

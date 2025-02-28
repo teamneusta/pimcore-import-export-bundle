@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class PageExportController
 {
@@ -37,7 +37,7 @@ final class PageExportController
         }
 
         try {
-            $yaml = $this->pageExporter->toYaml($page);
+            $yaml = $this->pageExporter->toYaml([$page]);
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
