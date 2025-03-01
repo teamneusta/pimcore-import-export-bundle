@@ -30,9 +30,9 @@ final class PageImportController
     ) {
         $this->messagesMap = [
             self::ERR_NO_FILE_UPLOADED => 'No file uploaded',
-            self::SUCCESS_DOCUMENT_REPLACEMENT => 'Documents replaced successfully',
-            self::SUCCESS_WITHOUT_REPLACEMENT => 'Documents already exist and were not replaced',
-            self::SUCCESS_NEW_DOCUMENT => 'New Documents imported successfully',
+            self::SUCCESS_DOCUMENT_REPLACEMENT => 'replaced successfully',
+            self::SUCCESS_WITHOUT_REPLACEMENT => 'not replaced',
+            self::SUCCESS_NEW_DOCUMENT => 'imported successfully',
         ];
     }
 
@@ -53,12 +53,16 @@ final class PageImportController
         try {
             $pages = $this->pageImporter->parseYaml($file->getContent());
 
-            $resultMessage = 'Import Summary:' . \PHP_EOL;
-
-            foreach ($pages as $index => $page) {
+            $results = [
+                self::SUCCESS_DOCUMENT_REPLACEMENT => 0,
+                self::SUCCESS_WITHOUT_REPLACEMENT => 0,
+                self::SUCCESS_NEW_DOCUMENT => 0,
+            ];
+            foreach ($pages as $page) {
                 $resultCode = $this->replaceIfExists($page, $overwrite);
-                $resultMessage = $this->appendMessage($index, $resultCode, $resultMessage);
+                ++$results[$resultCode];
             }
+            $resultMessage = $this->appendMessage($results);
 
             return new JsonResponse(['success' => true, 'message' => $resultMessage]);
         } catch (\Exception $e) {
@@ -84,11 +88,25 @@ final class PageImportController
         return self::SUCCESS_NEW_DOCUMENT;
     }
 
-    private function appendMessage(int|string $index, int $resultCode, string $resultMessage): string
+    /**
+     * @param array<int, int> $results
+     */
+    private function appendMessage(array $results): string
     {
-        $message = \sprintf('%d. %s', (int) $index + 1, $this->messagesMap[$resultCode]);
-        $resultMessage .= $message . \PHP_EOL;
+        $resultMessage = '';
 
-        return $resultMessage;
+        foreach ($results as $resultCode => $result) {
+            if ($result > 0) {
+                if (1 === $result) {
+                    $start = 'One Document';
+                } else {
+                    $start = \sprintf('%d Documents', $result);
+                }
+                $message = \sprintf('%s %s', $start, $this->messagesMap[$resultCode]);
+                $resultMessage .= $message . '<br/><br/>';
+            }
+        }
+
+        return '<p style="padding: 20px;">' . $resultMessage . '</p>';
     }
 }
