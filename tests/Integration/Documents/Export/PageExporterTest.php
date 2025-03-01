@@ -37,7 +37,7 @@ class PageExporterTest extends KernelTestCase
         $page->setTitle('Titel meines Dokuments');
         $page->setController('Irgend/ein/Controller');
         $inputEditable = new Input();
-        $inputEditable->setName('textEingabe');;
+        $inputEditable->setName('textEingabe');
         $inputEditable->setDataFromResource('Texteingabe');
         $page->setEditables([$inputEditable]);
 
