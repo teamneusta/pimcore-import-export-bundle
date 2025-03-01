@@ -48,7 +48,9 @@ abstract class AbstractPageFixture extends AbstractFixture
             $this->fullqualifiedYamlFilename,
             $this->params,
         );
-        $page = $this->pageImporter->parseYaml($yamlContent, false);
-        $this->replaceIfExists($page);
+        $pages = $this->pageImporter->parseYaml($yamlContent, false);
+        foreach ($pages as $page) {
+            $this->replaceIfExists($page);
+        }
     }
 }

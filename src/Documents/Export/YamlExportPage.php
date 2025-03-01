@@ -13,11 +13,11 @@ class YamlExportPage
     public bool $published = false;
     public string $path = '';
     public string $language = '';
-    public string $navigation_name = '';
+    public ?string $navigation_name = null;
     public ?string $navigation_title = null;
     public string $key = '';
-    public string $title = '';
-    public string $controller = '';
+    public ?string $title = null;
+    public ?string $controller = null;
     /** @var array<YamlExportEditable> */
     public array $editables = [];
 
