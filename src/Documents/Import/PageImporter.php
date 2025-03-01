@@ -36,7 +36,7 @@ class PageImporter
 
         $pages = [];
 
-        foreach ($config[YamlExportPage::PAGES] ?? [] as $configPage) {
+        foreach ($config[YamlExportPage::PAGES] as $configPage) {
             $page = null;
             if (\is_array($configPage[YamlExportPage::PAGE])) {
                 $page = $this->yamlToPageConverter->convert(new YamlExportPage($configPage[YamlExportPage::PAGE]));

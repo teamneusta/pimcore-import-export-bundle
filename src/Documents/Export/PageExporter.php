@@ -11,7 +11,7 @@ use Symfony\Component\Yaml\Yaml;
 
 class PageExporter
 {
-    private const YAML_DUMP_FLAGS =
+    public const YAML_DUMP_FLAGS =
         Yaml::DUMP_EXCEPTION_ON_INVALID_TYPE |
         Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK |
         Yaml::DUMP_NULL_AS_TILDE;
@@ -34,19 +34,35 @@ class PageExporter
      *     key: 'page_key_2'
      * ...
      *
-     * @param Page|iterable<Page> $pages
-     *
      * @throws ConverterException
      *
-     * @deprecated parameter type Page will not be allowed in further versions
+     * @deprecated use PageExporter#exportToYaml([$page]) in further versions
      */
-    public function toYaml(Page|iterable $pages): string
+    public function toYaml(Page $page): string
     {
-        // @deprecated - should be removed after changing the method signature
-        if ($pages instanceof Page) {
-            $pages = [$pages];
+        $pages = [];
+        if ($page instanceof Page) {
+            $pages = [$page];
         }
 
+        return $this->exportToYaml($pages);
+    }
+
+    /**
+     * Exports one or more pages as YAML with the following structure:
+     * pages:
+     *   - page:
+     *      key: 'page_key_1'
+     *   - page:
+     *     key: 'page_key_2'
+     * ...
+     *
+     * @param iterable<Page> $pages
+     *
+     * @throws ConverterException
+     */
+    public function exportToYaml(iterable $pages): string
+    {
         $yamlExportPages = [];
         foreach ($pages as $page) {
             $yamlExportPages[] = [YamlExportPage::PAGE => $this->pageToYamlConverter->convert($page)];
@@ -57,7 +73,7 @@ class PageExporter
             'yaml',
             [
                 'yaml_inline' => 4,
-                'yaml_indent' => 0,
+                'yaml_indent' => 2,
                 'yaml_flags' => self::YAML_DUMP_FLAGS,
             ]
         );

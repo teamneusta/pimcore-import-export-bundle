@@ -8,6 +8,7 @@ neusta_pimcore_import_export.plugin.page.export = Class.create({
     onPrepareDocumentTreeContextMenu: function (e) {
         let menu = e.detail.menu;
         let document = e.detail.document;
+
         // Export page into yaml file
         menu.add("-");
         menu.add(new Ext.menu.Item({
@@ -15,6 +16,15 @@ neusta_pimcore_import_export.plugin.page.export = Class.create({
             iconCls: "pimcore_icon_export",
             handler: function () {
                 pimcore.helpers.download(Routing.generate('neusta_pimcore_import_export_page_export', {page_id: document.data.id}));
+            }
+        }));
+
+        // Export page and children into yaml file
+        menu.add(new Ext.menu.Item({
+            text: t('neusta_pimcore_import_export_export_with_children_menu_label'),
+            iconCls: "pimcore_icon_export",
+            handler: function () {
+                pimcore.helpers.download(Routing.generate('neusta_pimcore_import_export_page_export_with_children', {page_id: document.data.id}));
             }
         }));
     },

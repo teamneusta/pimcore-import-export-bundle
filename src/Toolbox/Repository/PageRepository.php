@@ -19,4 +19,18 @@ class PageRepository extends AbstractElementRepository
     {
         parent::__construct(Page::class);
     }
+
+    /**
+     * @return iterable<Page>
+     */
+    public function findAllPagesWithSubPages(Page $page): iterable
+    {
+        yield $page;
+
+        foreach ($page->getChildren() as $child) {
+            if ($child instanceof Page) {
+                yield from $this->findAllPagesWithSubPages($child);
+            }
+        }
+    }
 }

@@ -1,4 +1,5 @@
 neusta_pimcore_import_export_export_menu_label: 'Exportiere in YAML'
+neusta_pimcore_import_export_export_with_children_menu_label: 'Exportiere in YAML (inkl. Unterseiten)'
 neusta_pimcore_import_export_import_dialog_title: 'Importiere Seite aus YAML'
 neusta_pimcore_import_export_import_menu_label: 'Importiere aus YAML'
 neusta_pimcore_import_export_import_dialog_file_label: 'YAML Datei'

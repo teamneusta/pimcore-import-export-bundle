@@ -19,7 +19,9 @@ final class PageImportController
     public const SUCCESS_WITHOUT_REPLACEMENT = 3;
     public const SUCCESS_NEW_DOCUMENT = 4;
 
-    /** string[] */
+    /**
+     * @var string[] Map of error codes to messages
+     */
     private array $messagesMap;
 
     public function __construct(
@@ -84,7 +86,7 @@ final class PageImportController
 
     private function appendMessage(int|string $index, int $resultCode, string $resultMessage): string
     {
-        $message = \sprintf('%d. %s', $index + 1, $this->messagesMap[$resultCode]);
+        $message = \sprintf('%d. %s', (int) $index + 1, $this->messagesMap[$resultCode]);
         $resultMessage .= $message . \PHP_EOL;
 
         return $resultMessage;
