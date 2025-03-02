@@ -6,6 +6,7 @@ use Neusta\ConverterBundle\Converter;
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Exception\ConverterException;
 use Neusta\Pimcore\ImportExportBundle\Documents\Export\YamlExportPage;
+use Pimcore\Model\Document;
 use Pimcore\Model\Document\Page;
 use Pimcore\Model\Element\DuplicateFullPathException;
 use Symfony\Component\Yaml\Yaml;
@@ -41,6 +42,7 @@ class PageImporter
             if (\is_array($configPage[YamlExportPage::PAGE])) {
                 $page = $this->yamlToPageConverter->convert(new YamlExportPage($configPage[YamlExportPage::PAGE]));
                 if ($forcedSave) {
+                    $this->checkAndUpdatePage($page, $config[YamlExportPage::PAGES]);
                     $page->save();
                 }
             }
@@ -66,5 +68,27 @@ class PageImporter
         }
 
         return '';
+    }
+
+    /**
+     * @param array<string, array<string, mixed>> $configPages
+     */
+    private function checkAndUpdatePage(Page $page, array &$configPages): void
+    {
+        $oldPath = $page->getPath();
+        $existingParent = Document::getById($page->getParentId() ?? -1);
+        if (!$existingParent) {
+            $existingParent = Document::getByPath($page->getPath() ?? '');
+            if (!$existingParent) {
+                throw new \InvalidArgumentException('Neither parentId nor path leads to a valid parent element');
+            }
+            $page->setParentId($existingParent->getId());
+            $newPath = $existingParent->getPath() . $page->getKey() . '/';
+            foreach ($configPages as $configPage) {
+                if (\array_key_exists('path', $configPage[YamlExportPage::PAGE]) && \is_string($oldPath)) {
+                    str_replace($oldPath, $newPath, $configPage[YamlExportPage::PAGE]['path']);
+                }
+            }
+        }
     }
 }

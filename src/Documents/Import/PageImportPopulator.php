@@ -22,8 +22,8 @@ class PageImportPopulator implements Populator
         if (property_exists($source, 'language') && isset($source->language)) {
             $target->setProperty('language', 'text', $source->language);
         }
-        $target->setProperty('navigation_title', 'text', $source->title);
-        $target->setProperty('navigation_name', 'text', $source->key);
+        $target->setProperty('navigation_title', 'text', $source->navigation_title);
+        $target->setProperty('navigation_name', 'text', $source->navigation_name);
         /** @var array<string, mixed> $editable */
         foreach ($source->editables ?? [] as $key => $editable) {
             $target->setRawEditable($key, $editable['type'], $editable['data']);
