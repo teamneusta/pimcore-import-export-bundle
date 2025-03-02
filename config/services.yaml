@@ -41,18 +41,21 @@ services:
     arguments:
       $propertyKey: 'language'
       $targetProperty: 'language'
+      $skipNull: true
 
   neusta_pimcore_import_export.page.property.navigation_title.populator:
     class: Neusta\Pimcore\ImportExportBundle\PimcoreConverter\Populator\PropertyBasedMappingPopulator
     arguments:
       $propertyKey: 'navigation_title'
       $targetProperty: 'navigation_title'
+      $skipNull: true
 
   neusta_pimcore_import_export.page.property.navigation_name.populator:
     class: Neusta\Pimcore\ImportExportBundle\PimcoreConverter\Populator\PropertyBasedMappingPopulator
     arguments:
       $propertyKey: 'navigation_name'
       $targetProperty: 'navigation_name'
+      $skipNull: true
 
   Neusta\Pimcore\ImportExportBundle\Documents\Export\PageExporter:
     arguments:
