@@ -57,6 +57,12 @@ services:
       $targetProperty: 'navigation_name'
       $skipNull: true
 
+  ###########################################################
+  # Export Populator (Editable -> YamlExportEditable)
+  ###########################################################
+  neusta_pimcore_import_export.editable.data.populator:
+    class: Neusta\Pimcore\ImportExportBundle\Documents\Export\Populator\EditableDataPopulator
+
   Neusta\Pimcore\ImportExportBundle\Documents\Export\PageExporter:
     arguments:
       $pageToYamlConverter: '@neusta_pimcore_import_export.export_page'

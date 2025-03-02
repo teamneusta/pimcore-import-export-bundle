@@ -58,7 +58,8 @@ neusta_converter:
 
     neusta_pimcore_import_export.editable_converter:
       target: Neusta\Pimcore\ImportExportBundle\Documents\Export\YamlExportEditable
+      populators:
+        - neusta_pimcore_import_export.editable.data.populator
       properties:
         type: ~
         name: ~
-        data: ~

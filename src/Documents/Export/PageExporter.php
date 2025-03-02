@@ -73,7 +73,7 @@ class PageExporter
             'yaml',
             [
                 'yaml_inline' => 4,
-                'yaml_indent' => 2,
+                'yaml_indent' => 0,
                 'yaml_flags' => self::YAML_DUMP_FLAGS,
             ]
         );
