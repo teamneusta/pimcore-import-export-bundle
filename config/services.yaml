@@ -1,3 +1,6 @@
+imports:
+  - { resource: 'converters_populators.yaml' }
+
 services:
   _defaults:
     autowire: true
@@ -5,6 +8,13 @@ services:
 
   Neusta\Pimcore\ImportExportBundle\Toolbox\:
     resource: '../src/Toolbox'
+
+  ###########################################################
+  # Commands
+  ###########################################################
+  Neusta\Pimcore\ImportExportBundle\Command\ExportAllPagesCommand:
+    public: true
+    tags: [ 'console.command' ]
 
   ###########################################################
   # Controller
@@ -17,55 +27,9 @@ services:
     public: true
     tags: [ 'controller.service_arguments' ]
 
-  ###########################################################
-  # Import Populator (YamlExportPage -> Page)
-  ###########################################################
-  Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImportPopulator: ~
-
-  Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImporter:
-    arguments:
-      $yamlToPageConverter: '@neusta_pimcore_import_export.import_page'
-
-  ###########################################################
-  # Export Populator (Page -> YamlExportPage)
-  ###########################################################
-  neusta_pimcore_import_export.page.editables.populator:
-    class: Neusta\ConverterBundle\Populator\ArrayConvertingPopulator
-    arguments:
-      $converter: '@neusta_pimcore_import_export.editable_converter'
-      $sourceArrayPropertyName: 'editables'
-      $targetPropertyName: 'editables'
-
-  neusta_pimcore_import_export.page.property.language.populator:
-    class: Neusta\Pimcore\ImportExportBundle\PimcoreConverter\Populator\PropertyBasedMappingPopulator
-    arguments:
-      $propertyKey: 'language'
-      $targetProperty: 'language'
-      $skipNull: true
-
-  neusta_pimcore_import_export.page.property.navigation_title.populator:
-    class: Neusta\Pimcore\ImportExportBundle\PimcoreConverter\Populator\PropertyBasedMappingPopulator
-    arguments:
-      $propertyKey: 'navigation_title'
-      $targetProperty: 'navigation_title'
-      $skipNull: true
-
-  neusta_pimcore_import_export.page.property.navigation_name.populator:
-    class: Neusta\Pimcore\ImportExportBundle\PimcoreConverter\Populator\PropertyBasedMappingPopulator
-    arguments:
-      $propertyKey: 'navigation_name'
-      $targetProperty: 'navigation_name'
-      $skipNull: true
-
-  ###########################################################
-  # Export Populator (Editable -> YamlExportEditable)
-  ###########################################################
-  neusta_pimcore_import_export.editable.data.populator:
-    class: Neusta\Pimcore\ImportExportBundle\Documents\Export\Populator\EditableDataPopulator
-
   Neusta\Pimcore\ImportExportBundle\Documents\Export\PageExporter:
     arguments:
-      $pageToYamlConverter: '@neusta_pimcore_import_export.export_page'
+      $pageToYamlConverter: '@neusta_pimcore_import_export.export_document'
 
   Neusta\Pimcore\ImportExportBundle\EventListener\PimcoreAdminListener:
     tags:

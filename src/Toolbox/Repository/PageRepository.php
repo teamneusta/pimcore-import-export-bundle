@@ -27,7 +27,7 @@ class PageRepository extends AbstractElementRepository
     {
         yield $page;
 
-        foreach ($page->getChildren() as $child) {
+        foreach ($page->getChildren(true) as $child) {
             if ($child instanceof Page) {
                 yield from $this->findAllPagesWithSubPages($child);
             }
