@@ -2,24 +2,23 @@
 
 ## Installation
 
-1. **Require the bundle**
+1.  **Require the bundle**
    
-   ```shell
-   composer require teamneusta/pimcore-import-export-bundle
-   ```
+    ```shell
+    composer require teamneusta/pimcore-import-export-bundle
+    ```
 
-2. **Enable the bundle**
-   
-   Add the Bundle to your `config/bundles.php`:
-   
-   ```php
-   Neusta\Pimcore\ImportExportBundle\NeustaPimcoreImportExportBundle::class => ['all' => true],
-   ```
+2.  **Enable the bundle**
+
+    Add the Bundle to your `config/bundles.php`:
+
+    ```php
+    Neusta\Pimcore\ImportExportBundle\NeustaPimcoreImportExportBundle::class => ['all' => true],
+    ```
 
 ## Usage
 
-After enabling the bundle you should see a new menu item in the context menu of Pimcore Admin Backend - Section
-Documents:
+After enabling the bundle you should see a new menu item in the context menu of Pimcore Admin Backend - Section Documents:
 
 ![context_menu_import_export.png](docs/images/context_menu_import_export.png)
 

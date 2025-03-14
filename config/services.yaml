@@ -9,16 +9,16 @@ services:
   Neusta\Pimcore\ImportExportBundle\Toolbox\:
     resource: '../src/Toolbox'
 
-  ###########################################################
-  # Commands
-  ###########################################################
+  ############
+  # Commands #
+  ############
   Neusta\Pimcore\ImportExportBundle\Command\ExportAllPagesCommand:
     public: true
     tags: [ 'console.command' ]
 
-  ###########################################################
-  # Controller
-  ###########################################################
+  ##############
+  # Controller #
+  ##############
   Neusta\Pimcore\ImportExportBundle\Controller\Admin\PageExportController:
     public: true
     tags: [ 'controller.service_arguments' ]
@@ -27,10 +27,16 @@ services:
     public: true
     tags: [ 'controller.service_arguments' ]
 
+  #############
+  # Documents #
+  #############
   Neusta\Pimcore\ImportExportBundle\Documents\Export\PageExporter:
     arguments:
       $pageToYamlConverter: '@neusta_pimcore_import_export.export_document'
 
+  #################
+  # EventListener #
+  #################
   Neusta\Pimcore\ImportExportBundle\EventListener\PimcoreAdminListener:
     tags:
       - { name: kernel.event_listener, event: pimcore.bundle_manager.paths.js, method: addJSFiles }

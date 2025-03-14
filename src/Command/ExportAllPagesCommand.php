@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Neusta\Pimcore\ImportExportBundle\Command;
 
@@ -16,8 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(
     name: 'neusta:pimcore:export:pages:all',
     description: 'Export all pages in one single YAML file'
-)
-]
+)]
 class ExportAllPagesCommand extends AbstractCommand
 {
     public function __construct(
