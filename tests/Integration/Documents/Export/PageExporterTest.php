@@ -31,14 +31,14 @@ class PageExporterTest extends KernelTestCase
         $page->setPublished(false);
         $page->setPath('/test/');
         $page->setKey('test_document_1');
-        $page->setProperty('language', 'string', 'fr');
-        $page->setProperty('navigation_name', 'string', 'Mein Dokument');
-        $page->setProperty('navigation_title', 'string', 'Mein Dokument - Titel');
-        $page->setTitle('Titel meines Dokuments');
-        $page->setController('Irgend/ein/Controller');
+        $page->setProperty('language', 'string', 'en');
+        $page->setProperty('navigation_name', 'string', 'My Document');
+        $page->setProperty('navigation_title', 'string', 'My Document - Title');
+        $page->setTitle('The Title of my document');
+        $page->setController('/Some/Controller');
         $inputEditable = new Input();
-        $inputEditable->setName('textEingabe');
-        $inputEditable->setDataFromResource('Texteingabe');
+        $inputEditable->setName('textInput');
+        $inputEditable->setDataFromResource('some text input');
         $page->setEditables([$inputEditable]);
 
         $yaml = $this->exporter->exportToYaml([$page]);
