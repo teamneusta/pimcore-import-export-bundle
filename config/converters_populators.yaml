@@ -6,7 +6,7 @@ services:
   ###########################################################
   # Import Populator (YamlExportPage -> Page)
   ###########################################################
-  Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImportPopulator: ~
+  Neusta\Pimcore\ImportExportBundle\Documents\Import\Populator\PageImportPopulator: ~
 
   Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImporter:
     arguments:

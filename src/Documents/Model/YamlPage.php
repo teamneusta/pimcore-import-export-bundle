@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Neusta\Pimcore\ImportExportBundle\Documents\Export;
+namespace Neusta\Pimcore\ImportExportBundle\Documents\Model;
 
-class YamlExportPage
+class YamlPage
 {
     public const PAGES = 'pages';
     public const PAGE = 'page';
@@ -18,7 +18,7 @@ class YamlExportPage
     public string $key = '';
     public ?string $title = null;
     public ?string $controller = null;
-    /** @var array<YamlExportEditable> */
+    /** @var array<YamlEditable> */
     public array $editables = [];
 
     /**

@@ -4,11 +4,11 @@ namespace Neusta\Pimcore\ImportExportBundle\Documents\Export\Populator;
 
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Populator;
-use Neusta\Pimcore\ImportExportBundle\Documents\Export\YamlExportEditable;
+use Neusta\Pimcore\ImportExportBundle\Documents\Model\YamlEditable;
 use Pimcore\Model\Document\Editable;
 
 /**
- * @implements Populator<Editable, YamlExportEditable, GenericContext|null>
+ * @implements Populator<Editable, YamlEditable, GenericContext|null>
  */
 class EditableDataPopulator implements Populator
 {

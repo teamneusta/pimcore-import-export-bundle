@@ -1,19 +1,19 @@
 <?php declare(strict_types=1);
 
-namespace Neusta\Pimcore\ImportExportBundle\Documents\Import;
+namespace Neusta\Pimcore\ImportExportBundle\Documents\Import\Populator;
 
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Populator;
-use Neusta\Pimcore\ImportExportBundle\Documents\Export\YamlExportPage;
+use Neusta\Pimcore\ImportExportBundle\Documents\Model\YamlPage;
 use Pimcore\Model\Document\Page;
 
 /**
- * @implements Populator<YamlExportPage, Page, GenericContext|null>
+ * @implements Populator<YamlPage, Page, GenericContext|null>
  */
 class PageImportPopulator implements Populator
 {
     /**
-     * @param YamlExportPage      $source
+     * @param YamlPage            $source
      * @param Page                $target
      * @param GenericContext|null $ctx
      */

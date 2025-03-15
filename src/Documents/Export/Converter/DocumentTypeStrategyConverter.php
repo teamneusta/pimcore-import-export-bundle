@@ -4,16 +4,16 @@ namespace Neusta\Pimcore\ImportExportBundle\Documents\Export\Converter;
 
 use Neusta\ConverterBundle\Converter;
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
-use Neusta\Pimcore\ImportExportBundle\Documents\Export\YamlExportPage;
+use Neusta\Pimcore\ImportExportBundle\Documents\Model\YamlPage;
 use Pimcore\Model\Document;
 
 /**
- * @implements Converter<Document, YamlExportPage, GenericContext|null>
+ * @implements Converter<Document, YamlPage, GenericContext|null>
  */
 class DocumentTypeStrategyConverter implements Converter
 {
     /**
-     * @param array<class-string, Converter<Document, YamlExportPage, GenericContext|null>> $type2ConverterMap
+     * @param array<class-string, Converter<Document, YamlPage, GenericContext|null>> $type2ConverterMap
      */
     public function __construct(
         private array $type2ConverterMap,

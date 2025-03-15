@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Neusta\Pimcore\ImportExportBundle\Tests\Integration\Documents\Export;
+namespace Neusta\Pimcore\ImportExportBundle\Tests\Integration\Documents\Import;
 
 use Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImporter;
 use Neusta\Pimcore\TestingFramework\Database\ResetDatabase;
@@ -33,7 +33,7 @@ class PageImporterTest extends KernelTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Neither parentId nor path leads to a valid parent element');
-        $this->importer->parseYaml($yaml);
+        $this->importer->fromYaml($yaml);
     }
 
     public function testSinglePageExport_regular_case_parent_id(): void
@@ -56,7 +56,7 @@ class PageImporterTest extends KernelTestCase
                         controller: /Some/Controller
             YAML;
 
-        $pages = $this->importer->parseYaml($yaml);
+        $pages = $this->importer->fromYaml($yaml);
         self::assertEquals(999, $pages[0]->getId());
         self::assertEquals('/', $pages[0]->getPath());
 
@@ -89,7 +89,7 @@ class PageImporterTest extends KernelTestCase
                         controller: /Some/Controller
             YAML;
 
-        $pages = $this->importer->parseYaml($yaml);
+        $pages = $this->importer->fromYaml($yaml);
         self::assertEquals(999, $pages[0]->getId());
         self::assertEquals('/', $pages[0]->getPath());
         self::assertEquals(1, $pages[0]->getParentId());
@@ -128,7 +128,37 @@ class PageImporterTest extends KernelTestCase
                         key: test_document_1_1_1
             YAML;
 
-        $pages = $this->importer->parseYaml($yaml);
+        $pages = $this->importer->fromYaml($yaml);
+
+        self::assertEquals('/test_document_1/test_document_1_1/', $pages[2]->getPath());
+    }
+
+    public function testSinglePageImport_tree_case_by_path(): void
+    {
+        $yaml =
+            <<<YAML
+            pages:
+                -
+                    page:
+                        parentId: 1
+                        id: 999
+                        path: /my_path/
+                        key: test_document_1
+                -
+                    page:
+                        parentId: 9999
+                        id: 1000
+                        path: /my_path/test_document_1/
+                        key: test_document_1_1
+                -
+                    page:
+                        parentId: 9999
+                        id: 1001
+                        path: /my_path/test_document_1/test_document_1_1/
+                        key: test_document_1_1_1
+            YAML;
+
+        $pages = $this->importer->fromYaml($yaml);
 
         self::assertEquals('/test_document_1/test_document_1_1/', $pages[2]->getPath());
     }
