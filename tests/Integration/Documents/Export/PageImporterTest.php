@@ -95,12 +95,12 @@ class PageImporterTest extends KernelTestCase
         self::assertEquals(1, $pages[0]->getParentId());
 
         self::assertEquals('test_document_1', $pages[0]->getKey());
-        self::assertEquals('Titel meines Dokuments', $pages[0]->getTitle());
+        self::assertEquals('The Title of My Document', $pages[0]->getTitle());
         self::assertEquals('email', $pages[0]->getType());
-        self::assertEquals('Irgend/ein/Controller', $pages[0]->getController());
-        self::assertEquals('fr', $pages[0]->getProperty('language'));
-        self::assertEquals('Mein Dokument', $pages[0]->getProperty('navigation_name'));
-        self::assertEquals('Mein Dokument - Titel', $pages[0]->getProperty('navigation_title'));
+        self::assertEquals('/Some/Controller', $pages[0]->getController());
+        self::assertEquals('en', $pages[0]->getProperty('language'));
+        self::assertEquals('My Document', $pages[0]->getProperty('navigation_name'));
+        self::assertEquals('My Document - Title', $pages[0]->getProperty('navigation_title'));
     }
 
     public function testSinglePageImport_tree_case(): void
