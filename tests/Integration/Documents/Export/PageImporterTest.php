@@ -49,11 +49,11 @@ class PageImporterTest extends KernelTestCase
                         published: false
                         path: /path/will/be/overwritten/by/parent_id/
                         language: fr
-                        navigation_name: 'Mein Dokument'
-                        navigation_title: 'Mein Dokument - Titel'
+                        navigation_name: 'My Document'
+                        navigation_title: 'My Document - Title'
                         key: test_document_1
-                        title: 'Titel meines Dokuments'
-                        controller: Irgend/ein/Controller
+                        title: 'The Title of My Document'
+                        controller: /Some/Controller
             YAML;
 
         $pages = $this->importer->parseYaml($yaml);
