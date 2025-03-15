@@ -20,18 +20,17 @@ final class PageImportController
     /**
      * @var string[] Map of error codes to messages
      */
-    private array $messagesMap;
+    private array $messagesMap = [
+        self::ERR_NO_FILE_UPLOADED => 'No file uploaded',
+        self::SUCCESS_DOCUMENT_REPLACEMENT => 'replaced successfully',
+        self::SUCCESS_WITHOUT_REPLACEMENT => 'not replaced',
+        self::SUCCESS_NEW_DOCUMENT => 'imported successfully',
+    ];
 
     public function __construct(
         private PageImporter $pageImporter,
         private PageRepository $pageRepository,
     ) {
-        $this->messagesMap = [
-            self::ERR_NO_FILE_UPLOADED => 'No file uploaded',
-            self::SUCCESS_DOCUMENT_REPLACEMENT => 'replaced successfully',
-            self::SUCCESS_WITHOUT_REPLACEMENT => 'not replaced',
-            self::SUCCESS_NEW_DOCUMENT => 'imported successfully',
-        ];
     }
 
     #[Route(
