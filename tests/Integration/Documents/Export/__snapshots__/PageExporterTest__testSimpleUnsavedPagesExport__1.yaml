@@ -1,0 +1,29 @@
+pages:
+    -
+        page:
+            id: ~
+            parentId: 1
+            type: page
+            published: true
+            path: /
+            language: ''
+            navigation_name: ~
+            navigation_title: ~
+            key: test_document_1
+            title: ''
+            controller: 'App\Controller\DefaultController::defaultAction'
+            editables: {  }
+    -
+        page:
+            id: ~
+            parentId: 1
+            type: page
+            published: true
+            path: /
+            language: ''
+            navigation_name: ~
+            navigation_title: ~
+            key: test_document_2
+            title: ''
+            controller: 'App\Controller\DefaultController::defaultAction'
+            editables: {  }
