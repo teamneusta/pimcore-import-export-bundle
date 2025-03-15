@@ -61,10 +61,10 @@ class PageImporterTest extends KernelTestCase
         self::assertEquals('/', $pages[0]->getPath());
 
         self::assertEquals('test_document_1', $pages[0]->getKey());
-        self::assertEquals('The Titel of My Document', $pages[0]->getTitle());
+        self::assertEquals('The Title of My Document', $pages[0]->getTitle());
         self::assertEquals('email', $pages[0]->getType());
         self::assertEquals('/Some/Controller', $pages[0]->getController());
-        self::assertEquals('en', $pages[0]->getProperty('language'));
+        self::assertEquals('fr', $pages[0]->getProperty('language'));
         self::assertEquals('My Document', $pages[0]->getProperty('navigation_name'));
         self::assertEquals('My Document - Title', $pages[0]->getProperty('navigation_title'));
     }
