@@ -81,12 +81,12 @@ class PageImporterTest extends KernelTestCase
                         type: email
                         published: false
                         path: /
-                        language: fr
-                        navigation_name: 'Mein Dokument'
-                        navigation_title: 'Mein Dokument - Titel'
+                        language: en
+                        navigation_name: 'My Document'
+                        navigation_title: 'My Document - Title'
                         key: test_document_1
-                        title: 'Titel meines Dokuments'
-                        controller: Irgend/ein/Controller
+                        title: 'The Title of My Document'
+                        controller: /Some/Controller
             YAML;
 
         $pages = $this->importer->parseYaml($yaml);
