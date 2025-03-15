@@ -26,12 +26,11 @@ final class PageExportController
     )]
     public function exportPage(Request $request): Response
     {
-        $pageId = $request->query->getInt('page_id');
-        $page = $this->pageRepository->getById($pageId);
-
-        if (!$page instanceof Page) {
+        try {
+            $page = $this->getPageByRequest($request);
+        } catch (\Exception $exception) {
             return new JsonResponse(
-                \sprintf('Page with id "%s" was not found', $pageId),
+                \sprintf('Page with id "%s" was not found', $exception->getMessage()),
                 Response::HTTP_NOT_FOUND,
             );
         }
@@ -42,14 +41,7 @@ final class PageExportController
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $response = new Response($yaml);
-        $response->headers->set('Content-type', 'application/yaml');
-        $response->headers->set(
-            'Content-Disposition',
-            HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, $this->createFilename($page)),
-        );
-
-        return $response;
+        return $this->createJsonResponseByYaml($yaml, $this->createFilename($page));
     }
 
     #[Route(
@@ -59,12 +51,11 @@ final class PageExportController
     )]
     public function exportPageWithChildren(Request $request): Response
     {
-        $pageId = $request->query->getInt('page_id');
-        $page = $this->pageRepository->getById($pageId);
-
-        if (!$page instanceof Page) {
+        try {
+            $page = $this->getPageByRequest($request);
+        } catch (\Exception $exception) {
             return new JsonResponse(
-                \sprintf('Page with id "%s" was not found', $pageId),
+                \sprintf('Page with id "%s" was not found', $exception->getMessage()),
                 Response::HTTP_NOT_FOUND,
             );
         }
@@ -75,18 +66,35 @@ final class PageExportController
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $response = new Response($yaml);
-        $response->headers->set('Content-type', 'application/yaml');
-        $response->headers->set(
-            'Content-Disposition',
-            HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, $this->createFilename($page)),
-        );
+        return $this->createJsonResponseByYaml($yaml, $this->createFilename($page));
+    }
 
-        return $response;
+    private function getPageByRequest(Request $request): Page
+    {
+        $pageId = $request->query->getInt('page_id');
+        $page = $this->pageRepository->getById($pageId);
+
+        if (!$page instanceof Page) {
+            throw new \Exception((string) $pageId);
+        }
+
+        return $page;
     }
 
     private function createFilename(Page $page): string
     {
         return \sprintf('%s.yaml', str_replace(' ', '_', (string) $page->getKey()));
+    }
+
+    private function createJsonResponseByYaml(string $yaml, string $filename): Response
+    {
+        $response = new Response($yaml);
+        $response->headers->set('Content-type', 'application/yaml');
+        $response->headers->set(
+            'Content-Disposition',
+            HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, $filename),
+        );
+
+        return $response;
     }
 }
