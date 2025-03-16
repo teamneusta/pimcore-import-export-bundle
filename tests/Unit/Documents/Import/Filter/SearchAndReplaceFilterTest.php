@@ -4,7 +4,6 @@ namespace App\Tests\Unit\ImportExportBundle\Documents\Import\Filter;
 
 use Neusta\Pimcore\ImportExportBundle\Documents\Import\Filter\SearchAndReplaceFilter;
 use PHPUnit\Framework\TestCase;
-use function PHPUnit\Framework\assertEquals;
 
 class SearchAndReplaceFilterTest extends TestCase
 {

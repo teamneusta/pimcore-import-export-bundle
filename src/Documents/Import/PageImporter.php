@@ -42,7 +42,7 @@ class PageImporter
             if (\is_array($configPage[YamlPage::PAGE])) {
                 $page = $this->yamlToPageConverter->convert(new YamlPage($configPage[YamlPage::PAGE]));
                 if ($forcedSave) {
-                    $this->checkAndUpdatePage($page, $config[YamlPage::PAGES]);
+                    $this->checkAndUpdatePage($page);
                     $page->save();
                 }
             }
@@ -54,25 +54,14 @@ class PageImporter
         return $pages;
     }
 
-    /**
-     * @param array<string, array<string, mixed>> $configPages
-     */
-    private function checkAndUpdatePage(Page $page, array &$configPages): void
+    private function checkAndUpdatePage(Page $page): void
     {
-        $oldPath = $page->getPath();
-
         if (!Document::getById($page->getParentId() ?? -1)) {
             $existingParent = Document::getByPath($page->getPath() ?? '');
             if (!$existingParent) {
                 throw new \InvalidArgumentException('Neither parentId nor path leads to a valid parent element');
             }
             $page->setParentId($existingParent->getId());
-            $newPath = $existingParent->getPath() . $page->getKey() . '/';
-            foreach ($configPages as $configPage) {
-                if (\array_key_exists('path', $configPage[YamlPage::PAGE]) && \is_string($oldPath)) {
-                    str_replace($oldPath, $newPath, $configPage[YamlPage::PAGE]['path']);
-                }
-            }
         }
     }
 }

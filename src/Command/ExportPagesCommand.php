@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
     name: 'neusta:pimcore:export:pages:all',
     description: 'Export all pages in one single YAML file'
 )]
-class ExportAllPagesCommand extends AbstractCommand
+class ExportPagesCommand extends AbstractCommand
 {
     public function __construct(
         private PageRepository $pageRepository,
@@ -34,6 +34,12 @@ class ExportAllPagesCommand extends AbstractCommand
                 InputOption::VALUE_OPTIONAL,
                 'The name of the output file (default: export_all_pages.yaml)',
                 'export_all_pages.yaml'
+            )
+            ->addOption(
+                'ids',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Comma-separated list of page IDs to export'
             );
     }
 
@@ -48,9 +54,32 @@ class ExportAllPagesCommand extends AbstractCommand
             return Command::FAILURE;
         }
 
-        $allPages = $this->addPages($rootPage, []);
+        $pageIds = $input->getOption('ids');
+        $allPages = [];
 
-        $this->io->writeln('Start exporting all results');
+        if ($pageIds) {
+            $ids = array_map('intval', explode(',', $pageIds));
+            foreach ($ids as $id) {
+                $page = $this->pageRepository->getById($id);
+                if ($page) {
+                    $allPages = $this->addPages($page, $allPages);
+                } else {
+                    $this->io->error("Page with ID $id not found");
+
+                    return Command::FAILURE;
+                }
+            }
+        } else {
+            $rootPage = $this->pageRepository->getById(1);
+            if (!$rootPage) {
+                $this->io->error('Root page (ID: 1) not found');
+
+                return Command::FAILURE;
+            }
+            $allPages = $this->addPages($rootPage, []);
+        }
+
+        $this->io->writeln(\sprintf('Start exporting %d pages', \count($allPages)));
         $this->io->newLine();
         $yamlContent = $this->pageExporter->exportToYaml($allPages);
 
@@ -60,6 +89,7 @@ class ExportAllPagesCommand extends AbstractCommand
         $this->io->newLine();
         if (!file_put_contents($exportFilename, $yamlContent)) {
             $this->io->error('An error occurred while writing the file');
+
             return Command::FAILURE;
         }
 

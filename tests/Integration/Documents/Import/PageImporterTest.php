@@ -154,12 +154,18 @@ class PageImporterTest extends KernelTestCase
                     page:
                         parentId: 9999
                         id: 1001
+                        path: /test_document_1/
+                        key: test_document_1_2
+                -
+                    page:
+                        parentId: 9999
+                        id: 10011
                         path: /test_document_1/test_document_1_1/
                         key: test_document_1_1_1
             YAML;
 
         $pages = $this->importer->fromYaml($yaml);
 
-        self::assertEquals('/test_document_1/test_document_1_1/', $pages[2]->getPath());
+        self::assertEquals('/test_document_1/test_document_1_1/', $pages[3]->getPath());
     }
 }

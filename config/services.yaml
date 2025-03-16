@@ -12,7 +12,11 @@ services:
   ############
   # Commands #
   ############
-  Neusta\Pimcore\ImportExportBundle\Command\ExportAllPagesCommand:
+  Neusta\Pimcore\ImportExportBundle\Command\ExportPagesCommand:
+    public: true
+    tags: [ 'console.command' ]
+
+  Neusta\Pimcore\ImportExportBundle\Command\ImportPagesCommand:
     public: true
     tags: [ 'console.command' ]
 
