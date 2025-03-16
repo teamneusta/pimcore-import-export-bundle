@@ -142,19 +142,19 @@ class PageImporterTest extends KernelTestCase
                     page:
                         parentId: 1
                         id: 999
-                        path: /my_path/
+                        path: /
                         key: test_document_1
                 -
                     page:
                         parentId: 9999
                         id: 1000
-                        path: /my_path/test_document_1/
+                        path: /test_document_1/
                         key: test_document_1_1
                 -
                     page:
                         parentId: 9999
                         id: 1001
-                        path: /my_path/test_document_1/test_document_1_1/
+                        path: /test_document_1/test_document_1_1/
                         key: test_document_1_1_1
             YAML;
 
