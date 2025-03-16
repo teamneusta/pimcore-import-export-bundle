@@ -51,8 +51,6 @@ page:
 
 In the same way you can re-import your yaml file again by selecting: `Import from YAML` in the context menu.
 
-## Configuration
-
 ### Page Import
 
 The import process will create pages with the given data.
@@ -72,6 +70,40 @@ If neither is found, an InvalidArgumentException will be thrown, and the save op
 
 If multiple pages are imported and a path specification changes py the applied rules, this path specification will be
 replaced with the new, correct path specification in all provided page configurations.
+
+### Parameterize your yaml files
+
+You can parameterize your yaml files with placeholders. The placeholders will be replaced by the values you provide in your fixtures.
+
+```yaml
+pages:
+    - page:
+        id: 2
+        parentId: 1
+        # ...further properties
+        editables:
+            # ...several editables
+            'main:1.img:1.image':
+                type: image
+                data:
+                    id: %IMAGE_ID%
+            'main:1.img:1.title':
+            # ...
+```
+
+In the case above an image has been assigned to an `Editable/Image` editable. The image id is a placeholder `%IMAGE_ID%`. 
+
+You can use now a `Neusta\Pimcore\ImportExportBundle\Documents\Import\Filter\SearchAndReplaceFilter` instance to replace the placeholder with the actual image id (e.g. 1234).
+
+```php
+$yamlContent = (new SearchAndReplaceFilter(['%IMAGE_ID%' => 1234]))->filterAndReplace($yamlContent);
+```
+
+If you want to change your yaml in a more complex way you can use the `Neusta\Pimcore\ImportExportBundle\Documents\Import\Filter\YamlFilter` interface to implement your own filter.
+
+With that technique you can export test pages for Fixtures, change values into placeholders (e.g. for assets and data objects) and replace them with the actual values in your tests.
+
+```php
 
 ## Contribution
 
