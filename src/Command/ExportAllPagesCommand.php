@@ -9,6 +9,7 @@ use Pimcore\Model\Document;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
@@ -22,6 +23,18 @@ class ExportAllPagesCommand extends AbstractCommand
         private PageExporter $pageExporter,
     ) {
         parent::__construct();
+    }
+
+    protected function configure(): void
+    {
+        $this
+            ->addOption(
+                'output',
+                'o',
+                InputOption::VALUE_OPTIONAL,
+                'The name of the output file (default: export_all_pages.yaml)',
+                'export_all_pages.yaml'
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -41,11 +54,14 @@ class ExportAllPagesCommand extends AbstractCommand
         $this->io->newLine();
         $yamlContent = $this->pageExporter->exportToYaml($allPages);
 
-        $exportFilename = 'export_all_pages.yaml';
+        $exportFilename = $input->getOption('output');
 
         $this->io->writeln('Write in file <' . $exportFilename . '>');
         $this->io->newLine();
-        file_put_contents($exportFilename, $yamlContent);
+        if (!file_put_contents($exportFilename, $yamlContent)) {
+            $this->io->error('An error occurred while writing the file');
+            return Command::FAILURE;
+        }
 
         $this->io->success('All pages have been exported successfully');
 
