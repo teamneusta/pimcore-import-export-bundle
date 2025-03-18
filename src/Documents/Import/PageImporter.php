@@ -22,7 +22,7 @@ class PageImporter
     }
 
     /**
-     * @return array<Page>
+     * @return array<PimcorePage>
      *
      * @throws ConverterException
      * @throws DuplicateFullPathException
@@ -54,7 +54,7 @@ class PageImporter
         return $pages;
     }
 
-    private function checkAndUpdatePage(Page $page): void
+    private function checkAndUpdatePage(Document $page): void
     {
         if (!Document::getById($page->getParentId() ?? -1)) {
             $existingParent = Document::getByPath($page->getPath() ?? '');

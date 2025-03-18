@@ -70,7 +70,7 @@ class PageExporter
         $yamlExportPages = [];
         foreach ($pages as $page) {
             if (
-                $page instanceof Page
+                $page instanceof PimcorePage
                 || $page instanceof PageSnippet
                 || $page instanceof Folder
             ) {

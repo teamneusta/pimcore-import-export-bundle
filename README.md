@@ -24,6 +24,9 @@ After enabling the bundle you should see a new menu item in the context menu of 
 
 ![context_menu_export.png](docs/images/context_menu_export.png)
 
+After that you will be asked for a file name and the export will start:
+![filename_dialog.png](docs/images/filename_dialog.png)
+
 (german translation)
 
 For the import you can use the main menu button:

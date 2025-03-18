@@ -4,12 +4,12 @@ namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
 use Neusta\Pimcore\ImportExportBundle\Documents\Export\PageExporter;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\PageRepository;
-use Pimcore\Model\Document\Page;
+use Pimcore\Model\Document\Page as PimcorePage;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 final class PageExportController
 {
@@ -26,22 +26,15 @@ final class PageExportController
     )]
     public function exportPage(Request $request): Response
     {
-        try {
-            $page = $this->getPageByRequest($request);
-        } catch (\Exception $exception) {
+        $page = $this->getPageByRequest($request);
+        if (!$page instanceof PimcorePage) {
             return new JsonResponse(
-                \sprintf('Page with id "%s" was not found', $exception->getMessage()),
+                \sprintf('Page with id "%s" was not found', $request->query->getInt('page_id')),
                 Response::HTTP_NOT_FOUND,
             );
         }
 
-        try {
-            $yaml = $this->pageExporter->exportToYaml([$page]);
-        } catch (\Exception $e) {
-            return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        return $this->createJsonResponseByYaml($yaml, $this->createFilename($page));
+        return $this->exportPages([$page], $request->query->getString('filename'));
     }
 
     #[Route(
@@ -51,39 +44,38 @@ final class PageExportController
     )]
     public function exportPageWithChildren(Request $request): Response
     {
-        try {
-            $page = $this->getPageByRequest($request);
-        } catch (\Exception $exception) {
+        $page = $this->getPageByRequest($request);
+        if (!$page instanceof PimcorePage) {
             return new JsonResponse(
-                \sprintf('Page with id "%s" was not found', $exception->getMessage()),
+                \sprintf('Page with id "%s" was not found', $request->query->getInt('page_id')),
                 Response::HTTP_NOT_FOUND,
             );
         }
 
+        $pages = $this->pageRepository->findAllPagesWithSubPages($page);
+
+        return $this->exportPages($pages, $request->query->getString('filename'));
+    }
+
+    private function getPageByRequest(Request $request): ?PimcorePage
+    {
+        $pageId = $request->query->getInt('page_id');
+
+        return $this->pageRepository->getById($pageId);
+    }
+
+    /**
+     * @param iterable<PimcorePage> $pages
+     */
+    private function exportPages(iterable $pages, string $filename): Response
+    {
         try {
-            $yaml = $this->pageExporter->exportToYaml($this->pageRepository->findAllPagesWithSubPages($page));
+            $yaml = $this->pageExporter->exportToYaml($pages);
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->createJsonResponseByYaml($yaml, $this->createFilename($page));
-    }
-
-    private function getPageByRequest(Request $request): Page
-    {
-        $pageId = $request->query->getInt('page_id');
-        $page = $this->pageRepository->getById($pageId);
-
-        if (!$page instanceof Page) {
-            throw new \Exception((string) $pageId);
-        }
-
-        return $page;
-    }
-
-    private function createFilename(Page $page): string
-    {
-        return \sprintf('%s.yaml', str_replace(' ', '_', (string) $page->getKey()));
+        return $this->createJsonResponseByYaml($yaml, $filename);
     }
 
     private function createJsonResponseByYaml(string $yaml, string $filename): Response

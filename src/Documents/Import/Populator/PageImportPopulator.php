@@ -13,8 +13,8 @@ use Pimcore\Model\Document\Page as PimcorePage;
 class PageImportPopulator implements Populator
 {
     /**
-     * @param Page            $source
-     * @param Page                $target
+     * @param Page                $source
+     * @param PimcorePage         $target
      * @param GenericContext|null $ctx
      */
     public function populate(object $target, object $source, ?object $ctx = null): void

@@ -58,6 +58,7 @@ class ExportPagesCommand extends AbstractCommand
                     $allPages = $this->addPages($page, $allPages);
                 } else {
                     $this->io->error("Page with ID $id not found");
+
                     return Command::FAILURE;
                 }
             }
@@ -65,6 +66,7 @@ class ExportPagesCommand extends AbstractCommand
             $rootPage = $this->pageRepository->getById(1);
             if (!$rootPage) {
                 $this->io->error('Root page (ID: 1) not found');
+
                 return Command::FAILURE;
             }
             $allPages = $this->addPages($rootPage, []);
@@ -80,6 +82,7 @@ class ExportPagesCommand extends AbstractCommand
         $this->io->newLine();
         if (!file_put_contents($exportFilename, $yamlContent)) {
             $this->io->error('An error occurred while writing the file');
+
             return Command::FAILURE;
         }
 

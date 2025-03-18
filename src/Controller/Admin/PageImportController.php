@@ -4,7 +4,7 @@ namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
 use Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImporter;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\PageRepository;
-use Pimcore\Model\Document\Page;
+use Pimcore\Model\Document\Page as PimcorePage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,9 +40,9 @@ final class PageImportController
     )]
     public function import(Request $request): JsonResponse
     {
-        $file = $request->files->get('file');
+        $file = $this->getUploadedFile($request);
         if (!$file instanceof UploadedFile) {
-            return new JsonResponse(['success' => false, 'message' => self::ERR_NO_FILE_UPLOADED], 400);
+            return $this->createJsonResponse(false, $this->messagesMap[self::ERR_NO_FILE_UPLOADED], 400);
         }
 
         $overwrite = $request->request->getBoolean('overwrite');
@@ -61,13 +61,23 @@ final class PageImportController
             }
             $resultMessage = $this->appendMessage($results);
 
-            return new JsonResponse(['success' => true, 'message' => $resultMessage]);
+            return $this->createJsonResponse(true, $resultMessage);
         } catch (\Exception $e) {
-            return new JsonResponse(['success' => false, 'message' => $e->getMessage()], 500);
+            return $this->createJsonResponse(false, $e->getMessage(), 500);
         }
     }
 
-    protected function replaceIfExists(Page $page, bool $overwrite): int
+    private function getUploadedFile(Request $request): ?UploadedFile
+    {
+        return $request->files->get('file');
+    }
+
+    private function createJsonResponse(bool $success, string $message, int $statusCode = 200): JsonResponse
+    {
+        return new JsonResponse(['success' => $success, 'message' => $message], $statusCode);
+    }
+
+    protected function replaceIfExists(PimcorePage $page, bool $overwrite): int
     {
         $oldPage = $this->pageRepository->getByPath('/' . $page->getFullPath());
         if (null !== $oldPage) {

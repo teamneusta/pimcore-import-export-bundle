@@ -4,7 +4,7 @@
 neusta_converter:
   converter:
     ###########################################################
-    # Import Converter (YamlExportPage -> Page)
+    # Import Converter (Page -> PimcorePage)
     ###########################################################
     neusta_pimcore_import_export.import_page:
       target: Pimcore\Model\Document\Page
@@ -37,7 +37,7 @@ neusta_converter:
           default: 0
 
     ###########################################################
-    # Export Converter (Folder -> YamlExportPage)
+    # Export Converter (Document/Folder -> Page)
     ###########################################################
     neusta_pimcore_import_export.export_folder:
       target: Neusta\Pimcore\ImportExportBundle\Documents\Model\Page
@@ -54,7 +54,7 @@ neusta_converter:
         parentId: ~
 
     ###########################################################
-    # Export Converter (Page -> YamlExportPage)
+    # Export Converter (Pimcore Page -> Page)
     ###########################################################
     neusta_pimcore_import_export.export_page:
       target: Neusta\Pimcore\ImportExportBundle\Documents\Model\Page
@@ -74,7 +74,7 @@ neusta_converter:
         parentId: ~
 
     ###########################################################
-    # Export Converter (Snippet -> YamlExportPage)
+    # Export Converter (Page Snippet -> Page)
     ###########################################################
     neusta_pimcore_import_export.export_page_snippet:
       target: Neusta\Pimcore\ImportExportBundle\Documents\Model\Page
