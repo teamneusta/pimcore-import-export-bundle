@@ -74,7 +74,7 @@ class ExportPagesCommand extends AbstractCommand
 
         $this->io->writeln(\sprintf('Start exporting %d pages', \count($allPages)));
         $this->io->newLine();
-        $yamlContent = $this->pageExporter->exportToYaml($allPages);
+        $yamlContent = $this->pageExporter->toYaml($allPages);
 
         $exportFilename = $input->getOption('output');
 

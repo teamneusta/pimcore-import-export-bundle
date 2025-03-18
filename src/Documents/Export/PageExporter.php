@@ -38,34 +38,11 @@ class PageExporter
      *     key: 'page_key_2'
      * ...
      *
-     * @throws ConverterException
-     *
-     * @deprecated use PageExporter#exportToYaml([$page]) in further versions
-     */
-    public function toYaml(PimcorePage $page): string
-    {
-        $pages = [];
-        if ($page instanceof PimcorePage) {
-            $pages = [$page];
-        }
-
-        return $this->exportToYaml($pages);
-    }
-
-    /**
-     * Exports one or more pages as YAML with the following structure:
-     * pages:
-     *   - page:
-     *      key: 'page_key_1'
-     *   - page:
-     *     key: 'page_key_2'
-     * ...
-     *
      * @param iterable<Document> $pages
      *
      * @throws ConverterException
      */
-    public function exportToYaml(iterable $pages): string
+    public function toYaml(iterable $pages): string
     {
         $yamlExportPages = [];
         foreach ($pages as $page) {
@@ -82,7 +59,7 @@ class PageExporter
             [Page::PAGES => $yamlExportPages],
             'yaml',
             [
-                'yaml_inline' => 4,
+                'yaml_inline' => 6,
                 'yaml_indent' => 0,
                 'yaml_flags' => self::YAML_DUMP_FLAGS,
             ]

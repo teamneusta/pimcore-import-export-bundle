@@ -41,7 +41,7 @@ class PageExporterTest extends KernelTestCase
         $inputEditable->setDataFromResource('some text input');
         $page->setEditables([$inputEditable]);
 
-        $yaml = $this->exporter->exportToYaml([$page]);
+        $yaml = $this->exporter->toYaml([$page]);
         $this->assertMatchesSnapshot($yaml, new ImportExportYamlDriver());
     }
 
@@ -59,7 +59,7 @@ class PageExporterTest extends KernelTestCase
         $page2->setTitle('Test Document_2');
         $page2->save();
 
-        $yaml = $this->exporter->exportToYaml([$page1, $page2]);
+        $yaml = $this->exporter->toYaml([$page1, $page2]);
         $this->assertMatchesSnapshot($yaml, new ImportExportYamlDriver());
     }
 
@@ -75,7 +75,7 @@ class PageExporterTest extends KernelTestCase
         $page2->setKey('test_document_2');
         $page2->setPath('/');
 
-        $yaml = $this->exporter->exportToYaml([$page1, $page2]);
+        $yaml = $this->exporter->toYaml([$page1, $page2]);
         $this->assertMatchesSnapshot($yaml, new ImportExportYamlDriver());
     }
 
@@ -99,7 +99,7 @@ class PageExporterTest extends KernelTestCase
         $page3->setTitle('Test Document_2');
         $page3->save();
 
-        $yaml = $this->exporter->exportToYaml([$page1, $page2, $page3]);
+        $yaml = $this->exporter->toYaml([$page1, $page2, $page3]);
         $this->assertMatchesSnapshot($yaml, new ImportExportYamlDriver());
     }
 }
