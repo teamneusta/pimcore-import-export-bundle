@@ -5,10 +5,10 @@ namespace Neusta\Pimcore\ImportExportBundle\Documents\Export;
 use Neusta\ConverterBundle\Converter;
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Exception\ConverterException;
-use Neusta\Pimcore\ImportExportBundle\Documents\Model\YamlPage;
+use Neusta\Pimcore\ImportExportBundle\Documents\Model\Page;
 use Pimcore\Model\Document;
 use Pimcore\Model\Document\Folder;
-use Pimcore\Model\Document\Page;
+use Pimcore\Model\Document\Page as PimcorePage;
 use Pimcore\Model\Document\PageSnippet;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Yaml\Yaml;
@@ -21,7 +21,7 @@ class PageExporter
         Yaml::DUMP_NULL_AS_TILDE;
 
     /**
-     * @param Converter<Document, YamlPage, GenericContext|null> $pageToYamlConverter
+     * @param Converter<Document, Page, GenericContext|null> $pageToYamlConverter
      */
     public function __construct(
         private readonly Converter $pageToYamlConverter,
@@ -42,10 +42,10 @@ class PageExporter
      *
      * @deprecated use PageExporter#exportToYaml([$page]) in further versions
      */
-    public function toYaml(Page $page): string
+    public function toYaml(PimcorePage $page): string
     {
         $pages = [];
-        if ($page instanceof Page) {
+        if ($page instanceof PimcorePage) {
             $pages = [$page];
         }
 
@@ -74,12 +74,12 @@ class PageExporter
                 || $page instanceof PageSnippet
                 || $page instanceof Folder
             ) {
-                $yamlExportPages[] = [YamlPage::PAGE => $this->pageToYamlConverter->convert($page)];
+                $yamlExportPages[] = [Page::PAGE => $this->pageToYamlConverter->convert($page)];
             }
         }
 
         return $this->serializer->serialize(
-            [YamlPage::PAGES => $yamlExportPages],
+            [Page::PAGES => $yamlExportPages],
             'yaml',
             [
                 'yaml_inline' => 4,

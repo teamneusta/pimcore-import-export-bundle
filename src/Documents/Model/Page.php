@@ -2,10 +2,10 @@
 
 namespace Neusta\Pimcore\ImportExportBundle\Documents\Model;
 
-class YamlPage
+class Page
 {
-    public const PAGES = 'pages';
-    public const PAGE = 'page';
+    public const PAGES = 'documents';
+    public const PAGE = 'document';
 
     public ?int $id = null;
     public int $parentId = 0;
@@ -18,7 +18,7 @@ class YamlPage
     public string $key = '';
     public ?string $title = null;
     public ?string $controller = null;
-    /** @var array<YamlEditable> */
+    /** @var array<Editable> */
     public array $editables = [];
 
     /**

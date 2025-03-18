@@ -4,16 +4,16 @@ namespace Neusta\Pimcore\ImportExportBundle\Documents\Import\Populator;
 
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Populator;
-use Neusta\Pimcore\ImportExportBundle\Documents\Model\YamlPage;
-use Pimcore\Model\Document\Page;
+use Neusta\Pimcore\ImportExportBundle\Documents\Model\Page;
+use Pimcore\Model\Document\Page as PimcorePage;
 
 /**
- * @implements Populator<YamlPage, Page, GenericContext|null>
+ * @implements Populator<Page, PimcorePage, GenericContext|null>
  */
 class PageImportPopulator implements Populator
 {
     /**
-     * @param YamlPage            $source
+     * @param Page            $source
      * @param Page                $target
      * @param GenericContext|null $ctx
      */

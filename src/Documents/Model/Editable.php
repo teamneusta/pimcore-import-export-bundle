@@ -2,7 +2,7 @@
 
 namespace Neusta\Pimcore\ImportExportBundle\Documents\Model;
 
-class YamlEditable
+class Editable
 {
     public string $type;
     public string $name;

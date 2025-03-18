@@ -8,12 +8,13 @@ use Pimcore\Console\AbstractCommand;
 use Pimcore\Model\Document;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
-    name: 'neusta:pimcore:export:pages:all',
+    name: 'neusta:pimcore:export:pages',
     description: 'Export all pages in one single YAML file'
 )]
 class ExportPagesCommand extends AbstractCommand
@@ -35,11 +36,10 @@ class ExportPagesCommand extends AbstractCommand
                 'The name of the output file (default: export_all_pages.yaml)',
                 'export_all_pages.yaml'
             )
-            ->addOption(
+            ->addArgument(
                 'ids',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Comma-separated list of page IDs to export'
+                InputArgument::IS_ARRAY,
+                'List of page IDs to export'
             );
     }
 
@@ -47,25 +47,17 @@ class ExportPagesCommand extends AbstractCommand
     {
         $this->io->title('Export all pages into one single YAML file');
 
-        $rootPage = $this->pageRepository->getById(1);
-        if (!$rootPage) {
-            $this->io->error('Root page (ID: 1) not found');
-
-            return Command::FAILURE;
-        }
-
-        $pageIds = $input->getOption('ids');
+        $pageIds = $input->getArgument('ids');
         $allPages = [];
 
         if ($pageIds) {
-            $ids = array_map('intval', explode(',', $pageIds));
+            $ids = array_map('intval', $pageIds);
             foreach ($ids as $id) {
                 $page = $this->pageRepository->getById($id);
                 if ($page) {
                     $allPages = $this->addPages($page, $allPages);
                 } else {
                     $this->io->error("Page with ID $id not found");
-
                     return Command::FAILURE;
                 }
             }
@@ -73,7 +65,6 @@ class ExportPagesCommand extends AbstractCommand
             $rootPage = $this->pageRepository->getById(1);
             if (!$rootPage) {
                 $this->io->error('Root page (ID: 1) not found');
-
                 return Command::FAILURE;
             }
             $allPages = $this->addPages($rootPage, []);
@@ -89,7 +80,6 @@ class ExportPagesCommand extends AbstractCommand
         $this->io->newLine();
         if (!file_put_contents($exportFilename, $yamlContent)) {
             $this->io->error('An error occurred while writing the file');
-
             return Command::FAILURE;
         }
 

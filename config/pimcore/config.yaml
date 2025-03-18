@@ -40,7 +40,7 @@ neusta_converter:
     # Export Converter (Folder -> YamlExportPage)
     ###########################################################
     neusta_pimcore_import_export.export_folder:
-      target: Neusta\Pimcore\ImportExportBundle\Documents\Model\YamlPage
+      target: Neusta\Pimcore\ImportExportBundle\Documents\Model\Page
       populators:
         - neusta_pimcore_import_export.page.property.language.populator
         - neusta_pimcore_import_export.page.property.navigation_title.populator
@@ -57,7 +57,7 @@ neusta_converter:
     # Export Converter (Page -> YamlExportPage)
     ###########################################################
     neusta_pimcore_import_export.export_page:
-      target: Neusta\Pimcore\ImportExportBundle\Documents\Model\YamlPage
+      target: Neusta\Pimcore\ImportExportBundle\Documents\Model\Page
       populators:
         - neusta_pimcore_import_export.page.property.language.populator
         - neusta_pimcore_import_export.page.property.navigation_title.populator
@@ -77,7 +77,7 @@ neusta_converter:
     # Export Converter (Snippet -> YamlExportPage)
     ###########################################################
     neusta_pimcore_import_export.export_page_snippet:
-      target: Neusta\Pimcore\ImportExportBundle\Documents\Model\YamlPage
+      target: Neusta\Pimcore\ImportExportBundle\Documents\Model\Page
       populators:
         - neusta_pimcore_import_export.page.property.language.populator
         - neusta_pimcore_import_export.page.property.navigation_title.populator
@@ -93,7 +93,7 @@ neusta_converter:
         parentId: ~
 
     neusta_pimcore_import_export.editable_converter:
-      target: Neusta\Pimcore\ImportExportBundle\Documents\Model\YamlEditable
+      target: Neusta\Pimcore\ImportExportBundle\Documents\Model\Editable
       populators:
         - neusta_pimcore_import_export.editable.data.populator
       properties:
