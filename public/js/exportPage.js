@@ -23,7 +23,7 @@ neusta_pimcore_import_export.plugin.page.export = Class.create({
                 let defaultFilename = document.data.key + '.yaml';
                 let filename = prompt(t('neusta_pimcore_import_export_enter_filename'), defaultFilename);
                 if (filename) {
-                    pimcore.helpers.download(Routing.generate(route, {page_id: document.data.id, filename: filename}));
+                    pimcore.helpers.download(Routing.generate(route, {page_id: document.data.id, filename: filename, format: 'yaml'}));
                 }
             }
         }));

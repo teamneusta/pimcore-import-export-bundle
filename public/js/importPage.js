@@ -10,10 +10,10 @@ neusta_pimcore_import_export.plugin.page.import = Class.create({
 
         menu.neusta_pimcore_import_export = {
             label: t('neusta_pimcore_import_export_import_menu_label'),
-            iconCls: 'pimcore_icon_import', // Pimcore-Icon für Konsistenz
-            priority: 50, // Position im Menü (höher = weiter oben)
+            iconCls: 'pimcore_icon_import',
+            priority: 50,
             handler: this.openImportDialog.bind(this),
-            noSubmenus: true // Kein Submenü, direkter Klick öffnet das Fenster
+            noSubmenus: true
         };
     },
 
@@ -46,58 +46,7 @@ neusta_pimcore_import_export.plugin.page.import = Class.create({
                     buttons: [
                         {
                             text: 'Import',
-                            handler: function (btn) {
-                                let form = btn.up('form').getForm();
-                                if (!form.isValid()) {
-                                    return;
-                                }
-
-                                form.submit({
-                                    url: Routing.generate('neusta_pimcore_import_export_page_import'),
-                                    method: 'POST',
-                                    waitMsg: t('neusta_pimcore_import_export_import_dialog_wait_message'),
-                                    headers: {
-                                        'X-Requested-With': 'XMLHttpRequest' // ✅ important for AJAX-Requests
-                                    },
-                                    params: {
-                                        'csrfToken': parent.pimcore.settings["csrfToken"]
-                                    },
-                                    success: function (form, action) {
-                                        let response = Ext.decode(action.response.responseText);
-                                        // pimcore.helpers.showNotification(t('neusta_pimcore_import_export_import_dialog_notification_success'), response.message, 'success');
-                                        let successDialog = new Ext.Window({
-                                            title: t('neusta_pimcore_import_export_import_dialog_notification_success'),
-                                            width: 300,
-                                            height: 200,
-                                            modal: true, // ✅ Modal = Benutzer muss interagieren
-                                            layout: 'fit',
-                                            items: [
-                                                {
-                                                    xtype: 'panel',
-                                                    html: `${response.message}`,
-                                                }
-                                            ],
-                                            buttons: [
-                                                {
-                                                    text: 'OK',
-                                                    handler: function () {
-                                                        successDialog.close();
-                                                    }
-                                                }
-                                            ]
-                                        });
-
-                                        successDialog.show();
-
-                                        pimcore.globalmanager.get('layout_document_tree').tree.getStore().reload();
-                                        uploadDialog.close();
-                                    },
-                                    failure: function (form, action) {
-                                        let response = Ext.decode(action.response.responseText);
-                                        pimcore.helpers.showNotification(t('neusta_pimcore_import_export_import_dialog_notification_error'), response.message || 'Import failed', 'error');
-                                    }
-                                });
-                            }
+                            handler: this.handleImport.bind(this)
                         }
                     ]
                 })
@@ -105,6 +54,62 @@ neusta_pimcore_import_export.plugin.page.import = Class.create({
         });
 
         uploadDialog.show();
+    },
+
+    handleImport: function (btn) {
+        let form = btn.up('form').getForm();
+        if (!form.isValid()) {
+            return;
+        }
+
+        form.submit({
+            url: Routing.generate('neusta_pimcore_import_export_page_import', {format: 'yaml'}),
+            method: 'POST',
+            waitMsg: t('neusta_pimcore_import_export_import_dialog_wait_message'),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            params: {
+                'csrfToken': parent.pimcore.settings["csrfToken"]
+            },
+            success: this.onImportSuccess.bind(this),
+            failure: this.onImportFailure.bind(this)
+        });
+    },
+
+    onImportSuccess: function (form, action) {
+        let response = Ext.decode(action.response.responseText);
+        let successDialog = new Ext.Window({
+            title: t('neusta_pimcore_import_export_import_dialog_notification_success'),
+            width: 300,
+            height: 200,
+            modal: true,
+            layout: 'fit',
+            items: [
+                {
+                    xtype: 'panel',
+                    html: `${response.message}`,
+                }
+            ],
+            buttons: [
+                {
+                    text: 'OK',
+                    handler: function () {
+                        successDialog.close();
+                    }
+                }
+            ]
+        });
+
+        successDialog.show();
+
+        pimcore.globalmanager.get('layout_document_tree').tree.getStore().reload();
+        form.owner.up('window').close();
+    },
+
+    onImportFailure: function (form, action) {
+        let response = Ext.decode(action.response.responseText);
+        pimcore.helpers.showNotification(t('neusta_pimcore_import_export_import_dialog_notification_error'), response.message || 'Import failed', 'error');
     }
 });
 

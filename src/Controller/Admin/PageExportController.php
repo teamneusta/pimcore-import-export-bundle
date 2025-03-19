@@ -34,7 +34,7 @@ final class PageExportController
             );
         }
 
-        return $this->exportPages([$page], $request->query->getString('filename'));
+        return $this->exportPages([$page], $request->query->getString('filename'), 'yaml');
     }
 
     #[Route(
@@ -54,7 +54,7 @@ final class PageExportController
 
         $pages = $this->pageRepository->findAllPagesWithSubPages($page);
 
-        return $this->exportPages($pages, $request->query->getString('filename'));
+        return $this->exportPages($pages, $request->query->getString('filename'), $request->query->getString('format'));
     }
 
     private function getPageByRequest(Request $request): ?PimcorePage
@@ -67,10 +67,10 @@ final class PageExportController
     /**
      * @param iterable<PimcorePage> $pages
      */
-    private function exportPages(iterable $pages, string $filename): Response
+    private function exportPages(iterable $pages, string $filename, string $format): Response
     {
         try {
-            $yaml = $this->pageExporter->export($pages, 'yaml');
+            $yaml = $this->pageExporter->export($pages, $format);
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

@@ -34,6 +34,9 @@ services:
   ##############
   # Serializer #
   ##############
+  Neusta\Pimcore\ImportExportBundle\Serializer\SerializerInterface:
+    alias: Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy
+
   Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy:
     arguments:
       $formatToSerializerMap:
