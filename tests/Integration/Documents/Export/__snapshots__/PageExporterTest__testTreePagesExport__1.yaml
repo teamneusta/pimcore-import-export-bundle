@@ -37,7 +37,7 @@ documents:
             language: ''
             navigation_name: ~
             navigation_title: ~
-            key: test_document_2
-            title: 'Test Document_2'
+            key: test_document_3
+            title: 'Test Document_3'
             controller: 'App\Controller\DefaultController::defaultAction'
             editables: {  }
