@@ -118,8 +118,8 @@ class PageExporterTest extends KernelTestCase
 
         $page3 = new Page();
         $page3->setParentId($page2->getId());
-        $page3->setKey('test_document_2');
-        $page3->setTitle('Test Document_2');
+        $page3->setKey('test_document_3');
+        $page3->setTitle('Test Document_3');
         $page3->save();
 
         $yaml = $this->exporter->export([$page1, $page2, $page3], 'yaml');
