@@ -43,7 +43,7 @@ class ImportPagesCommand extends AbstractCommand
     {
         $this->io->title('Import pages given by YAML file');
 
-        $this->io->writeln('Start exporting all results');
+        $this->io->writeln('Start importing pages from YAML file');
         $this->io->newLine();
 
         $yamlInput = file_get_contents($input->getOption('input'));
