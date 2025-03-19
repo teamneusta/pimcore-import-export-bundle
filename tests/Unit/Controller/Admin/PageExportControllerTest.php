@@ -43,7 +43,7 @@ class PageExportControllerTest extends TestCase
     {
         $page = $this->prophesize(Page::class);
         $this->pageRepository->getById(17)->willReturn($page->reveal());
-        $this->pageExporter->export([$page->reveal()])->willReturn('TEST_YAML');
+        $this->pageExporter->export([$page->reveal()], 'yaml')->willReturn('TEST_YAML');
 
         $response = $this->controller->exportPage($this->request);
 
@@ -57,7 +57,7 @@ class PageExportControllerTest extends TestCase
     {
         $page = $this->prophesize(Page::class);
         $this->pageRepository->getById(17)->willReturn($page->reveal());
-        $this->pageExporter->export([$page->reveal()])->willThrow(new \Exception('Problem'));
+        $this->pageExporter->export([$page->reveal()], 'yaml')->willThrow(new \Exception('Problem'));
 
         $response = $this->controller->exportPage($this->request);
 

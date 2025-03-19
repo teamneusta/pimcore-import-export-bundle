@@ -33,7 +33,7 @@ class PageImporter
         $config = $this->serializer->deserialize($yamlInput, $format);
 
         if (!\is_array($config) || !\is_array($config[Page::PAGES] ?? null)) {
-            throw new \DomainException(sprintf('Given data in format %s is not valid.', $format));
+            throw new \DomainException(\sprintf('Given data in format %s is not valid.', $format));
         }
 
         $pages = [];

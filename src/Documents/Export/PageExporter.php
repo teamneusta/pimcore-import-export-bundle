@@ -24,7 +24,7 @@ class PageExporter
     }
 
     /**
-     * Exports one or more pages in the given format (yaml, json, ...))
+     * Exports one or more pages in the given format (yaml, json, ...)).
      *
      * @param iterable<Document> $pages
      *
@@ -43,6 +43,6 @@ class PageExporter
             }
         }
 
-        return $this->serializer->serialize([Page::PAGES => $yamlExportPages],$format);
+        return $this->serializer->serialize([Page::PAGES => $yamlExportPages], $format);
     }
 }

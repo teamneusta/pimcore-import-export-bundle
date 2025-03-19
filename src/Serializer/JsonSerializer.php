@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Neusta\Pimcore\ImportExportBundle\Serializer;
 
-use Neusta\Pimcore\ImportExportBundle\Documents\Model\Page;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
