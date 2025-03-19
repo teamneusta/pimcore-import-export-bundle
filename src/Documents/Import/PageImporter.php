@@ -6,10 +6,10 @@ use Neusta\ConverterBundle\Converter;
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Exception\ConverterException;
 use Neusta\Pimcore\ImportExportBundle\Documents\Model\Page;
+use Neusta\Pimcore\ImportExportBundle\Serializer\SerializerInterface;
 use Pimcore\Model\Document;
 use Pimcore\Model\Document\Page as PimcorePage;
 use Pimcore\Model\Element\DuplicateFullPathException;
-use Symfony\Component\Yaml\Yaml;
 
 class PageImporter
 {
@@ -18,6 +18,7 @@ class PageImporter
      */
     public function __construct(
         private readonly Converter $yamlToPageConverter,
+        private readonly SerializerInterface $serializer,
     ) {
     }
 
@@ -27,12 +28,12 @@ class PageImporter
      * @throws ConverterException
      * @throws DuplicateFullPathException
      */
-    public function fromYaml(string $yamlInput, bool $forcedSave = true): array
+    public function import(string $yamlInput, string $format, bool $forcedSave = true): array
     {
-        $config = Yaml::parse($yamlInput);
+        $config = $this->serializer->deserialize($yamlInput, $format);
 
         if (!\is_array($config) || !\is_array($config[Page::PAGES] ?? null)) {
-            throw new \DomainException('Given YAML is not valid.');
+            throw new \DomainException(sprintf('Given data in format %s is not valid.', $format));
         }
 
         $pages = [];

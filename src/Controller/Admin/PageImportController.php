@@ -48,7 +48,7 @@ final class PageImportController
         $overwrite = $request->request->getBoolean('overwrite');
 
         try {
-            $pages = $this->pageImporter->fromYaml($file->getContent());
+            $pages = $this->pageImporter->import($file->getContent(), 'yaml');
 
             $results = [
                 self::SUCCESS_DOCUMENT_REPLACEMENT => 0,

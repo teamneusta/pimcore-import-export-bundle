@@ -53,7 +53,7 @@ class ImportPagesCommand extends AbstractCommand
             return Command::FAILURE;
         }
 
-        $pages = $this->pageImporter->fromYaml($yamlInput, !$input->getOption('dry-run'));
+        $pages = $this->pageImporter->import($yamlInput, 'yaml', !$input->getOption('dry-run'));
 
         $this->io->success(\sprintf('%d pages have been imported successfully', \count($pages)));
 

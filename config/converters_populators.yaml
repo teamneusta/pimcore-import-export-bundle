@@ -8,10 +8,6 @@ services:
   ###########################################################
   Neusta\Pimcore\ImportExportBundle\Documents\Import\Populator\PageImportPopulator: ~
 
-  Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImporter:
-    arguments:
-      $yamlToPageConverter: '@neusta_pimcore_import_export.import_page'
-
   ###########################################################
   # Export Converter (Document -> YamlPage)
   ###########################################################

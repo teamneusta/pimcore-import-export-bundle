@@ -26,7 +26,7 @@ class PageImportPopulator implements Populator
         $target->setProperty('navigation_name', 'text', $source->navigation_name);
         /** @var array<string, mixed> $editable */
         foreach ($source->editables ?? [] as $key => $editable) {
-            $target->setRawEditable($key, $editable['type'], $editable['data']);
+            $target->setRawEditable((string) $key, $editable['type'], $editable['data']);
         }
     }
 }

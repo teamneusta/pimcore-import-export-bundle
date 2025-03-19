@@ -70,7 +70,7 @@ final class PageExportController
     private function exportPages(iterable $pages, string $filename): Response
     {
         try {
-            $yaml = $this->pageExporter->toYaml($pages);
+            $yaml = $this->pageExporter->export($pages, 'yaml');
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

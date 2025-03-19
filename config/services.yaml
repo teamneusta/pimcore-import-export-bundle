@@ -31,12 +31,30 @@ services:
     public: true
     tags: [ 'controller.service_arguments' ]
 
+  ##############
+  # Serializer #
+  ##############
+  Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy:
+    arguments:
+      $formatToSerializerMap:
+        yaml: '@Neusta\Pimcore\ImportExportBundle\Serializer\YamlSerializer'
+        json: '@Neusta\Pimcore\ImportExportBundle\Serializer\JsonSerializer'
+
+  Neusta\Pimcore\ImportExportBundle\Serializer\YamlSerializer: ~
+  Neusta\Pimcore\ImportExportBundle\Serializer\JsonSerializer: ~
+
   #############
   # Documents #
   #############
   Neusta\Pimcore\ImportExportBundle\Documents\Export\PageExporter:
     arguments:
+      $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
       $pageToYamlConverter: '@neusta_pimcore_import_export.export_document'
+
+  Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImporter:
+    arguments:
+      $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
+      $yamlToPageConverter: '@neusta_pimcore_import_export.import_page'
 
   #################
   # EventListener #
