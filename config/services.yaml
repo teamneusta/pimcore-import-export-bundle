@@ -57,7 +57,7 @@ services:
   Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImporter:
     arguments:
       $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
-      $yamlToPageConverter: '@neusta_pimcore_import_export.import_page'
+      $yamlToPageConverter: '@neusta_pimcore_import_export.import_document'
 
   #################
   # EventListener #

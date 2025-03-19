@@ -6,7 +6,7 @@ neusta_converter:
     ###########################################################
     # Import Converter (Page -> PimcorePage)
     ###########################################################
-    neusta_pimcore_import_export.import_page:
+    neusta_pimcore_import_export.import_document:
       target: Pimcore\Model\Document\Page
       populators:
         - Neusta\Pimcore\ImportExportBundle\Documents\Import\Populator\PageImportPopulator
