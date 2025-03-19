@@ -77,6 +77,16 @@ class ExportPagesCommand extends AbstractCommand
         $yamlContent = $this->pageExporter->export($allPages, 'yaml');
 
         $exportFilename = $input->getOption('output');
+        // Validate filename to prevent directory traversal
+        $safeFilename = basename($exportFilename);
+        if ($safeFilename !== $exportFilename) {
+            $this->io->warning(sprintf(
+                'For security reasons, path traversal is not allowed. Using "%s" instead of "%s".',
+                $safeFilename,
+                $exportFilename
+            ));
+            $exportFilename = $safeFilename;
+        }
 
         $this->io->writeln('Write in file <' . $exportFilename . '>');
         $this->io->newLine();
