@@ -1,20 +1,20 @@
 <?php declare(strict_types=1);
 
-namespace Neusta\Pimcore\ImportExportBundle\Documents\Import;
+namespace Neusta\Pimcore\ImportExportBundle\Documents\Import\Populator;
 
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Populator;
-use Neusta\Pimcore\ImportExportBundle\Documents\Export\YamlExportPage;
-use Pimcore\Model\Document\Page;
+use Neusta\Pimcore\ImportExportBundle\Documents\Model\Page;
+use Pimcore\Model\Document\Page as PimcorePage;
 
 /**
- * @implements Populator<YamlExportPage, Page, GenericContext|null>
+ * @implements Populator<Page, PimcorePage, GenericContext|null>
  */
 class PageImportPopulator implements Populator
 {
     /**
-     * @param YamlExportPage      $source
-     * @param Page                $target
+     * @param Page                $source
+     * @param PimcorePage         $target
      * @param GenericContext|null $ctx
      */
     public function populate(object $target, object $source, ?object $ctx = null): void
@@ -26,7 +26,7 @@ class PageImportPopulator implements Populator
         $target->setProperty('navigation_name', 'text', $source->navigation_name);
         /** @var array<string, mixed> $editable */
         foreach ($source->editables ?? [] as $key => $editable) {
-            $target->setRawEditable($key, $editable['type'], $editable['data']);
+            $target->setRawEditable((string) $key, $editable['type'], $editable['data']);
         }
     }
 }

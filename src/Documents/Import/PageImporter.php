@@ -5,44 +5,45 @@ namespace Neusta\Pimcore\ImportExportBundle\Documents\Import;
 use Neusta\ConverterBundle\Converter;
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Exception\ConverterException;
-use Neusta\Pimcore\ImportExportBundle\Documents\Export\YamlExportPage;
+use Neusta\Pimcore\ImportExportBundle\Documents\Model\Page;
+use Neusta\Pimcore\ImportExportBundle\Serializer\SerializerInterface;
 use Pimcore\Model\Document;
-use Pimcore\Model\Document\Page;
+use Pimcore\Model\Document\Page as PimcorePage;
 use Pimcore\Model\Element\DuplicateFullPathException;
-use Symfony\Component\Yaml\Yaml;
 
 class PageImporter
 {
     /**
-     * @param Converter<YamlExportPage, Page, GenericContext|null> $yamlToPageConverter
+     * @param Converter<Page, PimcorePage, GenericContext|null> $yamlToPageConverter
      */
     public function __construct(
         private readonly Converter $yamlToPageConverter,
+        private readonly SerializerInterface $serializer,
     ) {
     }
 
     /**
-     * @return array<Page>
+     * @return array<PimcorePage>
      *
      * @throws ConverterException
      * @throws DuplicateFullPathException
      */
-    public function parseYaml(string $yamlInput, bool $forcedSave = true): array
+    public function import(string $yamlInput, string $format, bool $forcedSave = true): array
     {
-        $config = Yaml::parse($yamlInput);
+        $config = $this->serializer->deserialize($yamlInput, $format);
 
-        if (!\is_array($config) || !\is_array($config[YamlExportPage::PAGES] ?? null)) {
-            throw new \DomainException('Given YAML is not valid.');
+        if (!\is_array($config) || !\is_array($config[Page::PAGES] ?? null)) {
+            throw new \DomainException(\sprintf('Given data in format %s is not valid.', $format));
         }
 
         $pages = [];
 
-        foreach ($config[YamlExportPage::PAGES] as $configPage) {
+        foreach ($config[Page::PAGES] as $configPage) {
             $page = null;
-            if (\is_array($configPage[YamlExportPage::PAGE])) {
-                $page = $this->yamlToPageConverter->convert(new YamlExportPage($configPage[YamlExportPage::PAGE]));
+            if (\is_array($configPage[Page::PAGE])) {
+                $page = $this->yamlToPageConverter->convert(new Page($configPage[Page::PAGE]));
                 if ($forcedSave) {
-                    $this->checkAndUpdatePage($page, $config[YamlExportPage::PAGES]);
+                    $this->checkAndUpdatePage($page);
                     $page->save();
                 }
             }
@@ -54,41 +55,14 @@ class PageImporter
         return $pages;
     }
 
-    /**
-     * @param array<string, mixed> $params
-     */
-    public function readYamlFileAndSetParameters(string $filename, array $params = []): string
+    private function checkAndUpdatePage(Document $page): void
     {
-        if (($yamlFile = file_get_contents($filename)) !== false) {
-            foreach ($params as $key => $paramValue) {
-                $yamlFile = str_replace($key, (string) $paramValue, $yamlFile);
-            }
-
-            return $yamlFile;
-        }
-
-        return '';
-    }
-
-    /**
-     * @param array<string, array<string, mixed>> $configPages
-     */
-    private function checkAndUpdatePage(Page $page, array &$configPages): void
-    {
-        $oldPath = $page->getPath();
-        $existingParent = Document::getById($page->getParentId() ?? -1);
-        if (!$existingParent) {
+        if (!Document::getById($page->getParentId() ?? -1)) {
             $existingParent = Document::getByPath($page->getPath() ?? '');
             if (!$existingParent) {
                 throw new \InvalidArgumentException('Neither parentId nor path leads to a valid parent element');
             }
             $page->setParentId($existingParent->getId());
-            $newPath = $existingParent->getPath() . $page->getKey() . '/';
-            foreach ($configPages as $configPage) {
-                if (\array_key_exists('path', $configPage[YamlExportPage::PAGE]) && \is_string($oldPath)) {
-                    str_replace($oldPath, $newPath, $configPage[YamlExportPage::PAGE]['path']);
-                }
-            }
         }
     }
 }

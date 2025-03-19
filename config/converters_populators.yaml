@@ -4,28 +4,24 @@ services:
     autoconfigure: true
 
   ###########################################################
-  # Import Populator (YamlExportPage -> Page)
+  # Import Populator (YamlPage -> Page)
   ###########################################################
-  Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImportPopulator: ~
-
-  Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImporter:
-    arguments:
-      $yamlToPageConverter: '@neusta_pimcore_import_export.import_page'
+  Neusta\Pimcore\ImportExportBundle\Documents\Import\Populator\PageImportPopulator: ~
 
   ###########################################################
-  # Export Converter (Document -> YamlExportPage)
+  # Export Converter (Document -> YamlPage)
   ###########################################################
   neusta_pimcore_import_export.export_document:
       class: Neusta\Pimcore\ImportExportBundle\Documents\Export\Converter\DocumentTypeStrategyConverter
       arguments:
-        $type2ConverterMap:
+        $typeToConverterMap:
           Pimcore\Model\Document\Page: '@neusta_pimcore_import_export.export_page'
           Pimcore\Model\Document\Snippet: '@neusta_pimcore_import_export.export_page_snippet'
           Pimcore\Model\Document\Folder: '@neusta_pimcore_import_export.export_folder'
 
 
   ###########################################################
-  # Export Populator (Page -> YamlExportPage)
+  # Export Populator (Page -> YamlPage)
   ###########################################################
   neusta_pimcore_import_export.page.editables.populator:
     class: Neusta\ConverterBundle\Populator\ArrayConvertingPopulator
@@ -56,7 +52,7 @@ services:
       $skipNull: true
 
   ###########################################################
-  # Export Populator (Editable -> YamlExportEditable)
+  # Export Populator (Editable -> YamlEditable)
   ###########################################################
   neusta_pimcore_import_export.editable.data.populator:
     class: Neusta\Pimcore\ImportExportBundle\Documents\Export\Populator\EditableDataPopulator

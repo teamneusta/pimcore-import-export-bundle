@@ -9,26 +9,25 @@ neusta_pimcore_import_export.plugin.page.export = Class.create({
         let menu = e.detail.menu;
         let document = e.detail.document;
 
-        // Export page into yaml file
+        // Add menu items
         menu.add("-");
-        menu.add(new Ext.menu.Item({
-            text: t('neusta_pimcore_import_export_export_menu_label'),
-            iconCls: "pimcore_icon_export",
-            handler: function () {
-                pimcore.helpers.download(Routing.generate('neusta_pimcore_import_export_page_export', {page_id: document.data.id}));
-            }
-        }));
-
-        // Export page and children into yaml file
-        menu.add(new Ext.menu.Item({
-            text: t('neusta_pimcore_import_export_export_with_children_menu_label'),
-            iconCls: "pimcore_icon_export",
-            handler: function () {
-                pimcore.helpers.download(Routing.generate('neusta_pimcore_import_export_page_export_with_children', {page_id: document.data.id}));
-            }
-        }));
+        this.addMenuItem(menu, document, 'neusta_pimcore_import_export_export_menu_label', 'neusta_pimcore_import_export_page_export');
+        this.addMenuItem(menu, document, 'neusta_pimcore_import_export_export_with_children_menu_label', 'neusta_pimcore_import_export_page_export_with_children');
     },
 
+    addMenuItem: function (menu, document, label, route) {
+        menu.add(new Ext.menu.Item({
+            text: t(label),
+            iconCls: "pimcore_icon_export",
+            handler: function () {
+                let defaultFilename = document.data.key + '.yaml';
+                let filename = prompt(t('neusta_pimcore_import_export_enter_filename'), defaultFilename);
+                if (filename) {
+                    pimcore.helpers.download(Routing.generate(route, {page_id: document.data.id, filename: filename, format: 'yaml'}));
+                }
+            }
+        }));
+    }
 });
 
 var pimcorePluginPageExport = new neusta_pimcore_import_export.plugin.page.export();

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Neusta\Pimcore\ImportExportBundle\Documents\Export;
+namespace Neusta\Pimcore\ImportExportBundle\Documents\Model;
 
-class YamlExportEditable
+class Editable
 {
     public string $type;
     public string $name;

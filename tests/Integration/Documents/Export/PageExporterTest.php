@@ -41,8 +41,31 @@ class PageExporterTest extends KernelTestCase
         $inputEditable->setDataFromResource('some text input');
         $page->setEditables([$inputEditable]);
 
-        $yaml = $this->exporter->exportToYaml([$page]);
+        $yaml = $this->exporter->export([$page], 'yaml');
         $this->assertMatchesSnapshot($yaml, new ImportExportYamlDriver());
+    }
+
+    public function testSinglePageExportAsJson(): void
+    {
+        $page = new Page();
+        $page->setId(999);
+        $page->setParentId(4);
+        $page->setType('email');
+        $page->setPublished(false);
+        $page->setPath('/test/');
+        $page->setKey('test_document_1');
+        $page->setProperty('language', 'string', 'en');
+        $page->setProperty('navigation_name', 'string', 'My Document');
+        $page->setProperty('navigation_title', 'string', 'My Document - Title');
+        $page->setTitle('The Title of my document');
+        $page->setController('/Some/Controller');
+        $inputEditable = new Input();
+        $inputEditable->setName('textInput');
+        $inputEditable->setDataFromResource('some text input');
+        $page->setEditables([$inputEditable]);
+
+        $json = $this->exporter->export([$page], 'json');
+        $this->assertMatchesJsonSnapshot($json);
     }
 
     public function testSimpleSavedPagesExport(): void
@@ -59,7 +82,7 @@ class PageExporterTest extends KernelTestCase
         $page2->setTitle('Test Document_2');
         $page2->save();
 
-        $yaml = $this->exporter->exportToYaml([$page1, $page2]);
+        $yaml = $this->exporter->export([$page1, $page2], 'yaml');
         $this->assertMatchesSnapshot($yaml, new ImportExportYamlDriver());
     }
 
@@ -75,7 +98,7 @@ class PageExporterTest extends KernelTestCase
         $page2->setKey('test_document_2');
         $page2->setPath('/');
 
-        $yaml = $this->exporter->exportToYaml([$page1, $page2]);
+        $yaml = $this->exporter->export([$page1, $page2], 'yaml');
         $this->assertMatchesSnapshot($yaml, new ImportExportYamlDriver());
     }
 
@@ -99,7 +122,7 @@ class PageExporterTest extends KernelTestCase
         $page3->setTitle('Test Document_2');
         $page3->save();
 
-        $yaml = $this->exporter->exportToYaml([$page1, $page2, $page3]);
+        $yaml = $this->exporter->export([$page1, $page2, $page3], 'yaml');
         $this->assertMatchesSnapshot($yaml, new ImportExportYamlDriver());
     }
 }

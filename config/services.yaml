@@ -12,7 +12,11 @@ services:
   ############
   # Commands #
   ############
-  Neusta\Pimcore\ImportExportBundle\Command\ExportAllPagesCommand:
+  Neusta\Pimcore\ImportExportBundle\Command\ExportPagesCommand:
+    public: true
+    tags: [ 'console.command' ]
+
+  Neusta\Pimcore\ImportExportBundle\Command\ImportPagesCommand:
     public: true
     tags: [ 'console.command' ]
 
@@ -27,12 +31,33 @@ services:
     public: true
     tags: [ 'controller.service_arguments' ]
 
+  ##############
+  # Serializer #
+  ##############
+  Neusta\Pimcore\ImportExportBundle\Serializer\SerializerInterface:
+    alias: Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy
+
+  Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy:
+    arguments:
+      $formatToSerializerMap:
+        yaml: '@Neusta\Pimcore\ImportExportBundle\Serializer\YamlSerializer'
+        json: '@Neusta\Pimcore\ImportExportBundle\Serializer\JsonSerializer'
+
+  Neusta\Pimcore\ImportExportBundle\Serializer\YamlSerializer: ~
+  Neusta\Pimcore\ImportExportBundle\Serializer\JsonSerializer: ~
+
   #############
   # Documents #
   #############
   Neusta\Pimcore\ImportExportBundle\Documents\Export\PageExporter:
     arguments:
+      $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
       $pageToYamlConverter: '@neusta_pimcore_import_export.export_document'
+
+  Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImporter:
+    arguments:
+      $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
+      $yamlToPageConverter: '@neusta_pimcore_import_export.import_page'
 
   #################
   # EventListener #

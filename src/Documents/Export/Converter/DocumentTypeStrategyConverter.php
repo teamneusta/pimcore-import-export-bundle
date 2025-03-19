@@ -4,28 +4,28 @@ namespace Neusta\Pimcore\ImportExportBundle\Documents\Export\Converter;
 
 use Neusta\ConverterBundle\Converter;
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
-use Neusta\Pimcore\ImportExportBundle\Documents\Export\YamlExportPage;
+use Neusta\Pimcore\ImportExportBundle\Documents\Model\Page;
 use Pimcore\Model\Document;
 
 /**
- * @implements Converter<Document, YamlExportPage, GenericContext|null>
+ * @implements Converter<Document, Page, GenericContext|null>
  */
 class DocumentTypeStrategyConverter implements Converter
 {
     /**
-     * @param array<class-string, Converter<Document, YamlExportPage, GenericContext|null>> $type2ConverterMap
+     * @param array<class-string, Converter<Document, Page, GenericContext|null>> $typeToConverterMap
      */
     public function __construct(
-        private array $type2ConverterMap,
+        private array $typeToConverterMap,
     ) {
     }
 
     public function convert(object $source, ?object $ctx = null): object
     {
-        if (!\array_key_exists($source::class, $this->type2ConverterMap)) {
+        if (!\array_key_exists($source::class, $this->typeToConverterMap)) {
             throw new \InvalidArgumentException('No converter found for type ' . $source::class);
         }
 
-        return $this->type2ConverterMap[$source::class]->convert($source, $ctx);
+        return $this->typeToConverterMap[$source::class]->convert($source, $ctx);
     }
 }
