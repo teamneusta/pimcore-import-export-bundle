@@ -53,7 +53,18 @@ class ImportPagesCommand extends AbstractCommand
             return Command::FAILURE;
         }
 
-        $pages = $this->pageImporter->import($yamlInput, 'yaml', !$input->getOption('dry-run'));
+        try {
+            $pages = $this->pageImporter->import($yamlInput, 'yaml', !$input->getOption('dry-run'));
+        } catch (\DomainException $e) {
+            $this->io->error(sprintf('Invalid YAML format: %s', $e->getMessage()));
+            return Command::FAILURE;
+        } catch (\InvalidArgumentException $e) {
+            $this->io->error(sprintf('Import error: %s', $e->getMessage()));
+            return Command::FAILURE;
+        } catch (\Exception $e) {
+            $this->io->error(sprintf('Unexpected error during import: %s', $e->getMessage()));
+            return Command::FAILURE;
+        }
 
         $this->io->success(\sprintf('%d pages have been imported successfully', \count($pages)));
 
