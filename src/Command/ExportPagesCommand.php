@@ -3,6 +3,7 @@
 namespace Neusta\Pimcore\ImportExportBundle\Command;
 
 use Neusta\Pimcore\ImportExportBundle\Documents\Export\PageExporter;
+use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\PageRepository;
 use Pimcore\Console\AbstractCommand;
 use Pimcore\Model\Document;
@@ -21,7 +22,7 @@ class ExportPagesCommand extends AbstractCommand
 {
     public function __construct(
         private PageRepository $pageRepository,
-        private PageExporter $pageExporter,
+        private Exporter $pageExporter,
     ) {
         parent::__construct();
     }

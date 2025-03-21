@@ -3,6 +3,7 @@
 namespace Neusta\Pimcore\ImportExportBundle\Command;
 
 use Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImporter;
+use Neusta\Pimcore\ImportExportBundle\Import\Importer;
 use Pimcore\Console\AbstractCommand;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -17,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ImportPagesCommand extends AbstractCommand
 {
     public function __construct(
-        private PageImporter $pageImporter,
+        private Importer $pageImporter,
     ) {
         parent::__construct();
     }

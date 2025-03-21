@@ -1,0 +1,16 @@
+###########################################################
+# Neusta Converter Bundle
+###########################################################
+neusta_converter:
+  converter:
+    ###########################################################
+    # Export Converter (Pimcore Asset -> Folder)
+    ###########################################################
+    neusta_pimcore_import_export.export_element:
+      target: Neusta\Pimcore\ImportExportBundle\Model\Element
+      properties:
+        id: ~
+        key: ~
+        type: ~
+        path: ~
+        parentId: ~

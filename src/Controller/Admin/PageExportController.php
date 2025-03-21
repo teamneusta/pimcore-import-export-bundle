@@ -3,6 +3,7 @@
 namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
 use Neusta\Pimcore\ImportExportBundle\Documents\Export\PageExporter;
+use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\PageRepository;
 use Pimcore\Model\Document\Page as PimcorePage;
 use Symfony\Component\HttpFoundation\HeaderUtils;
@@ -14,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 final class PageExportController
 {
     public function __construct(
-        private PageExporter $pageExporter,
+        private Exporter $pageExporter,
         private PageRepository $pageRepository,
     ) {
     }

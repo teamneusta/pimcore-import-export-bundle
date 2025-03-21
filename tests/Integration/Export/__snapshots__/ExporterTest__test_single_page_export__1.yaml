@@ -1,0 +1,19 @@
+elements:
+    -
+        Pimcore\Model\Document\Page:
+            id: 999
+            parentId: 4
+            type: email
+            published: false
+            path: /test/
+            language: en
+            navigation_name: 'My Document'
+            navigation_title: 'My Document - Title'
+            key: test_document_1
+            title: 'The Title of my document'
+            controller: /Some/Controller
+            editables:
+                -
+                    type: input
+                    name: textInput
+                    data: 'some text input'

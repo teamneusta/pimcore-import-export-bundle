@@ -3,6 +3,7 @@
 namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
 use Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImporter;
+use Neusta\Pimcore\ImportExportBundle\Import\Importer;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\PageRepository;
 use Pimcore\Model\Document\Page as PimcorePage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -28,7 +29,7 @@ final class PageImportController
     ];
 
     public function __construct(
-        private PageImporter $pageImporter,
+        private Importer $pageImporter,
         private PageRepository $pageRepository,
     ) {
     }

@@ -1,6 +1,3 @@
-imports:
-  - { resource: 'converters_populators.yaml' }
-
 services:
   _defaults:
     autowire: true
@@ -45,19 +42,6 @@ services:
 
   Neusta\Pimcore\ImportExportBundle\Serializer\YamlSerializer: ~
   Neusta\Pimcore\ImportExportBundle\Serializer\JsonSerializer: ~
-
-  #############
-  # Documents #
-  #############
-  Neusta\Pimcore\ImportExportBundle\Documents\Export\PageExporter:
-    arguments:
-      $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
-      $pageToYamlConverter: '@neusta_pimcore_import_export.export_document'
-
-  Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImporter:
-    arguments:
-      $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
-      $yamlToPageConverter: '@neusta_pimcore_import_export.import_document'
 
   #################
   # EventListener #

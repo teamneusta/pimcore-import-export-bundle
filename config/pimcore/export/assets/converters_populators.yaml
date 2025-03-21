@@ -1,0 +1,43 @@
+###########################################################
+# Neusta Converter Bundle
+###########################################################
+neusta_converter:
+  converter:
+    ###########################################################
+    # Export Converter (Pimcore Asset -> Folder)
+    ###########################################################
+    neusta_pimcore_import_export.export_asset_folder:
+      target: Neusta\Pimcore\ImportExportBundle\Model\Asset\Asset
+      properties:
+        id: ~
+        key: ~
+        type: ~
+        published: ~
+        path: ~
+        parentId: ~
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  ###########################################################
+  # Export Converter (Pimcore Asset -> Asset)
+  ###########################################################
+  neusta_pimcore_import_export.export_asset:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\TypeStrategyConverter
+    arguments:
+      $typeToConverterMap:
+        Pimcore\Model\Asset\Image: '@neusta_pimcore_import_export.export_asset_image'
+        Pimcore\Model\Asset\Folder: '@neusta_pimcore_import_export.export_asset_folder'
+
+  neusta_pimcore_import_export.export_asset_folder:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
+    arguments:
+      $converter: '@neusta_pimcore_import_export.import_document'
+
+  neusta_pimcore_import_export.export_asset_image:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
+    arguments:
+      $converter: '@neusta_pimcore_import_export.export_element'
+      $postPopulators: []
