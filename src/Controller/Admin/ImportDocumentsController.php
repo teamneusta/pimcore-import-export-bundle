@@ -3,14 +3,14 @@
 namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
 use Neusta\Pimcore\ImportExportBundle\Import\Importer;
-use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\PageRepository;
-use Pimcore\Model\Document\Page as PimcorePage;
+use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository;
+use Pimcore\Model\Document;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class PageImportController
+final class ImportDocumentsController
 {
     public const ERR_NO_FILE_UPLOADED = 1;
     public const SUCCESS_DOCUMENT_REPLACEMENT = 2;
@@ -28,14 +28,14 @@ final class PageImportController
     ];
 
     public function __construct(
-        private Importer $pageImporter,
-        private PageRepository $pageRepository,
+        private Importer $importer,
+        private DocumentRepository $documentRepository,
     ) {
     }
 
     #[Route(
-        '/admin/neusta/import-export/page/import',
-        name: 'neusta_pimcore_import_export_page_import',
+        '/admin/neusta/import-export/document/import',
+        name: 'neusta_pimcore_import_export_document_import',
         methods: ['POST']
     )]
     public function import(Request $request): JsonResponse
@@ -48,16 +48,18 @@ final class PageImportController
         $overwrite = $request->request->getBoolean('overwrite');
 
         try {
-            $pages = $this->pageImporter->import($file->getContent(), (string) $request->query->get('format', 'yaml'));
+            $documents = $this->importer->import($file->getContent(), (string) $request->query->get('format', 'yaml'));
 
             $results = [
                 self::SUCCESS_DOCUMENT_REPLACEMENT => 0,
                 self::SUCCESS_WITHOUT_REPLACEMENT => 0,
                 self::SUCCESS_NEW_DOCUMENT => 0,
             ];
-            foreach ($pages as $page) {
-                $resultCode = $this->replaceIfExists($page, $overwrite);
-                ++$results[$resultCode];
+            foreach ($documents as $document) {
+                if ($document instanceof Document) {
+                    $resultCode = $this->replaceIfExists($document, $overwrite);
+                    ++$results[$resultCode];
+                }
             }
             $resultMessage = $this->appendMessage($results);
 
@@ -77,20 +79,20 @@ final class PageImportController
         return new JsonResponse(['success' => $success, 'message' => $message], $statusCode);
     }
 
-    protected function replaceIfExists(PimcorePage $page, bool $overwrite): int
+    protected function replaceIfExists(Document $document, bool $overwrite): int
     {
-        $oldPage = $this->pageRepository->getByPath('/' . $page->getFullPath());
+        $oldPage = $this->documentRepository->getByPath('/' . $document->getFullPath());
         if (null !== $oldPage) {
             if ($overwrite) {
                 $oldPage->delete();
-                $page->save();
+                $document->save();
 
                 return self::SUCCESS_DOCUMENT_REPLACEMENT;
             }
 
             return self::SUCCESS_WITHOUT_REPLACEMENT;
         }
-        $page->save();
+        $document->save();
 
         return self::SUCCESS_NEW_DOCUMENT;
     }

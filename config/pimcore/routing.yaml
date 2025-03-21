@@ -5,7 +5,7 @@ neusta_pimcore_import_export_page_export:
         expose: true
 
 neusta_pimcore_import_export_page_import:
-    resource: '../../src/Controller/Admin/PageImportController.php'
+    resource: '../../src/Controller/Admin/ImportDocumentsController.php'
     type: attribute
     options:
         expose: true

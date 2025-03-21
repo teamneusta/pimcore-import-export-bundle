@@ -21,14 +21,16 @@ class ArrayPropertyPopulator implements Populator
 {
     private PropertyAccessorInterface $propertyAccessor;
 
+    private string $sourceArrayKey;
+
     public function __construct(
         private string $targetProperty,
         private mixed $defaultValue = null,
-        private ?string $sourceArrayKey = null,
+        ?string $sourceArrayKey = null,
         ?PropertyAccessorInterface $propertyAccessor = null,
     ) {
         $this->propertyAccessor = $propertyAccessor ?? PropertyAccess::createPropertyAccessor();
-        $this->sourceArrayKey = $this->sourceArrayKey ?? $this->targetProperty;
+        $this->sourceArrayKey = $sourceArrayKey ?? $this->targetProperty;
     }
 
     public function populate(object $target, object $source, ?object $ctx = null): void

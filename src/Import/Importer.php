@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Neusta\Pimcore\ImportExportBundle\Import;
 
+use ArrayObject;
 use Neusta\ConverterBundle\Converter;
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Exception\ConverterException;
@@ -15,10 +16,10 @@ use Pimcore\Model\Element\DuplicateFullPathException;
 class Importer
 {
     /**
-     * @template TSource of Element
+     * @template TSource of ArrayObject<string, mixed>
      * @template TTarget of AbstractElement
      *
-     * @param array<class-string<TSource>, Converter<TSource, TTarget, GenericContext|null> $typeToConverterMap
+     * @param array<class-string<TSource>, Converter<TSource, TTarget, GenericContext|null>> $typeToConverterMap
      */
     public function __construct(
         private readonly array $typeToConverterMap,
@@ -32,6 +33,8 @@ class Importer
      *
      * @throws ConverterException
      * @throws DuplicateFullPathException
+     * @throws \DomainException
+     * @throws \InvalidArgumentException
      */
     public function import(string $yamlInput, string $format, bool $forcedSave = true): array
     {
@@ -49,10 +52,8 @@ class Importer
             if (\array_key_exists($typeKey, $this->typeToConverterMap)) {
                 $result = $this->typeToConverterMap[$typeKey]->convert(new \ArrayObject($element[$typeKey]));
                 if ($forcedSave) {
-                    $result = $this->parentRelationResolver->resolve($result);
-                    if ($result) {
-                        $result->save();
-                    }
+                    $this->parentRelationResolver->resolve($result);
+                    $result->save();
                 }
             }
             if ($result) {
@@ -62,17 +63,4 @@ class Importer
 
         return $elements;
     }
-    //
-    // private function checkAndUpdatePage(AbstractElement $element): void
-    // {
-    //
-    //    if (!$dao->getById($element->getParentId() ?? -1)) {
-    //        $listing = $dao->getByPath($element->getPath());
-    //        $existingParent = $listing->getByPath($element->getPath() ?? '');
-    //        if (!$existingParent) {
-    //            throw new \InvalidArgumentException('Neither parentId nor path leads to a valid parent element');
-    //        }
-    //        $element->setParentId($existingParent->getId());
-    //    }
-    // }
 }

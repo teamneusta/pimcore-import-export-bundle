@@ -1,6 +1,6 @@
-pimcore.registerNS("neusta_pimcore_import_export.plugin.page.import");
+pimcore.registerNS("neusta_pimcore_import_export.plugin.document.import");
 
-neusta_pimcore_import_export.plugin.page.import = Class.create({
+neusta_pimcore_import_export.plugin.document.import = Class.create({
     initialize: function () {
         document.addEventListener(pimcore.events.preMenuBuild, this.preMenuBuild.bind(this));
     },
@@ -63,7 +63,7 @@ neusta_pimcore_import_export.plugin.page.import = Class.create({
         }
 
         form.submit({
-            url: Routing.generate('neusta_pimcore_import_export_page_import', {format: 'yaml'}),
+            url: Routing.generate('neusta_pimcore_import_export_document_import', {format: 'yaml'}),
             method: 'POST',
             waitMsg: t('neusta_pimcore_import_export_import_dialog_wait_message'),
             headers: {
@@ -113,4 +113,4 @@ neusta_pimcore_import_export.plugin.page.import = Class.create({
     }
 });
 
-var pimcorePluginPageImport = new neusta_pimcore_import_export.plugin.page.import();
+var pimcorePluginPageImport = new neusta_pimcore_import_export.plugin.document.import();

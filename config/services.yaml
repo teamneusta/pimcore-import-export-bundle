@@ -10,7 +10,7 @@ services:
     public: true
     tags: [ 'console.command' ]
 
-  Neusta\Pimcore\ImportExportBundle\Command\ImportPagesCommand:
+  Neusta\Pimcore\ImportExportBundle\Command\ImportDocumentsCommand:
     public: true
     tags: [ 'console.command' ]
 
@@ -21,7 +21,7 @@ services:
     public: true
     tags: [ 'controller.service_arguments' ]
 
-  Neusta\Pimcore\ImportExportBundle\Controller\Admin\PageImportController:
+  Neusta\Pimcore\ImportExportBundle\Controller\Admin\ImportDocumentsController:
     public: true
     tags: [ 'controller.service_arguments' ]
 
