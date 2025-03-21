@@ -17,6 +17,10 @@ services:
   ##############
   # Controller #
   ##############
+  Neusta\Pimcore\ImportExportBundle\Controller\Admin\ExportAssetsController:
+    public: true
+    tags: [ 'controller.service_arguments' ]
+
   Neusta\Pimcore\ImportExportBundle\Controller\Admin\ExportDocumentsController:
     public: true
     tags: [ 'controller.service_arguments' ]

@@ -16,4 +16,18 @@ class AssetRepository extends AbstractElementRepository
     {
         parent::__construct(Asset::class);
     }
+
+    /**
+     * @return iterable<Asset>
+     */
+    public function findAllAssetsWithChildren(Asset $asset): iterable
+    {
+        yield $asset;
+
+        foreach ($asset->getChildren() as $child) {
+            if ($child instanceof Asset) {
+                yield from $this->findAllAssetsWithChildren($child);
+            }
+        }
+    }
 }

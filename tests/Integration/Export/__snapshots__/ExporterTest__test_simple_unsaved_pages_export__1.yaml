@@ -1,0 +1,29 @@
+elements:
+    -
+        Pimcore\Model\Document\Page:
+            published: true
+            navigation_name: ~
+            navigation_title: ~
+            title: 'Test Document_1'
+            controller: 'App\Controller\DefaultController::defaultAction'
+            editables: {  }
+            id: ~
+            parentId: 1
+            type: page
+            path: /will/not/overwritten/
+            language: ''
+            key: test_document_1
+    -
+        Pimcore\Model\Document\Page:
+            published: true
+            navigation_name: ~
+            navigation_title: ~
+            title: 'Test Document_2'
+            controller: 'App\Controller\DefaultController::defaultAction'
+            editables: {  }
+            id: ~
+            parentId: 1
+            type: page
+            path: /will/not/overwritten/
+            language: ''
+            key: test_document_2

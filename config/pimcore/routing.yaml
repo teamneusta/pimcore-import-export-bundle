@@ -1,10 +1,16 @@
-neusta_pimcore_import_export_page_export:
+neusta_pimcore_import_export_assets_export:
+    resource: '../../src/Controller/Admin/ExportAssetsController.php'
+    type: attribute
+    options:
+        expose: true
+
+neusta_pimcore_import_export_documents_export:
     resource: '../../src/Controller/Admin/ExportDocumentsController.php'
     type: attribute
     options:
         expose: true
 
-neusta_pimcore_import_export_page_import:
+neusta_pimcore_import_export_documents_import:
     resource: '../../src/Controller/Admin/ImportDocumentsController.php'
     type: attribute
     options:

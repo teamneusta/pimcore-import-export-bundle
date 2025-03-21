@@ -12,7 +12,6 @@ neusta_converter:
         id: ~
         key: ~
         type: ~
-        published: ~
         path: ~
         parentId: ~
 
@@ -24,20 +23,58 @@ services:
   ###########################################################
   # Export Converter (Pimcore Asset -> Asset)
   ###########################################################
-  neusta_pimcore_import_export.export_asset:
+  neusta_pimcore_import_export.strategy.export_asset:
     class: Neusta\Pimcore\ImportExportBundle\Converter\TypeStrategyConverter
     arguments:
       $typeToConverterMap:
+        Pimcore\Model\Asset\Archive: '@neusta_pimcore_import_export.export_asset_archive'
+        Pimcore\Model\Asset\Audio: '@neusta_pimcore_import_export.export_asset_audio'
+        Pimcore\Model\Asset\Document: '@neusta_pimcore_import_export.export_asset_document'
         Pimcore\Model\Asset\Image: '@neusta_pimcore_import_export.export_asset_image'
+        Pimcore\Model\Asset\Text: '@neusta_pimcore_import_export.export_asset_text'
+        Pimcore\Model\Asset\Video: '@neusta_pimcore_import_export.export_asset_video'
         Pimcore\Model\Asset\Folder: '@neusta_pimcore_import_export.export_asset_folder'
+        Pimcore\Model\Asset\Unknown: '@neusta_pimcore_import_export.export_asset_unknown'
 
-  neusta_pimcore_import_export.export_asset_folder:
+  neusta_pimcore_import_export.export_asset_archive:
     class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
     arguments:
-      $converter: '@neusta_pimcore_import_export.import_document'
+      $converter: '@neusta_pimcore_import_export.export_asset_folder'
+      $postPopulators: []
+
+  neusta_pimcore_import_export.export_asset_audio:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
+    arguments:
+      $converter: '@neusta_pimcore_import_export.export_asset_folder'
+      $postPopulators: []
+
+  neusta_pimcore_import_export.export_asset_document:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
+    arguments:
+      $converter: '@neusta_pimcore_import_export.export_asset_folder'
+      $postPopulators: []
 
   neusta_pimcore_import_export.export_asset_image:
     class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
     arguments:
-      $converter: '@neusta_pimcore_import_export.export_element'
+      $converter: '@neusta_pimcore_import_export.export_asset_folder'
       $postPopulators: []
+
+  neusta_pimcore_import_export.export_asset_text:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
+    arguments:
+      $converter: '@neusta_pimcore_import_export.export_asset_folder'
+      $postPopulators: []
+
+  neusta_pimcore_import_export.export_asset_video:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
+    arguments:
+      $converter: '@neusta_pimcore_import_export.export_asset_folder'
+      $postPopulators: []
+
+  neusta_pimcore_import_export.export_asset_unknown:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
+    arguments:
+      $converter: '@neusta_pimcore_import_export.export_asset_folder'
+      $postPopulators: []
+
