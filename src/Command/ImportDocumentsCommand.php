@@ -4,6 +4,7 @@ namespace Neusta\Pimcore\ImportExportBundle\Command;
 
 use Neusta\Pimcore\ImportExportBundle\Import\Importer;
 use Pimcore\Console\AbstractCommand;
+use Pimcore\Model\Document;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,6 +17,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 class ImportDocumentsCommand extends AbstractCommand
 {
+    /**
+     * @param Importer<\ArrayObject<int|string, mixed>, Document> $importer
+     */
     public function __construct(
         private Importer $importer,
     ) {

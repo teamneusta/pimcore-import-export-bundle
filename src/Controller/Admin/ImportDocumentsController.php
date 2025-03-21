@@ -27,6 +27,9 @@ final class ImportDocumentsController
         self::SUCCESS_NEW_DOCUMENT => 'imported successfully',
     ];
 
+    /**
+     * @param Importer<\ArrayObject<int|string, mixed>, Document> $importer
+     */
     public function __construct(
         private Importer $importer,
         private DocumentRepository $documentRepository,

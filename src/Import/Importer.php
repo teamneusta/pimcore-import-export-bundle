@@ -13,12 +13,13 @@ use Neusta\Pimcore\ImportExportBundle\Serializer\SerializerInterface;
 use Pimcore\Model\Element\AbstractElement;
 use Pimcore\Model\Element\DuplicateFullPathException;
 
+/**
+ * @template TSource of ArrayObject<int|string, mixed>
+ * @template TTarget of AbstractElement
+ */
 class Importer
 {
     /**
-     * @template TSource of ArrayObject<string, mixed>
-     * @template TTarget of AbstractElement
-     *
      * @param array<class-string<TSource>, Converter<TSource, TTarget, GenericContext|null>> $typeToConverterMap
      */
     public function __construct(
@@ -29,7 +30,7 @@ class Importer
     }
 
     /**
-     * @return array<AbstractElement>
+     * @return array<TTarget>
      *
      * @throws ConverterException
      * @throws DuplicateFullPathException
@@ -50,7 +51,7 @@ class Importer
             $result = null;
             $typeKey = key($element);
             if (\array_key_exists($typeKey, $this->typeToConverterMap)) {
-                $result = $this->typeToConverterMap[$typeKey]->convert(new \ArrayObject($element[$typeKey]));
+                $result = $this->typeToConverterMap[$typeKey]->convert(new \ArrayObject($element[$typeKey])); // @phpstan-ignore-line
                 if ($forcedSave) {
                     $this->parentRelationResolver->resolve($result);
                     $result->save();

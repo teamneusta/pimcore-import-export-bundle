@@ -40,41 +40,56 @@ services:
     class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
     arguments:
       $converter: '@neusta_pimcore_import_export.export_asset_folder'
-      $postPopulators: []
+      $postPopulators:
+        - '@neusta_pimcore_import_export.asset.filename.populator'
 
   neusta_pimcore_import_export.export_asset_audio:
     class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
     arguments:
       $converter: '@neusta_pimcore_import_export.export_asset_folder'
-      $postPopulators: []
+      $postPopulators:
+        - '@neusta_pimcore_import_export.asset.filename.populator'
 
   neusta_pimcore_import_export.export_asset_document:
     class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
     arguments:
       $converter: '@neusta_pimcore_import_export.export_asset_folder'
-      $postPopulators: []
+      $postPopulators:
+        - '@neusta_pimcore_import_export.asset.filename.populator'
 
   neusta_pimcore_import_export.export_asset_image:
     class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
     arguments:
       $converter: '@neusta_pimcore_import_export.export_asset_folder'
-      $postPopulators: []
+      $postPopulators:
+        - '@neusta_pimcore_import_export.asset.filename.populator'
 
   neusta_pimcore_import_export.export_asset_text:
     class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
     arguments:
       $converter: '@neusta_pimcore_import_export.export_asset_folder'
-      $postPopulators: []
+      $postPopulators:
+        - '@neusta_pimcore_import_export.asset.filename.populator'
 
   neusta_pimcore_import_export.export_asset_video:
     class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
     arguments:
       $converter: '@neusta_pimcore_import_export.export_asset_folder'
-      $postPopulators: []
+      $postPopulators:
+        - '@neusta_pimcore_import_export.asset.filename.populator'
 
   neusta_pimcore_import_export.export_asset_unknown:
     class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
     arguments:
       $converter: '@neusta_pimcore_import_export.export_asset_folder'
       $postPopulators: []
+
+  ###########################################################
+  # Export Populator (Pimcore Asset -> Asset)
+  ###########################################################
+  neusta_pimcore_import_export.asset.filename.populator:
+    class: Neusta\ConverterBundle\Populator\PropertyMappingPopulator
+    arguments:
+      $sourceProperty: filename
+      $targetProperty: filename
 
