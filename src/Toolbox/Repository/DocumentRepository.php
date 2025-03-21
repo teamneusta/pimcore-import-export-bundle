@@ -18,4 +18,18 @@ class DocumentRepository extends AbstractElementRepository
     {
         parent::__construct(Document::class);
     }
+
+    /**
+     * @return iterable<Document>
+     */
+    public function findAllDocsWithChildren(Document $page): iterable
+    {
+        yield $page;
+
+        foreach ($page->getChildren(true) as $child) {
+            if ($child instanceof Document) {
+                yield from $this->findAllDocsWithChildren($child);
+            }
+        }
+    }
 }

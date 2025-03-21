@@ -1,9 +1,0 @@
-elements:
-    -
-        Pimcore\Model\Asset\Image:
-            id: 999
-            parentId: 1
-            type: image
-            path: /
-            language: ''
-            key: image_1

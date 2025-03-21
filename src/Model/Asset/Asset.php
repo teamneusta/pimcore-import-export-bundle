@@ -6,6 +6,7 @@ namespace Neusta\Pimcore\ImportExportBundle\Model\Asset;
 
 use Neusta\Pimcore\ImportExportBundle\Model\Element;
 
-class Asset extends Element {
+class Asset extends Element
+{
     public string $filename = '';
 }

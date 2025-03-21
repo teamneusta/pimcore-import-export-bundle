@@ -4,7 +4,7 @@ namespace Neusta\Pimcore\ImportExportBundle\Populator;
 
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Populator;
-use Neusta\Pimcore\ImportExportBundle\Model\Document\Page;
+use Neusta\Pimcore\ImportExportBundle\Model\Document\Document;
 use Pimcore\Model\Document\Page as PimcorePage;
 
 /**
@@ -13,7 +13,7 @@ use Pimcore\Model\Document\Page as PimcorePage;
 class PageImportPopulator implements Populator
 {
     /**
-     * @param Page                $source
+     * @param Document            $source
      * @param PimcorePage         $target
      * @param GenericContext|null $ctx
      */

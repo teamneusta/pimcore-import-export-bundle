@@ -2,7 +2,6 @@
 
 namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
-use Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImporter;
 use Neusta\Pimcore\ImportExportBundle\Import\Importer;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\PageRepository;
 use Pimcore\Model\Document\Page as PimcorePage;
@@ -49,7 +48,7 @@ final class PageImportController
         $overwrite = $request->request->getBoolean('overwrite');
 
         try {
-            $pages = $this->pageImporter->import($file->getContent(), (string)$request->query->get('format', 'yaml'));
+            $pages = $this->pageImporter->import($file->getContent(), (string) $request->query->get('format', 'yaml'));
 
             $results = [
                 self::SUCCESS_DOCUMENT_REPLACEMENT => 0,

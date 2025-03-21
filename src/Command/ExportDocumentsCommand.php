@@ -2,9 +2,8 @@
 
 namespace Neusta\Pimcore\ImportExportBundle\Command;
 
-use Neusta\Pimcore\ImportExportBundle\Documents\Export\PageExporter;
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
-use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\PageRepository;
+use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository;
 use Pimcore\Console\AbstractCommand;
 use Pimcore\Model\Document;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -15,13 +14,13 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
-    name: 'neusta:pimcore:export:pages',
-    description: 'Export all pages in one single YAML file'
+    name: 'neusta:pimcore:export:documents',
+    description: 'Export all Pimcore documents in one single file'
 )]
-class ExportPagesCommand extends AbstractCommand
+class ExportDocumentsCommand extends AbstractCommand
 {
     public function __construct(
-        private PageRepository $pageRepository,
+        private DocumentRepository $repository,
         private Exporter $pageExporter,
     ) {
         parent::__construct();
@@ -34,29 +33,36 @@ class ExportPagesCommand extends AbstractCommand
                 'output',
                 'o',
                 InputOption::VALUE_OPTIONAL,
-                'The name of the output file (default: export_all_pages.yaml)',
-                'export_all_pages.yaml'
+                'The name of the output file (default: export_all_documents.yaml)',
+                'export_all_documents.yaml'
+            )
+            ->addOption(
+                'format',
+                'f',
+                InputOption::VALUE_OPTIONAL,
+                'The format of the output file (default: yaml): yaml, json',
+                'yaml'
             )
             ->addArgument(
                 'ids',
                 InputArgument::IS_ARRAY,
-                'List of page IDs to export'
+                'List of document IDs to export'
             );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->io->title('Export all pages into one single YAML file');
+        $this->io->title('Export Pimcore Documents into one single file');
 
-        $pageIds = $input->getArgument('ids');
-        $allPages = [];
+        $documentIds = $input->getArgument('ids');
+        $allDocuments = [];
 
-        if ($pageIds) {
-            $ids = array_map('intval', $pageIds);
+        if ($documentIds) {
+            $ids = array_map('intval', $documentIds);
             foreach ($ids as $id) {
-                $page = $this->pageRepository->getById($id);
-                if ($page) {
-                    $allPages = $this->addPages($page, $allPages);
+                $document = $this->repository->getById($id);
+                if ($document) {
+                    $allDocuments = $this->addDocuments($document, $allDocuments);
                 } else {
                     $this->io->error("Page with ID $id not found");
 
@@ -64,24 +70,24 @@ class ExportPagesCommand extends AbstractCommand
                 }
             }
         } else {
-            $rootPage = $this->pageRepository->getById(1);
-            if (!$rootPage) {
-                $this->io->error('Root page (ID: 1) not found');
+            $rootDocument = $this->repository->getById(1);
+            if (!$rootDocument) {
+                $this->io->error('Root document (ID: 1) not found');
 
                 return Command::FAILURE;
             }
-            $allPages = $this->addPages($rootPage, []);
+            $allDocuments = $this->addDocuments($rootDocument, []);
         }
 
-        $this->io->writeln(\sprintf('Start exporting %d pages', \count($allPages)));
+        $this->io->writeln(\sprintf('Start exporting %d Pimcore Documents', \count($allDocuments)));
         $this->io->newLine();
-        $yamlContent = $this->pageExporter->export($allPages, 'yaml');
+        $yamlContent = $this->pageExporter->export($allDocuments, $input->getOption('format'));
 
         $exportFilename = $input->getOption('output');
         // Validate filename to prevent directory traversal
         $safeFilename = basename($exportFilename);
         if ($safeFilename !== $exportFilename) {
-            $this->io->warning(sprintf(
+            $this->io->warning(\sprintf(
                 'For security reasons, path traversal is not allowed. Using "%s" instead of "%s".',
                 $safeFilename,
                 $exportFilename
@@ -97,25 +103,25 @@ class ExportPagesCommand extends AbstractCommand
             return Command::FAILURE;
         }
 
-        $this->io->success('All pages have been exported successfully');
+        $this->io->success('All Pimcore Documents have been exported successfully');
 
         return Command::SUCCESS;
     }
 
     /**
-     * @param array<Document> $allPages
+     * @param array<Document> $allDocuments
      *
      * @return array<Document>
      */
-    private function addPages(Document $rootPage, array $allPages): array
+    private function addDocuments(Document $rootPage, array $allDocuments): array
     {
-        $allPages[] = $rootPage;
+        $allDocuments[] = $rootPage;
         foreach ($rootPage->getChildren(true) as $childPage) {
             if ($childPage instanceof Document) {
-                $allPages = $this->addPages($childPage, $allPages);
+                $allDocuments = $this->addDocuments($childPage, $allDocuments);
             }
         }
 
-        return $allPages;
+        return $allDocuments;
     }
 }

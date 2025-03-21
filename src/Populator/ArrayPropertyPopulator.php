@@ -14,6 +14,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  * @template TSource of \ArrayObject
  * @template TTarget of Element
  * @template TContext of GenericContext|null
+ *
  * @implements Populator<TSource, TTarget, TContext>
  */
 class ArrayPropertyPopulator implements Populator

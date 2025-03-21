@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neusta\Pimcore\ImportExportBundle\Tests\Integration\Documents;
+namespace Neusta\Pimcore\ImportExportBundle\Tests\Integration\Export;
 
 use PHPUnit\Framework\Assert;
 use Spatie\Snapshots\Driver;

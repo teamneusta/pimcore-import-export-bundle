@@ -3,13 +3,10 @@ services:
     autowire: true
     autoconfigure: true
 
-  Neusta\Pimcore\ImportExportBundle\Toolbox\:
-    resource: '../src/Toolbox'
-
   ############
   # Commands #
   ############
-  Neusta\Pimcore\ImportExportBundle\Command\ExportPagesCommand:
+  Neusta\Pimcore\ImportExportBundle\Command\ExportDocumentsCommand:
     public: true
     tags: [ 'console.command' ]
 
@@ -20,7 +17,7 @@ services:
   ##############
   # Controller #
   ##############
-  Neusta\Pimcore\ImportExportBundle\Controller\Admin\PageExportController:
+  Neusta\Pimcore\ImportExportBundle\Controller\Admin\ExportDocumentsController:
     public: true
     tags: [ 'controller.service_arguments' ]
 

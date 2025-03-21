@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Neusta\Pimcore\ImportExportBundle\Model;
 
-class Element {
+class Element
+{
     public const ELEMENTS = 'elements';
 
     public ?int $id = null;

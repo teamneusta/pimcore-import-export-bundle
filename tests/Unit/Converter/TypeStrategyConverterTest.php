@@ -2,7 +2,6 @@
 
 namespace Neusta\Pimcore\ImportExportBundle\Tests\Unit\Converter;
 
-use InvalidArgumentException;
 use Neusta\ConverterBundle\Converter;
 use Neusta\Pimcore\ImportExportBundle\Converter\TypeStrategyConverter;
 use PHPUnit\Framework\TestCase;
@@ -10,8 +9,8 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
-class TypeStrategyConverterTest extends TestCase {
-
+class TypeStrategyConverterTest extends TestCase
+{
     use ProphecyTrait;
 
     private TypeStrategyConverter $strategyConverter;
@@ -23,9 +22,9 @@ class TypeStrategyConverterTest extends TestCase {
     {
         $this->converterA = $this->prophesize(Converter::class);
         $this->converterA->convert(Argument::any(), null)->willReturn(new A());
-        $this->converterB  = $this->prophesize(Converter::class);
+        $this->converterB = $this->prophesize(Converter::class);
         $this->converterB->convert(Argument::any(), null)->willReturn(new B());
-        $this->converterC  = $this->prophesize(Converter::class);
+        $this->converterC = $this->prophesize(Converter::class);
         $this->converterC->convert(Argument::any(), null)->willReturn(new C());
     }
 
@@ -95,16 +94,24 @@ class TypeStrategyConverterTest extends TestCase {
         );
         $d = new InvalidType();
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('No converter found for type Neusta\Pimcore\ImportExportBundle\Tests\Unit\Converter\InvalidType');
         $strategyConverter->convert($d);
     }
 }
 
-class A {}
+class A
+{
+}
 
-class B extends A {}
+class B extends A
+{
+}
 
-class C extends B {}
+class C extends B
+{
+}
 
-class InvalidType {}
+class InvalidType
+{
+}

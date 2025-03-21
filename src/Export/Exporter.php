@@ -16,28 +16,29 @@ class Exporter
     /**
      * @template TSource of AbstractElement
      * @template TTarget of Element
+     *
      * @param array<class-string<TSource>, Converter<TSource, TTarget, GenericContext|null> > $typeToConverterMap
      */
     public function __construct(
-        private readonly array               $typeToConverterMap,
+        private readonly array $typeToConverterMap,
         private readonly SerializerInterface $serializer,
     ) {
     }
 
     /**
-     * Exports one or more pages in the given format (yaml, json, ...)).
+     * Exports one or more Pimcore Elements in the given format (yaml, json, ...)).
      *
-     * @param iterable<AbstractElement> $assets
+     * @param iterable<AbstractElement> $elements
      *
      * @throws ConverterException
      */
-    public function export(iterable $assets, string $format): string
+    public function export(iterable $elements, string $format): string
     {
         $yamlExportElements = [];
-        foreach ($assets as $asset) {
+        foreach ($elements as $element) {
             foreach (array_keys($this->typeToConverterMap) as $type) {
-                if ($asset instanceof $type) {
-                    $yamlExportElements[] = [$type => $this->typeToConverterMap[$type]->convert($asset)];
+                if ($element instanceof $type) {
+                    $yamlExportElements[] = [$type => $this->typeToConverterMap[$type]->convert($element)];
                     continue 2;
                 }
             }

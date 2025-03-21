@@ -1,9 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Neusta\Pimcore\ImportExportBundle\Tests\Integration\Documents\Export;
+namespace Neusta\Pimcore\ImportExportBundle\Tests\Integration\Export;
 
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
-use Neusta\Pimcore\ImportExportBundle\Tests\Integration\Documents\ImportExportYamlDriver;
 use Neusta\Pimcore\TestingFramework\Database\ResetDatabase;
 use Pimcore\Model\Asset\Image;
 use Pimcore\Model\Document\Editable\Input;
@@ -29,7 +28,7 @@ class ExporterTest extends KernelTestCase
         $asset->setId(999);
         $asset->setParentId(1);
         $asset->setKey('image_1');
-        $asset->setType("image");
+        $asset->setType('image');
         $asset->setPath('/');
 
         $yaml = $this->exporter->export([$asset], 'yaml');
@@ -88,9 +87,6 @@ class ExporterTest extends KernelTestCase
         $this->assertMatchesSnapshot($yaml, new ImportExportYamlDriver());
     }
 
-    /**
-     * @return Page
-     */
     private function createPageWithInputEditable(): Page
     {
         $page = new Page();
@@ -109,15 +105,10 @@ class ExporterTest extends KernelTestCase
         $inputEditable->setName('textInput');
         $inputEditable->setDataFromResource('some text input');
         $page->setEditables([$inputEditable]);
+
         return $page;
     }
 
-    /**
-     * @param string $index
-     * @param $parentId
-     * @param string $path
-     * @return Page
-     */
     private function createSimplePage(string $index, int $parentId, string $path): Page
     {
         $page1 = new Page();
@@ -125,7 +116,7 @@ class ExporterTest extends KernelTestCase
         $page1->setPath($path);
         $page1->setKey('test_document_' . $index);
         $page1->setTitle('Test Document_' . $index);
+
         return $page1;
     }
-
 }

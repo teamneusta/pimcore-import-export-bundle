@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Neusta\Pimcore\ImportExportBundle\Import;
 
-use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\AbstractElementRepository;
 use Pimcore\Model\Asset;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\Document;
@@ -17,9 +16,9 @@ class ParentRelationResolver
     {
         $path = $element->getPath();
 
-        if (($parent = $this->isValidParent($element))) {
+        if ($parent = $this->isValidParent($element)) {
             // Wenn die parentId gültig ist, den Path aktualisieren
-           $element->setPath($this->generatePath($parent, $element));
+            $element->setPath($this->generatePath($parent, $element));
         } elseif ($path) {
             // Wenn der Pfad existiert, versuchen, die parentId zu ermitteln
             $parent = $this->findParentByPath($path, $element);
@@ -40,10 +39,11 @@ class ParentRelationResolver
         $parentId = $element->getParentId();
         if ($parentId) {
             $parent = $this->getById($parentId, $element);
-            if ($this->isCompatibleType($parent, $element)) {;
+            if ($this->isCompatibleType($parent, $element)) {
                 return $parent;
             }
         }
+
         return null;
     }
 
@@ -56,6 +56,7 @@ class ParentRelationResolver
         } elseif ($element instanceof DataObject) {
             return DataObject::getById($id);
         }
+
         return null;
     }
 
@@ -68,20 +69,21 @@ class ParentRelationResolver
         } elseif ($element instanceof DataObject) {
             return DataObject::getByPath($path);
         }
+
         return null;
     }
 
     private function generatePath(ElementInterface $parent, AbstractElement $element): string
     {
-        return rtrim($parent->getPath(), '/') . '/' . $element->getKey();
+        return rtrim($parent->getPath() ?? '', '/') . '/' . $element->getKey();
     }
 
-    private function isCompatibleType(?AbstractElement $parent, AbstractElement $child): bool
+    private function isCompatibleType(?ElementInterface $parent, AbstractElement $child): bool
     {
-        return (
-            ($child instanceof Document && $parent instanceof Document) ||
-            ($child instanceof Asset && $parent instanceof Asset) ||
-            ($child instanceof DataObject && $parent instanceof DataObject\Folder)
-        );
+        return
+            ($child instanceof Document && $parent instanceof Document)
+            || ($child instanceof Asset && $parent instanceof Asset)
+            || ($child instanceof DataObject && $parent instanceof DataObject\Folder)
+        ;
     }
 }

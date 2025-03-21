@@ -2,7 +2,6 @@
 
 namespace Neusta\Pimcore\ImportExportBundle\Command;
 
-use Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImporter;
 use Neusta\Pimcore\ImportExportBundle\Import\Importer;
 use Pimcore\Console\AbstractCommand;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -57,13 +56,16 @@ class ImportPagesCommand extends AbstractCommand
         try {
             $pages = $this->pageImporter->import($yamlInput, 'yaml', !$input->getOption('dry-run'));
         } catch (\DomainException $e) {
-            $this->io->error(sprintf('Invalid YAML format: %s', $e->getMessage()));
+            $this->io->error(\sprintf('Invalid YAML format: %s', $e->getMessage()));
+
             return Command::FAILURE;
         } catch (\InvalidArgumentException $e) {
-            $this->io->error(sprintf('Import error: %s', $e->getMessage()));
+            $this->io->error(\sprintf('Import error: %s', $e->getMessage()));
+
             return Command::FAILURE;
         } catch (\Exception $e) {
-            $this->io->error(sprintf('Unexpected error during import: %s', $e->getMessage()));
+            $this->io->error(\sprintf('Unexpected error during import: %s', $e->getMessage()));
+
             return Command::FAILURE;
         }
 

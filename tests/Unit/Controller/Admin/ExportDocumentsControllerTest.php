@@ -2,8 +2,10 @@
 
 namespace Neusta\Pimcore\ImportExportBundle\Tests\Unit\Controller\Admin;
 
-use Neusta\Pimcore\ImportExportBundle\Controller\Admin\PageExportController;
+use Neusta\Pimcore\ImportExportBundle\Controller\Admin\ExportDocumentsController;
 use Neusta\Pimcore\ImportExportBundle\Documents\Export\PageExporter;
+use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
+use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\PageRepository;
 use PHPUnit\Framework\TestCase;
 use Pimcore\Model\Document\Page;
@@ -13,39 +15,39 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class PageExportControllerTest extends TestCase
+class ExportDocumentsControllerTest extends TestCase
 {
     use ProphecyTrait;
 
-    private PageExportController $controller;
+    private ExportDocumentsController $controller;
 
     /** @var ObjectProphecy<PageExporter> */
-    private $pageExporter;
+    private $exporter;
 
     /** @var ObjectProphecy<PageRepository> */
-    private $pageRepository;
+    private $documentRepository;
 
     private Request $request;
 
     protected function setUp(): void
     {
-        $this->pageExporter = $this->prophesize(PageExporter::class);
-        $this->pageRepository = $this->prophesize(PageRepository::class);
+        $this->exporter = $this->prophesize(Exporter::class);
+        $this->documentRepository = $this->prophesize(DocumentRepository::class);
 
-        $this->controller = new PageExportController(
-            $this->pageExporter->reveal(),
-            $this->pageRepository->reveal(),
+        $this->controller = new ExportDocumentsController(
+            $this->exporter->reveal(),
+            $this->documentRepository->reveal(),
         );
-        $this->request = new Request(['page_id' => 17]);
+        $this->request = new Request(['doc_id' => 17]);
     }
 
     public function testExportPage_regular_case(): void
     {
         $page = $this->prophesize(Page::class);
-        $this->pageRepository->getById(17)->willReturn($page->reveal());
-        $this->pageExporter->export([$page->reveal()], 'yaml')->willReturn('TEST_YAML');
+        $this->documentRepository->getById(17)->willReturn($page->reveal());
+        $this->exporter->export([$page->reveal()], 'yaml')->willReturn('TEST_YAML');
 
-        $response = $this->controller->exportPage($this->request);
+        $response = $this->controller->export($this->request);
 
         self::assertInstanceOf(Response::class, $response);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -56,10 +58,10 @@ class PageExportControllerTest extends TestCase
     public function testExportPage_exceptional_case(): void
     {
         $page = $this->prophesize(Page::class);
-        $this->pageRepository->getById(17)->willReturn($page->reveal());
-        $this->pageExporter->export([$page->reveal()], 'yaml')->willThrow(new \Exception('Problem'));
+        $this->documentRepository->getById(17)->willReturn($page->reveal());
+        $this->exporter->export([$page->reveal()], 'yaml')->willThrow(new \Exception('Problem'));
 
-        $response = $this->controller->exportPage($this->request);
+        $response = $this->controller->export($this->request);
 
         self::assertInstanceOf(JsonResponse::class, $response);
         self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
@@ -68,12 +70,12 @@ class PageExportControllerTest extends TestCase
 
     public function testExportPage_no_document_case(): void
     {
-        $this->pageRepository->getById(17)->willReturn(null);
+        $this->documentRepository->getById(17)->willReturn(null);
 
-        $response = $this->controller->exportPage($this->request);
+        $response = $this->controller->export($this->request);
 
         self::assertInstanceOf(JsonResponse::class, $response);
         self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
-        self::assertSame('"Page with id \u002217\u0022 was not found"', $response->getContent());
+        self::assertSame('"Document with id \u002217\u0022 was not found"', $response->getContent());
     }
 }

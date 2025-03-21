@@ -4,7 +4,7 @@ namespace Neusta\Pimcore\ImportExportBundle\Model\Document;
 
 use Neusta\Pimcore\ImportExportBundle\Model\Element;
 
-class Page extends Element
+class Document extends Element
 {
     public bool $published = false;
     public ?string $navigation_name = null;

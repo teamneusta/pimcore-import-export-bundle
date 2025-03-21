@@ -4,6 +4,9 @@ services:
     autoconfigure: true
     public: true
 
+  Neusta\Pimcore\ImportExportBundle\Toolbox\:
+    resource: '../../../src/Toolbox'
+
   Neusta\Pimcore\ImportExportBundle\Tests\Integration\Documents\ImportExportYamlDriver: ~
 
   ###########################################################
