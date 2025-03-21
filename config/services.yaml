@@ -6,12 +6,9 @@ services:
   ############
   # Commands #
   ############
-  Neusta\Pimcore\ImportExportBundle\Command\ExportDocumentsCommand:
-    public: true
-    tags: [ 'console.command' ]
-
-  Neusta\Pimcore\ImportExportBundle\Command\ImportDocumentsCommand:
-    public: true
+  # auto-register all commands as services
+  Neusta\Pimcore\ImportExportBundle\Command\:
+    resource: '../src/Command/*'
     tags: [ 'console.command' ]
 
   ##############
@@ -28,6 +25,11 @@ services:
   Neusta\Pimcore\ImportExportBundle\Controller\Admin\ImportDocumentsController:
     public: true
     tags: [ 'controller.service_arguments' ]
+
+  ##############
+  # Service    #
+  ##############
+  Neusta\Pimcore\ImportExportBundle\Export\Service\ZipService: ~
 
   ##############
   # Serializer #

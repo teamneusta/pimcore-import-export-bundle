@@ -3,6 +3,7 @@
 namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
+use Neusta\Pimcore\ImportExportBundle\Export\Service\ZipService;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\AssetRepository;
 use Pimcore\Model\Asset;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -17,6 +18,7 @@ final class ExportAssetsController
     public function __construct(
         private Exporter $exporter,
         private AssetRepository $assetRepository,
+        private ZipService $zipService,
     ) {
     }
 
@@ -71,29 +73,7 @@ final class ExportAssetsController
         }
 
         $zipFilename = tempnam(sys_get_temp_dir(), 'export_') . '.zip';
-        $zip = new \ZipArchive();
-        if (true !== $zip->open($zipFilename, \ZipArchive::CREATE)) {
-            return new JsonResponse('Could not create ZIP file', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        // Add YAML file to ZIP
-        $zip->addFromString($filename, $yaml);
-
-        // Add physical representation of assets to ZIP
-        foreach ($assets as $asset) {
-            if ('folder' !== $asset->getType()) {
-                $stream = $asset->getStream();
-                if (\is_resource($stream)) {
-                    $content = stream_get_contents($stream);
-                    if ($content) {
-                        $zip->addFromString($asset->getType() . \DIRECTORY_SEPARATOR . basename($asset->getFilename()), $content);
-                    }
-                    fclose($stream);
-                }
-            }
-        }
-
-        $zip->close();
+        $this->zipService->createZipWithAssets($assets, $yaml, $zipFilename);
 
         return $this->createZipResponse($zipFilename, $filename . '.zip');
     }
