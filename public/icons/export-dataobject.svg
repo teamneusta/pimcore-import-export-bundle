@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <!-- Hintergrund -->
+  <rect width="48" height="48" fill="#000000"/>
+
+  <!-- Würfel (dreidimensionales Aussehen) -->
+  <polygon points="16,12 32,12 40,18 24,18" fill="#ba68c8"/>
+  <polygon points="16,12 24,18 24,34 16,28" fill="#ab47bc"/>
+  <polygon points="40,18 24,18 24,34 40,28" fill="#8e24aa"/>
+
+  <!-- Weißer Pfeil auf grünem Kreis unten rechts -->
+  <circle cx="38" cy="38" r="8" fill="#4caf50"/>
+  <line x1="38" y1="34" x2="38" y2="42" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+  <polyline points="34,38 38,42 42,38" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+</svg>

@@ -11,24 +11,24 @@ neusta_pimcore_import_export.plugin.document.import = Class.create({
         if (menu.extras) {
             menu.extras.items.push({
                 text: t('neusta_pimcore_import_export_import_menu_label'),
-                iconCls: 'pimcore_icon_import',
+                iconCls: 'icon-import-menu',
                 hideOnClick: false,
                 menu: {
                     cls: "pimcore_navigation_flyout",
                     shadow: false,
                     items: [
                         {
-                            iconCls: 'pimcore_icon_import',
+                            iconCls: 'icon-import-assets',
                             text: t('neusta_pimcore_import_export_import_menu_label_asset'),
                             handler: this.openImportDialog.bind(this, 'asset', 'yaml')
                         },
                         {
-                            iconCls: 'pimcore_icon_import',
+                            iconCls: 'icon-import-documents',
                             text: t('neusta_pimcore_import_export_import_menu_label_document'),
                             handler: this.openImportDialog.bind(this, 'document', 'yaml')
                         },
                         {
-                            iconCls: 'pimcore_icon_import',
+                            iconCls: 'icon-import-dataobjects',
                             text: t('neusta_pimcore_import_export_import_menu_label_object'),
                             handler: this.openImportDialog.bind(this, 'object', 'yaml')
                         }

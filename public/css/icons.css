@@ -1,0 +1,69 @@
+.icon-import-menu {
+    background-image: url('../icons/import.svg');
+    background-size: 32px 32px;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+
+.icon-import-documents {
+    background-image: url('../icons/import-documents.svg');
+    background-size: 32px 32px;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+
+.icon-import-assets {
+    background-image: url('../icons/import-assets.svg');
+    background-size: 32px 32px;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+
+.icon-import-dataobjects {
+    background-image: url('../icons/import-dataobjects.svg');
+    background-size: 32px 32px;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+
+.icon-export-menu {
+    background-image: url('../icons/export.svg');
+    background-size: 32px 32px;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+
+.icon-export-documents {
+    background-image: url('../icons/export-documents.svg');
+    background-size: 24px 24px;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+
+.icon-export-document {
+    background-image: url('../icons/export-document.svg');
+    background-size: 24px 24px;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+
+.icon-export-assets {
+    background-image: url('../icons/export-assets.svg');
+    background-size: 24px 24px;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+
+.icon-export-dataobject {
+    background-image: url('../icons/export-dataobject.svg');
+    background-size: 24px 24px;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+
+.icon-export-dataobjects {
+    background-image: url('../icons/export-dataobjects.svg');
+    background-size: 24px 24px;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}

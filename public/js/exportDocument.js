@@ -11,14 +11,14 @@ neusta_pimcore_import_export.plugin.document.export = Class.create({
 
         // Add menu items
         menu.add("-");
-        this.addMenuItem(menu, document, 'neusta_pimcore_import_export_export_menu_label', 'neusta_pimcore_import_export_documents_export');
-        this.addMenuItem(menu, document, 'neusta_pimcore_import_export_export_with_children_menu_label', 'neusta_pimcore_import_export_documents_export_with_children');
+        this.addMenuItem(menu, document, 'neusta_pimcore_import_export_export_menu_label', 'icon-export-document', 'neusta_pimcore_import_export_documents_export');
+        this.addMenuItem(menu, document, 'neusta_pimcore_import_export_export_with_children_menu_label', 'icon-export-documents', 'neusta_pimcore_import_export_documents_export_with_children');
     },
 
-    addMenuItem: function (menu, document, label, route) {
+    addMenuItem: function (menu, document, label, icon, route) {
         menu.add(new Ext.menu.Item({
             text: t(label),
-            iconCls: "pimcore_icon_export",
+            iconCls: icon,
             handler: function () {
                 let defaultFilename = document.data.key + '.yaml';
                 let filename = prompt(t('neusta_pimcore_import_export_enter_filename'), defaultFilename);
