@@ -8,16 +8,37 @@ neusta_pimcore_import_export.plugin.document.import = Class.create({
     preMenuBuild: function (e) {
         let menu = e.detail.menu;
 
-        menu.neusta_pimcore_import_export = {
-            label: t('neusta_pimcore_import_export_import_menu_label'),
-            iconCls: 'pimcore_icon_import',
-            priority: 50,
-            handler: this.openImportDialog.bind(this),
-            noSubmenus: true
-        };
+        if (menu.extras) {
+            menu.extras.items.push({
+                text: t('neusta_pimcore_import_export_import_menu_label'),
+                iconCls: 'pimcore_icon_import',
+                hideOnClick: false,
+                menu: {
+                    cls: "pimcore_navigation_flyout",
+                    shadow: false,
+                    items: [
+                        {
+                            iconCls: 'pimcore_icon_import',
+                            text: t('neusta_pimcore_import_export_import_menu_label_asset'),
+                            handler: this.openImportDialog.bind(this, 'asset', 'yaml')
+                        },
+                        {
+                            iconCls: 'pimcore_icon_import',
+                            text: t('neusta_pimcore_import_export_import_menu_label_document'),
+                            handler: this.openImportDialog.bind(this, 'document', 'yaml')
+                        },
+                        {
+                            iconCls: 'pimcore_icon_import',
+                            text: t('neusta_pimcore_import_export_import_menu_label_object'),
+                            handler: this.openImportDialog.bind(this, 'object', 'yaml')
+                        }
+                    ]
+                }
+            });
+        }
     },
 
-    openImportDialog: function () {
+    openImportDialog: function (type, format) {
         let uploadDialog = new Ext.Window({
             title: t('neusta_pimcore_import_export_import_dialog_title'),
             width: 600,
@@ -46,7 +67,9 @@ neusta_pimcore_import_export.plugin.document.import = Class.create({
                     buttons: [
                         {
                             text: 'Import',
-                            handler: this.handleImport.bind(this)
+                            handler: function (btn) {
+                                this.handleImport(type, format, btn);
+                            }.bind(this)
                         }
                     ]
                 })
@@ -56,14 +79,14 @@ neusta_pimcore_import_export.plugin.document.import = Class.create({
         uploadDialog.show();
     },
 
-    handleImport: function (btn) {
+    handleImport: function (type, format, btn) {
         let form = btn.up('form').getForm();
         if (!form.isValid()) {
             return;
         }
 
         form.submit({
-            url: Routing.generate('neusta_pimcore_import_export_document_import', {format: 'yaml'}),
+            url: Routing.generate('neusta_pimcore_import_export_' + type + '_import', {format: format}),
             method: 'POST',
             waitMsg: t('neusta_pimcore_import_export_import_dialog_wait_message'),
             headers: {
@@ -79,6 +102,7 @@ neusta_pimcore_import_export.plugin.document.import = Class.create({
 
     onImportSuccess: function (form, action) {
         let response = Ext.decode(action.response.responseText);
+
         let successDialog = new Ext.Window({
             title: t('neusta_pimcore_import_export_import_dialog_notification_success'),
             width: 300,
