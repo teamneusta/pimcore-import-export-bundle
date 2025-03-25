@@ -18,7 +18,7 @@ neusta_pimcore_import_export.plugin.asset.export = Class.create({
     addMenuItem: function (menu, asset, label, route) {
         menu.add(new Ext.menu.Item({
             text: t(label),
-            iconCls: "icon-export-assets",
+            iconCls: "pimcore_icon_asset pimcore_icon_overlay_download",
             handler: function () {
                 let defaultFilename = asset.data.key + '.yaml';
                 let filename = prompt(t('neusta_pimcore_import_export_enter_filename'), defaultFilename);

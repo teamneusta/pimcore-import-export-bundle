@@ -1,0 +1,37 @@
+###########################################################
+# Neusta Converter Bundle
+###########################################################
+neusta_converter:
+  converter:
+    ###########################################################
+    # Export Converter (Document -> Page)
+    ###########################################################
+    neusta_pimcore_import_export.export_object:
+      target: Neusta\Pimcore\ImportExportBundle\Model\Object\DataObject
+      populators:
+        - neusta_pimcore_import_export.export_object.populator
+      properties:
+        className: ~
+        id: ~
+        key: ~
+        type: ~
+        published: ~
+        path: ~
+        parentId: ~
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  ###########################################################
+  # Export Converter (Concrete -> DataObject)
+  ###########################################################
+  neusta_pimcore_import_export.strategy.export_document:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\TypeStrategyConverter
+    arguments:
+      $typeToConverterMap:
+        Pimcore\Model\DataObject\Concrete: '@neusta_pimcore_import_export.export_object'
+
+  neusta_pimcore_import_export.export_object.populator:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\DataObjectExportPopulator

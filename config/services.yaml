@@ -18,6 +18,10 @@ services:
     public: true
     tags: [ 'controller.service_arguments' ]
 
+  Neusta\Pimcore\ImportExportBundle\Controller\Admin\ExportDataObjectsController:
+    public: true
+    tags: [ 'controller.service_arguments' ]
+
   Neusta\Pimcore\ImportExportBundle\Controller\Admin\ExportDocumentsController:
     public: true
     tags: [ 'controller.service_arguments' ]
@@ -26,10 +30,41 @@ services:
     public: true
     tags: [ 'controller.service_arguments' ]
 
+  ############
+  # Importer #
+  ############
+  Neusta\Pimcore\ImportExportBundle\Import\Importer:
+    class: Neusta\Pimcore\ImportExportBundle\Import\Importer
+    arguments:
+      $typeToConverterMap:
+        Pimcore\Model\Asset: '@neusta_pimcore_import_export.import_asset'
+        Pimcore\Model\Document: '@neusta_pimcore_import_export.import_document'
+      $parentRelationResolver: '@Neusta\Pimcore\ImportExportBundle\Import\ParentRelationResolver'
+      $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
+
+  ############
+  # Exporter #
+  ############
+  Neusta\Pimcore\ImportExportBundle\Export\Exporter:
+    class: Neusta\Pimcore\ImportExportBundle\Export\Exporter
+    arguments:
+      $typeToConverterMap:
+        Pimcore\Model\Asset: '@neusta_pimcore_import_export.strategy.export_asset'
+        Pimcore\Model\Document: '@neusta_pimcore_import_export.strategy.export_document'
+        Pimcore\Model\DataObject\Concrete: '@neusta_pimcore_import_export.export_object'
+      $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
+
   ##############
   # Service    #
   ##############
   Neusta\Pimcore\ImportExportBundle\Export\Service\ZipService: ~
+
+  Neusta\Pimcore\ImportExportBundle\Import\ParentRelationResolver: ~
+
+  Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\AssetRepository: ~
+  Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DataObjectRepository: ~
+  Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository: ~
+
 
   ##############
   # Serializer #

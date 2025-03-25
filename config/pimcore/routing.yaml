@@ -10,6 +10,12 @@ neusta_pimcore_import_export_documents_export:
     options:
         expose: true
 
+neusta_pimcore_import_export_objects_export:
+    resource: '../../src/Controller/Admin/ExportDataObjectsController.php'
+    type: attribute
+    options:
+        expose: true
+
 neusta_pimcore_import_export_documents_import:
     resource: '../../src/Controller/Admin/ImportDocumentsController.php'
     type: attribute

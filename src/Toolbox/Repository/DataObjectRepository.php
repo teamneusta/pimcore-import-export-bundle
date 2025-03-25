@@ -21,4 +21,19 @@ class DataObjectRepository extends AbstractElementRepository
     {
         parent::__construct(DataObject::class);
     }
+
+    /**
+     * @return iterable<Concrete>
+     */
+    public function findAllObjectsWithChildren(Concrete $page): iterable
+    {
+        yield $page;
+
+        foreach ($page->getChildren(includingUnpublished: true) as $child) {
+            if ($child instanceof Concrete) {
+                yield from $this->findAllObjectsWithChildren($child);
+            }
+        }
+    }
+
 }

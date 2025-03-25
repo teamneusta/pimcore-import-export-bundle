@@ -11,8 +11,8 @@ neusta_pimcore_import_export.plugin.document.export = Class.create({
 
         // Add menu items
         menu.add("-");
-        this.addMenuItem(menu, document, 'neusta_pimcore_import_export_export_menu_label', 'icon-export-document', 'neusta_pimcore_import_export_documents_export');
-        this.addMenuItem(menu, document, 'neusta_pimcore_import_export_export_with_children_menu_label', 'icon-export-documents', 'neusta_pimcore_import_export_documents_export_with_children');
+        this.addMenuItem(menu, document, 'neusta_pimcore_import_export_export_menu_label', 'pimcore_icon_document pimcore_icon_overlay_download', 'neusta_pimcore_import_export_documents_export');
+        this.addMenuItem(menu, document, 'neusta_pimcore_import_export_export_with_children_menu_label', 'pimcore_icon_document pimcore_icon_overlay_download', 'neusta_pimcore_import_export_documents_export_with_children');
     },
 
     addMenuItem: function (menu, document, label, icon, route) {

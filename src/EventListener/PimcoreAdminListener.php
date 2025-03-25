@@ -10,9 +10,12 @@ final class PimcoreAdminListener
     {
         $event->addPaths([
             '/bundles/neustapimcoreimportexport/js/startup.js',
+            // Export
             '/bundles/neustapimcoreimportexport/js/exportAsset.js',
+            '/bundles/neustapimcoreimportexport/js/exportDataObjects.js',
             '/bundles/neustapimcoreimportexport/js/exportDocument.js',
-            '/bundles/neustapimcoreimportexport/js/importDocument.js',
+            // Import
+            '/bundles/neustapimcoreimportexport/js/importMenu.js',
         ]);
     }
 

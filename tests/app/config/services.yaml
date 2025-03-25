@@ -32,6 +32,7 @@ services:
         Pimcore\Model\Document\Page: '@neusta_pimcore_import_export.export_page'
         Pimcore\Model\Document\PageSnippet: '@neusta_pimcore_import_export.export_page_snippet'
         Pimcore\Model\Document\Folder: '@neusta_pimcore_import_export.export_folder'
+        Pimcore\Model\Concrete: '@neusta_pimcore_import_export.export_object'
       $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
 
   ############
