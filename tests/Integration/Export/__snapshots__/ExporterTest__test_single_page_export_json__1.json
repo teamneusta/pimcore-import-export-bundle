@@ -16,7 +16,7 @@
                 ],
                 "id": 999,
                 "parentId": 4,
-                "type": "email",
+                "type": "page",
                 "path": "\/test\/",
                 "language": "en",
                 "key": "test_document_1"

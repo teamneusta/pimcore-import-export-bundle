@@ -92,7 +92,7 @@ class ExporterTest extends KernelTestCase
         $page = new Page();
         $page->setId(999);
         $page->setParentId(4);
-        $page->setType('email');
+        $page->setType('page');
         $page->setPublished(false);
         $page->setPath('/test/');
         $page->setKey('test_document_1');
