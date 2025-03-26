@@ -12,7 +12,6 @@ use Pimcore\Model\Element\AbstractElement;
 interface ImportRepositoryInterface
 {
     /**
-     * @param string $path
      * @return TElement
      */
     public function getByPath(string $path): ?AbstractElement;

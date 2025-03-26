@@ -4,9 +4,7 @@ namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DataObjectRepository;
-use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository;
 use Pimcore\Model\DataObject\Concrete;
-use Pimcore\Model\Document;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ExportDataObjectsController
 {
     public function __construct(
-        private Exporter             $exporter,
+        private Exporter $exporter,
         private DataObjectRepository $objectRepository,
     ) {
     }
@@ -60,7 +58,7 @@ final class ExportDataObjectsController
     }
 
     /**
-     * @param iterable<Document> $documents
+     * @param iterable<Concrete> $documents
      */
     private function exportObjects(iterable $documents, string $filename, string $format): Response
     {

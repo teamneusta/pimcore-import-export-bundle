@@ -3,7 +3,6 @@
 namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin\Base;
 
 use Neusta\ConverterBundle\Exception\ConverterException;
-use Neusta\Pimcore\ImportExportBundle\Import\Importer;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\ImportRepositoryInterface;
 use Pimcore\Model\Document;
 use Pimcore\Model\Element\AbstractElement;
@@ -34,7 +33,6 @@ abstract class AbstractImportBaseController
     protected bool $overwrite = false;
 
     /**
-     * @param Importer<\ArrayObject<int|string, mixed>, TElement> $importer
      * @param ImportRepositoryInterface<TElement> $repository
      */
     public function __construct(
@@ -49,7 +47,7 @@ abstract class AbstractImportBaseController
             return $this->createJsonResponse(false, $this->messagesMap[self::ERR_NO_FILE_UPLOADED], 400);
         }
 
-        $format = (string)$request->query->get('format', 'yaml');
+        $format = (string) $request->query->get('format', 'yaml');
         $this->overwrite = $request->request->getBoolean('overwrite');
 
         try {
@@ -75,23 +73,20 @@ abstract class AbstractImportBaseController
         if (null !== $oldElement) {
             if ($this->overwrite) {
                 $oldElement->delete();
-                $element->save(["versionNote" => "overwritten by pimcore-import-export-bundle"]);
+                $element->save(['versionNote' => 'overwritten by pimcore-import-export-bundle']);
 
                 return self::SUCCESS_ELEMENT_REPLACEMENT;
             }
 
             return self::SUCCESS_WITHOUT_REPLACEMENT;
         }
-        $element->save(["versionNote" => "added by pimcore-import-export-bundle"]);
+        $element->save(['versionNote' => 'added by pimcore-import-export-bundle']);
 
         return self::SUCCESS_NEW_ELEMENT;
     }
 
     /**
-     * @param array $elements
-     * @param bool $overwrite
-     * @param string $elementType
-     * @return string
+     * @param array<TElement> $elements
      */
     protected function createResultMessage(array $elements, string $elementType): string
     {
@@ -125,11 +120,10 @@ abstract class AbstractImportBaseController
     }
 
     /**
-     * @param UploadedFile $file
-     * @param string $format
-     * @return AbstractElement[]
+     * @return array<TElement>
+     *
      * @throws ConverterException
      * @throws DuplicateFullPathException
      */
-    protected abstract function importByFile(UploadedFile $file, string $format): array;
+    abstract protected function importByFile(UploadedFile $file, string $format): array;
 }

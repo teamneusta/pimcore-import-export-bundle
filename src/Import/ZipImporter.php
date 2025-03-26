@@ -5,26 +5,27 @@ declare(strict_types=1);
 namespace Neusta\Pimcore\ImportExportBundle\Import;
 
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Yaml\Yaml;
-use ZipArchive;
 
 class ZipImporter
 {
     private Filesystem $filesystem;
     private string $tempDir;
 
-    public function __construct(string $tempDir = null)
+    public function __construct(?string $tempDir = null)
     {
         $this->filesystem = new Filesystem();
         $this->tempDir = $tempDir ?? sys_get_temp_dir();
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function import(string $zipPath): array
     {
         $extractPath = $this->createTempExtractPath();
 
-        $zip = new ZipArchive();
-        if ($zip->open($zipPath) !== true) {
+        $zip = new \ZipArchive();
+        if (true !== $zip->open($zipPath)) {
             throw new \RuntimeException("Konnte ZIP-Datei nicht öffnen: $zipPath");
         }
 
@@ -33,12 +34,12 @@ class ZipImporter
 
         $yamlPath = $this->findYamlFile($extractPath);
         if (!$yamlPath) {
-            throw new \RuntimeException("Keine YAML-Datei im ZIP gefunden.");
+            throw new \RuntimeException('Keine YAML-Datei im ZIP gefunden.');
         }
 
         $yamlData = file_get_contents($yamlPath);
 
-        $assets = $this->collectAssetDirectories($extractPath, $yamlPath);
+        $assets = $this->collectAssetDirectories($extractPath);
 
         return array_merge(['yaml' => $yamlData], $assets);
     }
@@ -47,6 +48,7 @@ class ZipImporter
     {
         $extractPath = $this->tempDir . '/zipimport_' . uniqid();
         $this->filesystem->mkdir($extractPath);
+
         return $extractPath;
     }
 
@@ -54,38 +56,47 @@ class ZipImporter
     {
         $rii = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir));
         foreach ($rii as $file) {
-            if ($file->isFile() && strtolower($file->getExtension()) === 'yaml') {
+            if ($file->isFile() && 'yaml' === strtolower($file->getExtension())) {
                 return $file->getPathname();
             }
         }
+
         return null;
     }
 
-    private function collectAssetDirectories(string $basePath, string $yamlPath): array
+    /**
+     * @return array<string, array<string, string>>
+     */
+    private function collectAssetDirectories(string $basePath): array
     {
         $assets = [];
         $entries = scandir($basePath);
-        foreach ($entries as $entry) {
-            if (in_array($entry, ['.', '..'], true)) {
-                continue;
-            }
+        if ($entries) {
+            foreach ($entries as $entry) {
+                if (\in_array($entry, ['.', '..'], true)) {
+                    continue;
+                }
 
-            $fullPath = $basePath . DIRECTORY_SEPARATOR . $entry;
+                $fullPath = $basePath . \DIRECTORY_SEPARATOR . $entry;
 
-            // Nur Verzeichnisse betrachten
-            if (!is_dir($fullPath)) {
-                continue;
-            }
+                // Nur Verzeichnisse betrachten
+                if (!is_dir($fullPath)) {
+                    continue;
+                }
 
-            $files = $this->collectFilesFromDir($fullPath);
-            if (!empty($files)) {
-                $assets[$entry] = $files;
+                $files = $this->collectFilesFromDir($fullPath);
+                if (!empty($files)) {
+                    $assets[$entry] = $files;
+                }
             }
         }
 
         return $assets;
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function collectFilesFromDir(string $dir): array
     {
         $files = [];
@@ -93,7 +104,10 @@ class ZipImporter
         foreach ($rii as $file) {
             if ($file->isFile()) {
                 $filename = $file->getFilename();
-                $files[$filename] = file_get_contents($file->getPathname());
+                $content = file_get_contents($file->getPathname());
+                if ($content) {
+                    $files[$filename] = $content;
+                }
             }
         }
 

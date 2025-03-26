@@ -8,20 +8,26 @@ use Neusta\ConverterBundle\Converter;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 /**
+ * @template TSource of object
+ * @template TTarget of object
+ * @template TContext of object|null
  *
+ * @implements Converter<TSource, TTarget, TContext>
  */
 class ConverterStrategy implements Converter
 {
     /**
-     * @var iterable<SupportsAwareConverterInterface>
+     * @var iterable<SupportsAwareConverterInterface<TSource, TTarget, TContext>>
      */
     private iterable $converters;
 
+    /**
+     * @param iterable<SupportsAwareConverterInterface<TSource, TTarget, TContext>> $converters
+     */
     public function __construct(
         #[TaggedIterator('neusta_pimcore_import_export.objects.import.converter', defaultPriorityMethod: 'getPriority')]
-        iterable $converters
-    )
-    {
+        iterable $converters,
+    ) {
         $this->converters = $converters;
     }
 
@@ -33,6 +39,6 @@ class ConverterStrategy implements Converter
             }
         }
 
-        throw new \InvalidArgumentException("No converter found for type " . get_class($source));
+        throw new \InvalidArgumentException('No converter found for type ' . $source::class);
     }
 }

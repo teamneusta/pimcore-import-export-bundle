@@ -3,12 +3,13 @@
 namespace Neusta\Pimcore\ImportExportBundle\Toolbox\Repository;
 
 use Pimcore\Model\Asset;
-use Pimcore\Model\Element\AbstractElement;
 
 /**
  * @method Asset         create(int $parentId, array $data = [], bool $save = true)
  * @method Asset|null    getById(int $id, array $params = [])
  * @method Asset\Listing getList(array $config = [])
+ *
+ * @implements ImportRepositoryInterface<Asset>
  */
 class AssetRepository extends AbstractElementRepository implements ImportRepositoryInterface
 {
@@ -31,13 +32,13 @@ class AssetRepository extends AbstractElementRepository implements ImportReposit
         }
     }
 
-    /**
-     * @param string $path
-     * @return AbstractElement|null
-     */
-    public function getByPath(string $path): ?AbstractElement
+    public function getByPath(string $path): ?Asset
     {
-        return parent::getByPath($path);
-    }
+        $element = parent::getByPath($path);
+        if ($element instanceof Asset) {
+            return $element;
+        }
 
+        return null;
+    }
 }

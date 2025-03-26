@@ -3,7 +3,6 @@
 namespace Neusta\Pimcore\ImportExportBundle\Toolbox\Repository;
 
 use Pimcore\Model\Document;
-use Pimcore\Model\Element\AbstractElement;
 
 /**
  * @method Document         create(int $parentId, array $data = [], bool $save = true)
@@ -35,13 +34,13 @@ class DocumentRepository extends AbstractElementRepository implements ImportRepo
         }
     }
 
-    /**
-     * @param string $path
-     * @return Document|null
-     */
-    public function getByPath(string $path): ?AbstractElement
+    public function getByPath(string $path): ?Document
     {
-        return parent::getByPath($path);
-    }
+        $element = parent::getByPath($path);
+        if ($element instanceof Document) {
+            return $element;
+        }
 
+        return null;
+    }
 }

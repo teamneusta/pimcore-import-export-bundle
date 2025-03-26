@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
+/**
+ * @extends AbstractImportBaseController<Concrete>
+ */
 final class ImportDataObjectsController extends AbstractImportBaseController
 {
     /**
@@ -18,7 +21,7 @@ final class ImportDataObjectsController extends AbstractImportBaseController
      */
     public function __construct(
         DataObjectRepository $repository,
-        private Importer     $importer,
+        private Importer $importer,
     ) {
         parent::__construct($repository);
     }

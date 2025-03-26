@@ -4,7 +4,6 @@ namespace Neusta\Pimcore\ImportExportBundle\Toolbox\Repository;
 
 use Pimcore\Model\DataObject;
 use Pimcore\Model\DataObject\Concrete;
-use Pimcore\Model\Element\AbstractElement;
 
 /**
  * @method DataObject|null    getById(int $id, array $params = [])
@@ -38,13 +37,13 @@ class DataObjectRepository extends AbstractElementRepository implements ImportRe
         }
     }
 
-    /**
-     * @param string $path
-     * @return AbstractElement|null
-     */
-    public function getByPath(string $path): ?AbstractElement
+    public function getByPath(string $path): ?Concrete
     {
-        return parent::getByPath($path);
-    }
+        $element = parent::getByPath($path);
+        if ($element instanceof Concrete) {
+            return $element;
+        }
 
+        return null;
+    }
 }

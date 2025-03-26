@@ -6,17 +6,19 @@ use Neusta\Pimcore\ImportExportBundle\Controller\Admin\Base\AbstractImportBaseCo
 use Neusta\Pimcore\ImportExportBundle\Import\Importer;
 use Neusta\Pimcore\ImportExportBundle\Import\ZipImporter;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\AssetRepository;
-use Pimcore\Model\Document;
+use Pimcore\Model\Asset;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use ZipArchive;
 
+/**
+ * @extends AbstractImportBaseController<Asset>
+ */
 final class ImportAssetsController extends AbstractImportBaseController
 {
     /**
-     * @param Importer<\ArrayObject<int|string, mixed>, Document> $importer
+     * @param Importer<\ArrayObject<int|string, mixed>, Asset> $importer
      */
     public function __construct(
         private Importer $importer,
@@ -38,23 +40,25 @@ final class ImportAssetsController extends AbstractImportBaseController
 
     protected function importByFile(UploadedFile $file, string $format): array
     {
-        $extension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+        $extension = pathinfo($file->getClientOriginalName(), \PATHINFO_EXTENSION);
 
         // if file is ZIP add physical files to Assets
-        if ($extension === 'zip') {
+        if ('zip' === $extension) {
             $zipContent = $this->zipImporter->import($file->getPathname());
             $assets = $this->importer->import($zipContent['yaml'], $format);
             foreach ($assets as $asset) {
                 if (
-                    array_key_exists($asset->getType(), $zipContent) &&
-                    array_key_exists($asset->getKey(), $zipContent[$asset->getType()])
+                    \array_key_exists($asset->getType(), $zipContent)
+                    && $asset->getKey()
+                    && \array_key_exists($asset->getKey(), $zipContent[$asset->getType()])
                 ) {
                     $asset->setData($zipContent[$asset->getType()][$asset->getKey()]);
                     if ($this->overwrite) {
-                        $asset->save(["versionNote" => "added by pimcore-import-export-bundle"]);
+                        $asset->save(['versionNote' => 'added by pimcore-import-export-bundle']);
                     }
                 }
             }
+
             return $assets;
         }
 

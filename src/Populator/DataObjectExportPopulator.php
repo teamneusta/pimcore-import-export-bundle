@@ -2,7 +2,6 @@
 
 namespace Neusta\Pimcore\ImportExportBundle\Populator;
 
-use ArrayObject;
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Populator;
 use Neusta\Pimcore\ImportExportBundle\Model\Object\DataObject;
@@ -18,16 +17,15 @@ class DataObjectExportPopulator implements Populator
     private PropertyAccessorInterface $propertyAccessor;
 
     public function __construct(
-        ?PropertyAccessorInterface $propertyAccessor = null
-    )
-    {
+        ?PropertyAccessorInterface $propertyAccessor = null,
+    ) {
         $this->propertyAccessor = $propertyAccessor ?? PropertyAccess::createPropertyAccessor();
     }
 
     /**
-     * @param Concrete $source
-     * @param DataObject $target
-     * @param GenericContext|null         $ctx
+     * @param Concrete            $source
+     * @param DataObject          $target
+     * @param GenericContext|null $ctx
      */
     public function populate(object $target, object $source, ?object $ctx = null): void
     {
