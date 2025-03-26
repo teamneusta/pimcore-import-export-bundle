@@ -11,20 +11,26 @@ use Symfony\Component\Serializer\SerializerInterface as SymfonySerializerInterfa
 
 class JsonSerializer implements SerializerInterface
 {
-    private SymfonySerializerInterface $jsonSerializer;
-
     public function __construct(
+        private readonly SymfonySerializerInterface $serializer,
     ) {
-        $this->jsonSerializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
     }
 
     public function serialize(mixed $data, string $format): string
     {
-        return $this->jsonSerializer->serialize($data, 'json');
+        return $this->serializer->serialize($data, 'json', [
+            'json_encode_options' => JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
+        ]);
     }
 
     public function deserialize(string $data, string $format): mixed
     {
-        return json_decode($data, true);
+        $result = json_decode($data, true);
+        
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \InvalidArgumentException('JSON deserialization error: ' . json_last_error_msg());
+        }
+        
+        return $result;
     }
 }
