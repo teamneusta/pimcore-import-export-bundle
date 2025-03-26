@@ -30,10 +30,9 @@ class PageImportPopulator implements Populator
                 $target->setProperty('navigation_name', 'text', $source['navigation_name']);
             }
 
-            /** @var array<int|string, array{type: string, data: mixed}> $editables */
             /** @var array{type: string, data: mixed} $editable */
             foreach ($source['editables'] ?? [] as $key => $editable) {
-                if (!isset($editable['type']) || !isset($editable['data'])) {
+                if (!isset($editable['data'])) {
                     continue; // Skip editables with missing required fields
                 }
                 $target->setRawEditable((string) $key, $editable['type'], $editable['data']);
