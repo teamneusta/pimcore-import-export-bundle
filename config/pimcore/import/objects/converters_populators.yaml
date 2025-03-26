@@ -1,0 +1,54 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  neusta_pimcore_import_export.import_object:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\ConverterStrategy
+    arguments:
+      $converters: !tagged_iterator {tag: 'neusta_pimcore_import_export.objects.import.converter', default_priority_method: 'getPriority'}
+
+  ###########################################################
+  # Default Populator (ArrayObject -> Concrete)
+  ###########################################################
+  Neusta\Pimcore\ImportExportBundle\Populator\DataObjectImportPopulator: ~
+
+  neusta_pimcore_import_export.dataobject.import.populator.id:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: id
+      $defaultValue: 0
+
+  neusta_pimcore_import_export.dataobject.import.populator.key:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: key
+      $sourceArrayKey: key
+
+  neusta_pimcore_import_export.dataobject.import.populator.type:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: type
+      $sourceArrayKey: type
+      $defaultValue: 'object'
+
+  neusta_pimcore_import_export.dataobject.import.populator.published:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: published
+      $sourceArrayKey: published
+      $defaultValue: false
+
+  neusta_pimcore_import_export.dataobject.import.populator.path:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: path
+      $sourceArrayKey: path
+      $defaultValue: '/'
+
+  neusta_pimcore_import_export.dataobject.import.populator.parentId:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: parentId
+      $sourceArrayKey: parentId
+      $defaultValue: 0
