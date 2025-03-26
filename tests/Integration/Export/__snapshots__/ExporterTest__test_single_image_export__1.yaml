@@ -1,6 +1,7 @@
 elements:
     -
         Pimcore\Model\Asset\Image:
+            filename: image_1
             id: 999
             parentId: 1
             type: image
