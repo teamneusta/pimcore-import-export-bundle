@@ -51,6 +51,8 @@ services:
       $parentRelationResolver: '@Neusta\Pimcore\ImportExportBundle\Import\ParentRelationResolver'
       $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
 
+  Neusta\Pimcore\ImportExportBundle\Import\ZipImporter: ~
+
   ############
   # Exporter #
   ############

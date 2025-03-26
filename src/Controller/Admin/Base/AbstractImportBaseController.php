@@ -31,6 +31,7 @@ abstract class AbstractImportBaseController
         self::SUCCESS_WITHOUT_REPLACEMENT => 'not replaced',
         self::SUCCESS_NEW_ELEMENT => 'imported successfully',
     ];
+    protected bool $overwrite = false;
 
     /**
      * @param Importer<\ArrayObject<int|string, mixed>, TElement> $importer
@@ -48,8 +49,8 @@ abstract class AbstractImportBaseController
             return $this->createJsonResponse(false, $this->messagesMap[self::ERR_NO_FILE_UPLOADED], 400);
         }
 
-        $overwrite = $request->request->getBoolean('overwrite');
         $format = (string)$request->query->get('format', 'yaml');
+        $this->overwrite = $request->request->getBoolean('overwrite');
 
         try {
             $elements = $this->importByFile($file, $format);
@@ -57,7 +58,7 @@ abstract class AbstractImportBaseController
             return $this->createJsonResponse(false, $e->getMessage(), 500);
         }
 
-        return $this->createJsonResponse(true, $this->createResultMessage($elements, $overwrite, Document::class));
+        return $this->createJsonResponse(true, $this->createResultMessage($elements, Document::class));
     }
 
     protected function createJsonResponse(bool $success, string $message, int $statusCode = 200): JsonResponse
@@ -68,20 +69,20 @@ abstract class AbstractImportBaseController
     /**
      * @param TElement $element
      */
-    protected function replaceIfExists(AbstractElement $element, bool $overwrite): int
+    protected function replaceIfExists(AbstractElement $element): int
     {
         $oldElement = $this->repository->getByPath('/' . $element->getFullPath());
         if (null !== $oldElement) {
-            if ($overwrite) {
+            if ($this->overwrite) {
                 $oldElement->delete();
-                $element->save();
+                $element->save(["versionNote" => "overwritten by pimcore-import-export-bundle"]);
 
                 return self::SUCCESS_ELEMENT_REPLACEMENT;
             }
 
             return self::SUCCESS_WITHOUT_REPLACEMENT;
         }
-        $element->save();
+        $element->save(["versionNote" => "added by pimcore-import-export-bundle"]);
 
         return self::SUCCESS_NEW_ELEMENT;
     }
@@ -92,7 +93,7 @@ abstract class AbstractImportBaseController
      * @param string $elementType
      * @return string
      */
-    protected function createResultMessage(array $elements, bool $overwrite, string $elementType): string
+    protected function createResultMessage(array $elements, string $elementType): string
     {
         $results = [
             self::SUCCESS_ELEMENT_REPLACEMENT => 0,
@@ -101,7 +102,7 @@ abstract class AbstractImportBaseController
         ];
         foreach ($elements as $element) {
             if ($element instanceof $elementType) {
-                $resultCode = $this->replaceIfExists($element, $overwrite);
+                $resultCode = $this->replaceIfExists($element);
                 ++$results[$resultCode];
             }
         }
