@@ -20,17 +20,17 @@ neusta_pimcore_import_export.plugin.document.import = Class.create({
                         {
                             iconCls: 'pimcore_nav_icon_asset pimcore_icon_overlay_upload',
                             text: t('neusta_pimcore_import_export_import_menu_label_asset'),
-                            handler: this.openImportDialog.bind(this, 'asset', 'yaml')
+                            handler: this.openImportDialog.bind(this, 'asset', 'yaml', '.zip,.yaml,.yml')
                         },
                         {
                             iconCls: 'pimcore_nav_icon_document pimcore_icon_overlay_upload',
                             text: t('neusta_pimcore_import_export_import_menu_label_document'),
-                            handler: this.openImportDialog.bind(this, 'document', 'yaml')
+                            handler: this.openImportDialog.bind(this, 'document', 'yaml', '.yaml,.yml')
                         },
                         {
                             iconCls: 'pimcore_nav_icon_object pimcore_icon_overlay_upload',
                             text: t('neusta_pimcore_import_export_import_menu_label_object'),
-                            handler: this.openImportDialog.bind(this, 'object', 'yaml')
+                            handler: this.openImportDialog.bind(this, 'object', 'yaml', '.yaml,.yml')
                         }
                     ]
                 }
@@ -38,7 +38,7 @@ neusta_pimcore_import_export.plugin.document.import = Class.create({
         }
     },
 
-    openImportDialog: function (type, format) {
+    openImportDialog: function (type, format, fileTypes) {
         let uploadDialog = new Ext.Window({
             title: t('neusta_pimcore_import_export_import_dialog_title'),
             width: 600,
@@ -56,7 +56,7 @@ neusta_pimcore_import_export.plugin.document.import = Class.create({
                             labelWidth: 100,
                             allowBlank: false,
                             buttonText: t('neusta_pimcore_import_export_import_dialog_file_button'),
-                            accept: '.yaml,.yml'
+                            accept: fileTypes
                         },
                         {
                             xtype: 'checkbox',

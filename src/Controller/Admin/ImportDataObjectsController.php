@@ -4,28 +4,28 @@ namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
 use Neusta\Pimcore\ImportExportBundle\Controller\Admin\Base\AbstractImportBaseController;
 use Neusta\Pimcore\ImportExportBundle\Import\Importer;
-use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository;
-use Pimcore\Model\Document;
+use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DataObjectRepository;
+use Pimcore\Model\DataObject\Concrete;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class ImportDocumentsController extends AbstractImportBaseController
+final class ImportDataObjectsController extends AbstractImportBaseController
 {
     /**
-     * @param Importer<\ArrayObject<int|string, mixed>, Document> $importer
+     * @param Importer<\ArrayObject<int|string, mixed>, Concrete> $importer
      */
     public function __construct(
-        DocumentRepository $repository,
-        private Importer $importer,
+        DataObjectRepository $repository,
+        private Importer     $importer,
     ) {
         parent::__construct($repository);
     }
 
     #[Route(
-        '/admin/neusta/import-export/document/import',
-        name: 'neusta_pimcore_import_export_document_import',
+        '/admin/neusta/import-export/object/import',
+        name: 'neusta_pimcore_import_export_object_import',
         methods: ['POST']
     )]
     public function import(Request $request): JsonResponse
