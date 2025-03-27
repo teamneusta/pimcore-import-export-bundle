@@ -5,18 +5,19 @@ namespace Neusta\Pimcore\ImportExportBundle\Command;
 use Neusta\Pimcore\ImportExportBundle\Command\Base\AbstractExportBaseCommand;
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\ExportRepositoryInterface;
+use Pimcore\Model\DataObject\Concrete;
 use Pimcore\Model\Document;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 
 /**
- * @extends AbstractExportBaseCommand<Document>
+ * @extends AbstractExportBaseCommand<Concrete>
  */
 #[AsCommand(
-    name: 'neusta:pimcore:export:documents',
-    description: 'Export all Pimcore Documents in one single file'
+    name: 'neusta:pimcore:export:objects',
+    description: 'Export all Pimcore Data Objects in one single file'
 )]
-class ExportDocumentsCommand extends AbstractExportBaseCommand
+class ExportDataObjectsCommand extends AbstractExportBaseCommand
 {
     public function __construct(
         ExportRepositoryInterface $repository,

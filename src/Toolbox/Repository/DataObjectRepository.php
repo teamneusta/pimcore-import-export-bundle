@@ -6,7 +6,6 @@ use Pimcore\Model\DataObject;
 use Pimcore\Model\DataObject\Concrete;
 
 /**
- * @method DataObject|null    getById(int $id, array $params = [])
  * @method DataObject\Listing getList(array $config = [])
  * @method void               setGetInheritedValues(bool $getInheritedValues)
  * @method bool               doGetInheritedValues(Concrete $object = null)
@@ -15,8 +14,9 @@ use Pimcore\Model\DataObject\Concrete;
  * @method bool               doHideUnpublished()
  *
  * @implements ImportRepositoryInterface<Concrete>
+ * @implements ExportRepositoryInterface<Concrete>
  */
-class DataObjectRepository extends AbstractElementRepository implements ImportRepositoryInterface
+class DataObjectRepository extends AbstractElementRepository implements ImportRepositoryInterface, ExportRepositoryInterface
 {
     public function __construct()
     {
@@ -40,6 +40,16 @@ class DataObjectRepository extends AbstractElementRepository implements ImportRe
     public function getByPath(string $path): ?Concrete
     {
         $element = parent::getByPath($path);
+        if ($element instanceof Concrete) {
+            return $element;
+        }
+
+        return null;
+    }
+
+    public function getById(int $id): ?Concrete
+    {
+        $element = parent::getById($id);
         if ($element instanceof Concrete) {
             return $element;
         }

@@ -6,9 +6,22 @@ services:
   ############
   # Commands #
   ############
-  # auto-register all commands as services
-  Neusta\Pimcore\ImportExportBundle\Command\:
-    resource: '../src/Command/*'
+  Neusta\Pimcore\ImportExportBundle\Command\ExportAssetsCommand:
+    arguments:
+      $repository: '@Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\AssetRepository'
+      $exporter: '@Neusta\Pimcore\ImportExportBundle\Export\Exporter'
+    tags: [ 'console.command' ]
+
+  Neusta\Pimcore\ImportExportBundle\Command\ExportDocumentsCommand:
+    arguments:
+      $repository: '@Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository'
+      $exporter: '@Neusta\Pimcore\ImportExportBundle\Export\Exporter'
+    tags: [ 'console.command' ]
+
+  Neusta\Pimcore\ImportExportBundle\Command\ExportDataObjectsCommand:
+    arguments:
+      $repository: '@Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DataObjectRepository'
+      $exporter: '@Neusta\Pimcore\ImportExportBundle\Export\Exporter'
     tags: [ 'console.command' ]
 
   ##############

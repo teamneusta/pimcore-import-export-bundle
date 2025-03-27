@@ -27,7 +27,7 @@ services:
   ###########################################################
   # Export Converter (Concrete -> DataObject)
   ###########################################################
-  neusta_pimcore_import_export.strategy.export_document:
+  neusta_pimcore_import_export.strategy.export_objects:
     class: Neusta\Pimcore\ImportExportBundle\Converter\TypeStrategyConverter
     arguments:
       $typeToConverterMap:

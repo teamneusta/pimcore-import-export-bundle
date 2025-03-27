@@ -6,14 +6,14 @@ use Pimcore\Model\Document;
 
 /**
  * @method Document         create(int $parentId, array $data = [], bool $save = true)
- * @method Document|null    getById(int $id, array $params = [])
  * @method Document\Listing getList(array $config = [])
  * @method void             setHideUnpublished(bool $hideUnpublished)
  * @method bool             doHideUnpublished()
  *
  * @implements ImportRepositoryInterface<Document>
+ * @implements ExportRepositoryInterface<Document>
  */
-class DocumentRepository extends AbstractElementRepository implements ImportRepositoryInterface
+class DocumentRepository extends AbstractElementRepository implements ImportRepositoryInterface, ExportRepositoryInterface
 {
     public function __construct()
     {
@@ -37,6 +37,16 @@ class DocumentRepository extends AbstractElementRepository implements ImportRepo
     public function getByPath(string $path): ?Document
     {
         $element = parent::getByPath($path);
+        if ($element instanceof Document) {
+            return $element;
+        }
+
+        return null;
+    }
+
+    public function getById(int $id): ?Document
+    {
+        $element = parent::getById($id);
         if ($element instanceof Document) {
             return $element;
         }

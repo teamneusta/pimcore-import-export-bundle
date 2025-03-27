@@ -4,7 +4,6 @@ namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin\Base;
 
 use Neusta\ConverterBundle\Exception\ConverterException;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\ImportRepositoryInterface;
-use Pimcore\Model\Document;
 use Pimcore\Model\Element\AbstractElement;
 use Pimcore\Model\Element\DuplicateFullPathException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -30,14 +29,24 @@ abstract class AbstractImportBaseController
         self::SUCCESS_WITHOUT_REPLACEMENT => 'not replaced',
         self::SUCCESS_NEW_ELEMENT => 'imported successfully',
     ];
+
     protected bool $overwrite = false;
+
+    /** @var array<int, int> */
+    private array $resultStatistics;
 
     /**
      * @param ImportRepositoryInterface<TElement> $repository
      */
     public function __construct(
         protected ImportRepositoryInterface $repository,
+        protected string $elementType = 'Element',
     ) {
+        $this->resultStatistics = [
+            self::SUCCESS_ELEMENT_REPLACEMENT => 0,
+            self::SUCCESS_WITHOUT_REPLACEMENT => 0,
+            self::SUCCESS_NEW_ELEMENT => 0,
+        ];
     }
 
     public function import(Request $request): JsonResponse
@@ -52,11 +61,14 @@ abstract class AbstractImportBaseController
 
         try {
             $elements = $this->importByFile($file, $format);
+            foreach ($elements as $element) {
+                ++$this->resultStatistics[$this->replaceIfExists($element)];
+            }
         } catch (\Exception $e) {
             return $this->createJsonResponse(false, $e->getMessage(), 500);
         }
 
-        return $this->createJsonResponse(true, $this->createResultMessage($elements, Document::class));
+        return $this->createJsonResponse(true, $this->createResultMessage());
     }
 
     protected function createJsonResponse(bool $success, string $message, int $statusCode = 200): JsonResponse
@@ -85,31 +97,16 @@ abstract class AbstractImportBaseController
         return self::SUCCESS_NEW_ELEMENT;
     }
 
-    /**
-     * @param array<TElement> $elements
-     */
-    protected function createResultMessage(array $elements, string $elementType): string
+    protected function createResultMessage(): string
     {
-        $results = [
-            self::SUCCESS_ELEMENT_REPLACEMENT => 0,
-            self::SUCCESS_WITHOUT_REPLACEMENT => 0,
-            self::SUCCESS_NEW_ELEMENT => 0,
-        ];
-        foreach ($elements as $element) {
-            if ($element instanceof $elementType) {
-                $resultCode = $this->replaceIfExists($element);
-                ++$results[$resultCode];
-            }
-        }
-
         $resultMessage = '';
 
-        foreach ($results as $resultCode => $result) {
+        foreach ($this->resultStatistics as $resultCode => $result) {
             if ($result > 0) {
                 if (1 === $result) {
-                    $start = 'One ' . $elementType;
+                    $start = 'One ' . $this->elementType;
                 } else {
-                    $start = \sprintf('%d ' . $elementType . 's', $result);
+                    $start = \sprintf('%d ' . $this->elementType . 's', $result);
                 }
                 $message = \sprintf('%s %s', $start, $this->messagesMap[$resultCode]);
                 $resultMessage .= $message . '<br/><br/>';

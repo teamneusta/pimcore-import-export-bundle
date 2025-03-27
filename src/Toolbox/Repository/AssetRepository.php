@@ -6,12 +6,12 @@ use Pimcore\Model\Asset;
 
 /**
  * @method Asset         create(int $parentId, array $data = [], bool $save = true)
- * @method Asset|null    getById(int $id, array $params = [])
  * @method Asset\Listing getList(array $config = [])
  *
  * @implements ImportRepositoryInterface<Asset>
+ * @implements ExportRepositoryInterface<Asset>
  */
-class AssetRepository extends AbstractElementRepository implements ImportRepositoryInterface
+class AssetRepository extends AbstractElementRepository implements ImportRepositoryInterface, ExportRepositoryInterface
 {
     public function __construct()
     {
@@ -35,6 +35,16 @@ class AssetRepository extends AbstractElementRepository implements ImportReposit
     public function getByPath(string $path): ?Asset
     {
         $element = parent::getByPath($path);
+        if ($element instanceof Asset) {
+            return $element;
+        }
+
+        return null;
+    }
+
+    public function getById(int $id): ?Asset
+    {
+        $element = parent::getById($id);
         if ($element instanceof Asset) {
             return $element;
         }

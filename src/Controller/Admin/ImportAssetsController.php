@@ -25,7 +25,7 @@ final class ImportAssetsController extends AbstractImportBaseController
         private ZipImporter $zipImporter,
         AssetRepository $assetRepository,
     ) {
-        parent::__construct($assetRepository);
+        parent::__construct($assetRepository, 'Asset');
     }
 
     #[Route(
@@ -63,6 +63,12 @@ final class ImportAssetsController extends AbstractImportBaseController
         }
 
         // if file is not ZIP only create Assets
-        return $this->importer->import($file->getContent(), $format);
+        try {
+            $content = $file->getContent();
+
+            return $this->importer->import($content, $format);
+        } catch (\Exception $e) {
+            throw new \Exception('Error reading uploaded file: ' . $e->getMessage(), 0, $e);
+        }
     }
 }

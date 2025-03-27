@@ -23,7 +23,7 @@ final class ImportDataObjectsController extends AbstractImportBaseController
         DataObjectRepository $repository,
         private Importer $importer,
     ) {
-        parent::__construct($repository);
+        parent::__construct($repository, 'DataObject');
     }
 
     #[Route(
@@ -38,6 +38,12 @@ final class ImportDataObjectsController extends AbstractImportBaseController
 
     protected function importByFile(UploadedFile $file, string $format): array
     {
-        return $this->importer->import($file->getContent(), $format);
+        try {
+            $content = $file->getContent();
+
+            return $this->importer->import($content, $format);
+        } catch (\Exception $e) {
+            throw new \Exception('Error reading uploaded file: ' . $e->getMessage(), 0, $e);
+        }
     }
 }
