@@ -40,7 +40,7 @@ services:
     arguments:
       $targetProperty: type
       $sourceArrayKey: type
-      $defaultValue: 'page'
+      $defaultValue: 'asset'
 
   neusta_pimcore_import_export.assets.import.populator.path:
     class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator

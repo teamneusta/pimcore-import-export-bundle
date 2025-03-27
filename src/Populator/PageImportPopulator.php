@@ -6,12 +6,25 @@ use ArrayObject;
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Populator;
 use Pimcore\Model\Document as PimcoreDocument;
+use Psr\Log\LoggerInterface;
 
 /**
  * @implements Populator<ArrayObject<string, mixed>, PimcoreDocument, GenericContext|null>
  */
 class PageImportPopulator implements Populator
 {
+    private const TEXT_PROPERTIES = [
+        'language',
+        'navigation_title',
+        'navigation_name',
+        // Add more properties here if necessary
+    ];
+
+    public function __construct(
+        private readonly ?LoggerInterface $logger = null,
+    ) {
+    }
+
     /**
      * @param \ArrayObject<string, mixed> $source
      * @param PimcoreDocument             $target
@@ -20,19 +33,19 @@ class PageImportPopulator implements Populator
     public function populate(object $target, object $source, ?object $ctx = null): void
     {
         if ($target instanceof PimcoreDocument\PageSnippet) {
-            if ($source->offsetExists('language') && isset($source['language'])) {
-                $target->setProperty('language', 'text', $source['language']);
-            }
-            if ($source->offsetExists('navigation_title') && isset($source['navigation_title'])) {
-                $target->setProperty('navigation_title', 'text', $source['navigation_title']);
-            }
-            if ($source->offsetExists('navigation_name') && isset($source['navigation_name'])) {
-                $target->setProperty('navigation_name', 'text', $source['navigation_name']);
+            foreach (self::TEXT_PROPERTIES as $property) {
+                if (isset($source[$property])) {
+                    $target->setProperty($property, 'text', $source[$property]);
+                }
             }
 
             /** @var array{type: string, data: mixed} $editable */
             foreach ($source['editables'] ?? [] as $key => $editable) {
                 if (!isset($editable['data'])) {
+                    $this->logger?->warning('Skipping editable with missing required fields', [
+                        'key' => $key,
+                        'editable' => $editable,
+                    ]);
                     continue; // Skip editables with missing required fields
                 }
                 $target->setRawEditable((string) $key, $editable['type'], $editable['data']);

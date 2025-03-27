@@ -27,7 +27,7 @@ class ExportDataObjectsCommand extends AbstractExportBaseCommand
             $repository,
             $exporter,
             ['yaml', 'json'],
-            Document::class,
+            Concrete::class,
         );
     }
 
