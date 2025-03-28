@@ -36,6 +36,17 @@ class ImportDocumentsCommand extends AbstractImportBaseCommand
         $this->io->newLine();
 
         $filename = $input->getOption('input');
+        if (empty($filename)) {
+            $this->io->error('No input file specified. Use --input option.');
+
+            return Command::FAILURE;
+        }
+
+        if (!file_exists($filename)) {
+            $this->io->error(\sprintf('Input file "%s" does not exist.', $filename));
+
+            return Command::FAILURE;
+        }
         $yamlInput = file_get_contents($filename);
         if (!$yamlInput) {
             $this->io->error('Input file could not be read');

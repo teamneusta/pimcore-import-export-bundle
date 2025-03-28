@@ -39,18 +39,18 @@ class ImportAssetsCommand extends AbstractImportBaseCommand
 
         $filename = $input->getOption('input');
 
-        $zipContent = file_get_contents($filename);
-        if (!$zipContent) {
-            $this->io->error('ZIP file could not be read');
+        $extension = pathinfo($filename, \PATHINFO_EXTENSION);
 
-            return Command::FAILURE;
-        }
+        // if file is ZIP
+        if ('zip' === $extension) {
+            $assetsFile = $this->extractAssetsFileFromZip($filename);
+            if (!$assetsFile) {
+                $this->io->error('ZIP file could not be extracted');
 
-        $assetsFile = $this->extractAssetsFileFromZip($zipContent);
-        if (!$assetsFile) {
-            $this->io->error('ZIP file could not be extracted');
-
-            return Command::FAILURE;
+                return Command::FAILURE;
+            }
+        } else {
+            $assetsFile = $filename;
         }
 
         $yamlInput = file_get_contents($assetsFile);
@@ -61,6 +61,7 @@ class ImportAssetsCommand extends AbstractImportBaseCommand
         }
 
         $format = $input->getOption('format');
+
         if (empty($format)) {
             $format = pathinfo($assetsFile, \PATHINFO_EXTENSION);
         }
@@ -121,6 +122,8 @@ class ImportAssetsCommand extends AbstractImportBaseCommand
             return null;
         }
 
-        return array_values(array_filter($files, fn ($file) => is_file($file)))[0];
+        $filteredFiles = array_values(array_filter($files, fn ($file) => is_file($file)));
+
+        return !empty($filteredFiles) ? $filteredFiles[0] : null;
     }
 }
