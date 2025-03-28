@@ -24,6 +24,22 @@ services:
       $exporter: '@Neusta\Pimcore\ImportExportBundle\Export\Exporter'
     tags: [ 'console.command' ]
 
+  Neusta\Pimcore\ImportExportBundle\Command\ImportAssetsCommand:
+    arguments:
+      $extractPath: sys_get_temp_dir() . '/pimcore_assets_import'
+      $importer: '@Neusta\Pimcore\ImportExportBundle\Import\Importer'
+    tags: [ 'console.command' ]
+
+  Neusta\Pimcore\ImportExportBundle\Command\ImportDataObjectsCommand:
+    arguments:
+      $importer: '@Neusta\Pimcore\ImportExportBundle\Import\Importer'
+    tags: [ 'console.command' ]
+
+  Neusta\Pimcore\ImportExportBundle\Command\ImportDocumentsCommand:
+    arguments:
+      $importer: '@Neusta\Pimcore\ImportExportBundle\Import\Importer'
+    tags: [ 'console.command' ]
+
   ##############
   # Controller #
   ##############

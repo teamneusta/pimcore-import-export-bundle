@@ -4,23 +4,23 @@ namespace Neusta\Pimcore\ImportExportBundle\Command;
 
 use Neusta\Pimcore\ImportExportBundle\Command\Base\AbstractImportBaseCommand;
 use Neusta\Pimcore\ImportExportBundle\Import\Importer;
-use Pimcore\Model\Document;
+use Pimcore\Model\DataObject\Concrete;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @extends AbstractImportBaseCommand<Document>
+ * @extends AbstractImportBaseCommand<Concrete>
  */
 #[AsCommand(
-    name: 'neusta:pimcore:import:documents',
-    description: 'Import documents given by file'
+    name: 'neusta:pimcore:import:objects',
+    description: 'Import objects given by file'
 )]
-class ImportDocumentsCommand extends AbstractImportBaseCommand
+class ImportDataObjectsCommand extends AbstractImportBaseCommand
 {
     /**
-     * @param Importer<\ArrayObject<int|string, mixed>, Document> $importer
+     * @param Importer<\ArrayObject<int|string, mixed>, Concrete> $importer
      */
     public function __construct(
         Importer $importer,
@@ -30,9 +30,9 @@ class ImportDocumentsCommand extends AbstractImportBaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->io->title('Import Pimcore Documents given by file');
+        $this->io->title('Import Pimcore Data Objects given by file');
 
-        $this->io->writeln('Start importing documents from file');
+        $this->io->writeln('Start importing objects from file');
         $this->io->newLine();
 
         $filename = $input->getOption('input');
@@ -64,7 +64,7 @@ class ImportDocumentsCommand extends AbstractImportBaseCommand
             return Command::FAILURE;
         }
 
-        $this->io->success(\sprintf('%d Pimcore Documents have been imported successfully', \count($documents)));
+        $this->io->success(\sprintf('%d Pimcore Data Objects have been imported successfully', \count($documents)));
 
         return Command::SUCCESS;
     }

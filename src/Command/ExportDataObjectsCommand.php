@@ -6,7 +6,6 @@ use Neusta\Pimcore\ImportExportBundle\Command\Base\AbstractExportBaseCommand;
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\ExportRepositoryInterface;
 use Pimcore\Model\DataObject\Concrete;
-use Pimcore\Model\Document;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 

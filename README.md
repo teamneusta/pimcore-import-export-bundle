@@ -3,15 +3,15 @@
 ## Installation
 
 1.  **Require the bundle**
-   
+    
     ```shell
     composer require teamneusta/pimcore-import-export-bundle
     ```
 
 2.  **Enable the bundle**
-
+    
     Add the Bundle to your `config/bundles.php`:
-
+    
     ```php
     Neusta\Pimcore\ImportExportBundle\NeustaPimcoreImportExportBundle::class => ['all' => true],
     ```
@@ -20,113 +20,186 @@
 
 ### Pimcore Admin Backend
 
-After enabling the bundle you should see a new menu item in the context menu of Pimcore Admin Backend - Section Documents:
+#### Export
 
-![context_menu_export.png](docs/images/context_menu_export.png)
+After enabling the bundle you should see a new menu item in the context menu of Pimcore Admin Backend:
 
-After that you will be asked for a file name and the export will start:
+| Documents | Assets                                                                              | Data Objects                                                                    |
+|--------|-------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+|![context_menu_export_assets.png](docs/images/context_menu_export_assets.png)| ![context_menu_export_documents.png](docs/images/context_menu_export_documents.png) | ![context_menu_export_objects.png](docs/images/context_menu_export_objects.png) |
+
+Currently only YAML Export is supported by menu
+
+After clicking one of the menu items you will be asked for a file name and the export will start:
+
 ![filename_dialog.png](docs/images/filename_dialog.png)
 
 (german translation)
 
-For the import you can use the main menu button:
+##### Special case: Assets Export
+
+Because Assets are mostly assigned to physical files (images, videos, documents, etc.) the export will create a ZIP file containing the binary data and a YAML file with the metadata.
+The same structured zip file can be used for the import of Assets as well.
+
+#### Import
+For the import you can have a look into the Tools Menu:
 
 ![import_menu.png](docs/images/import_menu.png)
 
+
 ### Symfony Commands
 
-There are two commands: one for exporting all pages, starting from the root document with ID 1, and one for importing pages from a given YAML file.
+### Import Commands
 
-#### Export Command
+All import commands follow a similar structure and support the following common options:
 
-##### Command Name
-`neusta:pimcore:export:pages:all`
+#### Common Options
+
+- `--input` or `-i`: Path to the input YAML file (required for import commands).
+- `--dry-run`: Perform the operation without persisting data (only available for import commands).
+
+
+#### `neusta:pimcore:import:documents`
 
 ##### Description
-Exports all pages into a single YAML file. Optionally, you can specify a comma-separated list of page IDs to export specific pages and their children.
-
-##### Options
-
-- `--output` or `-o` (optional): Specifies the name of the output file. Default is `export_all_pages.yaml`.
-- `--ids` (optional): A comma-separated list of page IDs to export. If not provided, the command exports the root page and its children.
+Imports Pimcore documents (e.g., pages, snippets) from a YAML file. You can optionally perform a dry run to validate the input before actually importing it.
 
 ##### Usage
 
-1. **Export all pages to the default file:**
-   
-   ```sh
-   php bin/console neusta:pimcore:export:pages:all
-   ```
-
-2. **Export all pages to a specified file:**
-   
-   ```sh
-   php bin/console neusta:pimcore:export:pages:all --output=custom_output.yaml
-   ```
-
-3. **Export specific pages and their children:**
-   
-   ```sh
-   php bin/console neusta:pimcore:export:pages:all --ids=2,3,4
-   ```
-
-4. **Export specific pages and their children to a specified file:**
-   
-   ```sh
-   php bin/console neusta:pimcore:export:pages:all --ids=2,3,4 --output=custom_output.yaml
-   ```
-
-##### Example
-
-To export pages with IDs 2, 3, and 4 and their children to a file named `selected_pages.yaml`:
-
 ```sh
-php bin/console neusta:pimcore:export:pages:all --ids=2,3,4 --output=selected_pages.yaml
+php bin/console neusta:pimcore:import:documents --input=documents.yaml
 ```
 
-This command will generate a YAML file named `selected_pages.yaml` containing the specified pages and their children. If any of the specified page IDs are not found, an error message will be displayed.
-#### Import Command
+```sh
+php bin/console neusta:pimcore:import:documents --input=documents.yaml --dry-run
+```
 
-##### Command Name
-`neusta:pimcore:import:pages`
+---
+
+#### `neusta:pimcore:import:assets`
 
 ##### Description
-Imports pages from a given YAML file. Optionally, you can perform a dry run to see how many pages would be successfully imported without actually saving them.
+Imports assets (e.g., images, PDFs, videos) into Pimcore based on a YAML definition.  
+This command supports importing from a YAML file referencing filenames within a ZIP archive that contains the actual binary files.
 
-##### Options
+##### How it works
 
-- `--input` or `-i` (required): Specifies the name of the input YAML file.
-- `--dry-run` (optional): Perform a dry run without saving the imported pages.
+The command expects a YAML file describing the assets and a ZIP archive containing the corresponding files. The ZIP file must be located in the same directory as the YAML file and must have the same base name (e.g., `assets.yaml` and `assets.zip`).
+
+The YAML file should refer to asset filenames (e.g., `my-image.jpg`) that are included in the ZIP archive. During import, the command will extract and assign the file content to the asset definition.
 
 ##### Usage
 
-1. **Import pages from a specified file:**
-   
-   ```sh
-   php bin/console neusta:pimcore:import:pages --input=your_input_file.yaml
-   ```
-
-2. **Perform a dry run to see how many pages would be imported:**
-   
-   ```sh
-   php bin/console neusta:pimcore:import:pages --input=your_input_file.yaml --dry-run
-   ```
-
-##### Example
-
-To import pages from a file named `pages_to_import.yaml`:
-
 ```sh
-php bin/console neusta:pimcore:import:pages --input=pages_to_import.yaml
+php bin/console neusta:pimcore:import:assets --input=assets.yaml
 ```
 
-To perform a dry run for the same file:
+The command will automatically look for `assets.zip` in the same directory as `assets.yaml`.
+
+To simulate the import:
 
 ```sh
-php bin/console neusta:pimcore:import:pages --input=pages_to_import.yaml --dry-run
+php bin/console neusta:pimcore:import:assets --input=assets.yaml --dry-run
 ```
 
-This command will read the specified YAML file and import the pages. If the `--dry-run` option is used, the pages will not be saved, and you will see how many pages would be successfully imported.
+---
+
+#### `neusta:pimcore:import:objects`
+
+##### Description
+Imports Pimcore DataObjects from a YAML file.  
+This command is useful for structured content like products, articles, or other custom objects. A dry run option is available to validate the YAML before importing.
+
+##### Usage
+
+```sh
+php bin/console neusta:pimcore:import:objects --input=dataobjects.yaml
+```
+
+To preview the import without saving anything:
+
+```sh
+php bin/console neusta:pimcore:import:objects --input=dataobjects.yaml --dry-run
+```
+
+### Export Commands
+
+All export commands follow a similar structure and support the following common options:
+
+#### Common Options
+
+- `--output` or `-o`: Path to the output YAML file (optional for export commands).
+- `--ids`: Comma-separated list of IDs to include in the operation (optional).
+
+#### `neusta:pimcore:export:documents`
+
+##### Description
+Exports Pimcore documents (e.g., pages, snippets) to a YAML file. You can export either the entire document tree or specific document IDs.
+
+##### Usage
+
+```sh
+php bin/console neusta:pimcore:export:documents
+```
+
+```sh
+php bin/console neusta:pimcore:export:documents --output=my-documents.yaml
+```
+
+```sh
+php bin/console neusta:pimcore:export:documents --ids=10,11,12 --output=subset.yaml
+```
+
+---
+
+#### `neusta:pimcore:export:assets`
+
+##### Description
+Exports Pimcore assets (e.g., images, videos, PDFs) into a YAML file along with a ZIP file containing the actual binary files.
+
+##### How it works
+
+This command creates two files:
+
+- A YAML file describing the asset structure and metadata.
+- A ZIP archive containing the binary files of the referenced assets.
+
+Both files share the same base name (e.g., `assets.yaml` and `assets.zip`).
+
+##### Usage
+
+```sh
+php bin/console neusta:pimcore:export:assets
+```
+
+```sh
+php bin/console neusta:pimcore:export:assets --output=my-assets.yaml
+```
+
+```sh
+php bin/console neusta:pimcore:export:assets --ids=101,102 --output=sub-assets.yaml
+```
+
+---
+
+#### `neusta:pimcore:export:objects`
+
+##### Description
+Exports Pimcore DataObjects into a YAML file. The objects can be filtered by ID or exported in full.
+
+##### Usage
+
+```sh
+php bin/console neusta:pimcore:export:objects
+```
+
+```sh
+php bin/console neusta:pimcore:export:objects --output=my-objects.yaml
+```
+
+```sh
+php bin/console neusta:pimcore:export:objects --ids=200,201,202 --output=subset.yaml
+```
 
 ## Concepts
 
@@ -135,23 +208,25 @@ This command will read the specified YAML file and import the pages. If the `--d
 The selected page will be exported into YAML format:
 
 ```yaml
-page:
-    id: 123
-    parentId: 1
-    type: page
-    published: true
-    path: /
-    language: de
-    navigation_name: my-site
-    navigation_title: 'My Site'
-    key: my-site
-    title: 'My Site'
-    controller: 'App\DefaultController::indexAction'
-    editables:
-        main:
-            type: areablock
-            name: main
-            data: [ { key: '1', type: text-editor, hidden: false } ]
+elements:
+    -
+        Pimcore\Model\Document:
+            id: 123
+            parentId: 1
+            type: page
+            published: true
+            path: /
+            language: de
+            navigation_name: my-site
+            navigation_title: 'My Site'
+            key: my-site
+            title: 'My Site'
+            controller: 'App\DefaultController::indexAction'
+            editables:
+                main:
+                    type: areablock
+                    name: main
+                    data: [ { key: '1', type: text-editor, hidden: false } ]
 ...
 ```  
 
@@ -166,13 +241,16 @@ The following rule applies:
 If the parseYaml method of the `PageImporter` is not called with `forcedSave`, the data from the provided YAML will be
 adopted, regardless of whether it makes sense or not, and without checking whether the page could be saved that way.
 
-If `forcedSave` is set to `true`, the ID will be retained (Caution – this can overwrite an existing page).
-If a `parentId` is specified, the corresponding document will be searched for.
-If it exists, it will be set as the parent (Note: This may override the `path` specification).
-If the `parentId` does not exist, an attempt will be made to find a parent using the `path` specification.
-If such a parent exists, the `parentId` will be set accordingly and saved.
+ * If `forcedSave` is set to `true`, the ID will be retained (Caution – this can overwrite an existing page).
+ * If `forcedSave` is set to `true` and no ID has been set, it will be generated by Pimcore (Creating new page).
 
-If neither is found, an InvalidArgumentException will be thrown, and the save operation will be aborted.
+ * If a `parentId` is specified, the corresponding document will be searched for.
+ * If it exists, it will be set as the parent (Note: This may override the `path` specification).
+ * If the `parentId` does not exist, an attempt will be made to find a parent using the `path` specification.
+ * If such a parent exists, the `parentId` will be set accordingly and saved.
+ * If neither is found, an InvalidArgumentException will be thrown, and the save operation will be aborted.
+
+![parent_flow.png](docs/images/parent_flow.png)
 
 If multiple pages are imported and a path specification changes py the applied rules, this path specification will be
 replaced with the new, correct path specification in all provided page configurations.
@@ -182,22 +260,23 @@ replaced with the new, correct path specification in all provided page configura
 You can parameterize your yaml files with placeholders. The placeholders will be replaced by the values you provide in your fixtures.
 
 ```yaml
-pages:
-    - page:
-        id: 2
-        parentId: 1
-        # ...further properties
-        editables:
-            # ...several editables
-            'main:1.img:1.image':
-                type: image
-                data:
-                    id: %IMAGE_ID%
-            'main:1.img:1.title':
-            # ...
+elements:
+    -
+        Pimcore\Model\Document:
+            id: 2
+            parentId: 1
+            # ...further properties
+            editables:
+              # ...several editables
+              'main:1.img:1.image':
+                  type: image
+                  data:
+                      id: %IMAGE_ID%
+              'main:1.img:1.title':
+              # ...
 ```
 
-In the case above an image has been assigned to an `Editable/Image` editable. The image id is a placeholder `%IMAGE_ID%`. 
+In the case above an image has been assigned to an `Editable/Image` editable. The image id is a placeholder `%IMAGE_ID%`.
 
 You can use now a `Neusta\Pimcore\ImportExportBundle\Documents\Import\Filter\SearchAndReplaceFilter` instance to replace the placeholder with the actual image id (e.g. 1234).
 
@@ -209,7 +288,6 @@ If you want to change your yaml in a more complex way you can use the `Neusta\Pi
 
 With that technique you can export test pages for Fixtures, change values into placeholders (e.g. for assets and data objects) and replace them with the actual values in your tests.
 
-```php
 
 ## Contribution
 
