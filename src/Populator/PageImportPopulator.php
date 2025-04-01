@@ -2,14 +2,13 @@
 
 namespace Neusta\Pimcore\ImportExportBundle\Populator;
 
-use ArrayObject;
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Populator;
 use Pimcore\Model\Document as PimcoreDocument;
 use Psr\Log\LoggerInterface;
 
 /**
- * @implements Populator<ArrayObject<string, mixed>, PimcoreDocument, GenericContext|null>
+ * @implements Populator<\ArrayObject<string, mixed>, PimcoreDocument, GenericContext|null>
  */
 class PageImportPopulator implements Populator
 {

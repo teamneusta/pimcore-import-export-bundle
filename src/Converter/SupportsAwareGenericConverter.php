@@ -1,10 +1,7 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Neusta\Pimcore\ImportExportBundle\Converter;
 
-use ArrayObject;
 use Neusta\ConverterBundle\Converter;
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Exception\ConverterException;
@@ -13,7 +10,7 @@ use Pimcore\Model\DataObject\Concrete;
 /**
  * @template TTarget of Concrete
  *
- * @implements SupportsAwareConverterInterface<ArrayObject<int|string, mixed>, TTarget, GenericContext|null>
+ * @implements SupportsAwareConverterInterface<\ArrayObject<int|string, mixed>, TTarget, GenericContext|null>
  */
 class SupportsAwareGenericConverter implements SupportsAwareConverterInterface
 {

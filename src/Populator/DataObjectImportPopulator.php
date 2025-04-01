@@ -2,7 +2,6 @@
 
 namespace Neusta\Pimcore\ImportExportBundle\Populator;
 
-use ArrayObject;
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Populator;
 use Pimcore\Model\DataObject\Concrete;
@@ -10,7 +9,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
- * @implements Populator<ArrayObject<int|string, mixed>, Concrete, GenericContext|null>
+ * @implements Populator<\ArrayObject<int|string, mixed>, Concrete, GenericContext|null>
  */
 class DataObjectImportPopulator implements Populator
 {

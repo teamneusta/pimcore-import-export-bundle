@@ -1,10 +1,7 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Neusta\Pimcore\ImportExportBundle\Import;
 
-use ArrayObject;
 use Neusta\ConverterBundle\Converter;
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Exception\ConverterException;
@@ -14,7 +11,7 @@ use Pimcore\Model\Element\AbstractElement;
 use Pimcore\Model\Element\DuplicateFullPathException;
 
 /**
- * @template TSource of ArrayObject<int|string, mixed>
+ * @template TSource of \ArrayObject<int|string, mixed>
  * @template TTarget of AbstractElement
  */
 class Importer
