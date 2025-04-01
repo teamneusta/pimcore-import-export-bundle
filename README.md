@@ -49,157 +49,31 @@ For the import you can have a look into the Tools Menu:
 
 ### Symfony Commands
 
-### Import Commands
+This bundle provides several commands to export and import data into Pimcore.
+
+Fur usage, run the commands with the `--help` option to see all available options and arguments.
+
+- `neusta:pimcore:export:documents`
+  - Export Pimcore documents (e.g., pages, snippets) to a YAML file. Export either the entire document tree or specific document IDs.
+- `neusta:pimcore:export:assets`
+  - Exports Pimcore assets (e.g., images, videos, PDFs) into two files: A YAML file along with a ZIP file containing the actual binary files.
+  - Both files share the same base name (e.g., `assets.yaml` and `assets.zip`).
+- `neusta:pimcore:export:objects`
+  - Exports Pimcore DataObjects into a YAML file. The objects can be filtered by ID or exported in full.
+- `neusta:pimcore:import:documents`
+  - Imports Pimcore documents (e.g., pages, snippets) from a YAML file.
+- `neusta:pimcore:import:assets`
+  - Imports assets (e.g., images, PDFs, videos) into Pimcore based on a YAML definition.
+  - The command expects a YAML file describing the assets and a ZIP archive containing the corresponding files. The ZIP file must be located in the same directory as the YAML file and must have the same base name (e.g., `assets.yaml` and `assets.zip`)
+- `neusta:pimcore:import:objects`
+  - Imports Pimcore DataObjects from a YAML file.
+
+#### Common Options
 
 All import commands follow a similar structure and support the following common options:
 
-#### Common Options
-
 - `--input` or `-i`: Path to the input YAML file (required for import commands).
 - `--dry-run`: Perform the operation without persisting data (only available for import commands).
-
-
-#### `neusta:pimcore:import:documents`
-
-##### Description
-Imports Pimcore documents (e.g., pages, snippets) from a YAML file. You can optionally perform a dry run to validate the input before actually importing it.
-
-##### Usage
-
-```sh
-php bin/console neusta:pimcore:import:documents --input=documents.yaml
-```
-
-```sh
-php bin/console neusta:pimcore:import:documents --input=documents.yaml --dry-run
-```
-
----
-
-#### `neusta:pimcore:import:assets`
-
-##### Description
-Imports assets (e.g., images, PDFs, videos) into Pimcore based on a YAML definition.  
-This command supports importing from a YAML file referencing filenames within a ZIP archive that contains the actual binary files.
-
-##### How it works
-
-The command expects a YAML file describing the assets and a ZIP archive containing the corresponding files. The ZIP file must be located in the same directory as the YAML file and must have the same base name (e.g., `assets.yaml` and `assets.zip`).
-
-The YAML file should refer to asset filenames (e.g., `my-image.jpg`) that are included in the ZIP archive. During import, the command will extract and assign the file content to the asset definition.
-
-##### Usage
-
-```sh
-php bin/console neusta:pimcore:import:assets --input=assets.yaml
-```
-
-The command will automatically look for `assets.zip` in the same directory as `assets.yaml`.
-
-To simulate the import:
-
-```sh
-php bin/console neusta:pimcore:import:assets --input=assets.yaml --dry-run
-```
-
----
-
-#### `neusta:pimcore:import:objects`
-
-##### Description
-Imports Pimcore DataObjects from a YAML file.  
-This command is useful for structured content like products, articles, or other custom objects. A dry run option is available to validate the YAML before importing.
-
-##### Usage
-
-```sh
-php bin/console neusta:pimcore:import:objects --input=dataobjects.yaml
-```
-
-To preview the import without saving anything:
-
-```sh
-php bin/console neusta:pimcore:import:objects --input=dataobjects.yaml --dry-run
-```
-
-### Export Commands
-
-All export commands follow a similar structure and support the following common options:
-
-#### Common Options
-
-- `--output` or `-o`: Path to the output YAML file (optional for export commands).
-- `--ids`: Comma-separated list of IDs to include in the operation (optional).
-
-#### `neusta:pimcore:export:documents`
-
-##### Description
-Exports Pimcore documents (e.g., pages, snippets) to a YAML file. You can export either the entire document tree or specific document IDs.
-
-##### Usage
-
-```sh
-php bin/console neusta:pimcore:export:documents
-```
-
-```sh
-php bin/console neusta:pimcore:export:documents --output=my-documents.yaml
-```
-
-```sh
-php bin/console neusta:pimcore:export:documents --ids=10,11,12 --output=subset.yaml
-```
-
----
-
-#### `neusta:pimcore:export:assets`
-
-##### Description
-Exports Pimcore assets (e.g., images, videos, PDFs) into a YAML file along with a ZIP file containing the actual binary files.
-
-##### How it works
-
-This command creates two files:
-
-- A YAML file describing the asset structure and metadata.
-- A ZIP archive containing the binary files of the referenced assets.
-
-Both files share the same base name (e.g., `assets.yaml` and `assets.zip`).
-
-##### Usage
-
-```sh
-php bin/console neusta:pimcore:export:assets
-```
-
-```sh
-php bin/console neusta:pimcore:export:assets --output=my-assets.yaml
-```
-
-```sh
-php bin/console neusta:pimcore:export:assets --ids=101,102 --output=sub-assets.yaml
-```
-
----
-
-#### `neusta:pimcore:export:objects`
-
-##### Description
-Exports Pimcore DataObjects into a YAML file. The objects can be filtered by ID or exported in full.
-
-##### Usage
-
-```sh
-php bin/console neusta:pimcore:export:objects
-```
-
-```sh
-php bin/console neusta:pimcore:export:objects --output=my-objects.yaml
-```
-
-```sh
-php bin/console neusta:pimcore:export:objects --ids=200,201,202 --output=subset.yaml
-```
 
 ## Concepts
 
@@ -227,7 +101,7 @@ elements:
                     type: areablock
                     name: main
                     data: [ { key: '1', type: text-editor, hidden: false } ]
-...
+# ...
 ```  
 
 In the same way you can re-import your yaml file again by selecting: `Import from YAML` in the context menu.
