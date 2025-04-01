@@ -63,7 +63,9 @@ abstract class AbstractExportBaseCommand extends AbstractCommand
         $this->io->title('Export ' . $this->elementType . ' into one single file');
 
         $elementIds = $input->getArgument('ids');
-        $allElements = [];
+        if ([] === $elementIds) {
+            $elementIds = [1];
+        }
 
         // check if format is supported
         if (!\in_array($input->getOption('format'), $this->supportedFormats, true)) {
@@ -72,27 +74,18 @@ abstract class AbstractExportBaseCommand extends AbstractCommand
             return Command::FAILURE;
         }
 
+        $allElements = [];
         // collect all elements
-        if ($elementIds) {
-            $ids = array_map('intval', $elementIds);
-            foreach ($ids as $id) {
-                $element = $this->repository->getById($id);
-                if ($element) {
-                    $allElements = $this->addElements($element, $allElements);
-                } else {
-                    $this->io->error("$this->elementType with ID $id not found");
-
-                    return Command::FAILURE;
-                }
-            }
-        } else {
-            $rootDocument = $this->repository->getById(1);
-            if (!$rootDocument) {
-                $this->io->error("Root $this->elementType (ID: 1) not found");
+        $ids = array_map('intval', $elementIds);
+        foreach ($ids as $id) {
+            $element = $this->repository->getById($id);
+            if ($element) {
+                $allElements = $this->addElements($element, $allElements);
+            } else {
+                $this->io->error("$this->elementType with ID $id not found");
 
                 return Command::FAILURE;
             }
-            $allElements = $this->addElements($rootDocument, []);
         }
 
         $this->io->writeln(\sprintf('Start exporting %d ' . $this->elementType, \count($allElements)));
