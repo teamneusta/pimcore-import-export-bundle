@@ -1,35 +1,5 @@
-neusta_pimcore_import_export_assets_export:
-    resource: '../../src/Controller/Admin/ExportAssetsController.php'
-    type: attribute
-    options:
-        expose: true
-
-neusta_pimcore_import_export_documents_export:
-    resource: '../../src/Controller/Admin/ExportDocumentsController.php'
-    type: attribute
-    options:
-        expose: true
-
-neusta_pimcore_import_export_objects_export:
-    resource: '../../src/Controller/Admin/ExportDataObjectsController.php'
-    type: attribute
-    options:
-        expose: true
-
-neusta_pimcore_import_export_asset_import:
-    resource: '../../src/Controller/Admin/ImportAssetsController.php'
-    type: attribute
-    options:
-        expose: true
-
-neusta_pimcore_import_export_document_import:
-    resource: '../../src/Controller/Admin/ImportDocumentsController.php'
-    type: attribute
-    options:
-        expose: true
-
-neusta_pimcore_import_export_object_import:
-    resource: '../../src/Controller/Admin/ImportDataObjectsController.php'
+neusta_pimcore_import_export:
+    resource: '../../src/Controller/Admin/'
     type: attribute
     options:
         expose: true
