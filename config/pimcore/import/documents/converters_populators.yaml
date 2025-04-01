@@ -37,48 +37,41 @@ services:
     class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
     arguments:
       $targetProperty: key
-      $sourceArrayKey: key
 
   neusta_pimcore_import_export.documents.import.populator.title:
     class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
     arguments:
       $targetProperty: title
-      $sourceArrayKey: title
       $defaultValue: 'no title'
 
   neusta_pimcore_import_export.documents.import.populator.controller:
     class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
     arguments:
       $targetProperty: controller
-      $sourceArrayKey: controller
       $defaultValue: 'no controller'
 
   neusta_pimcore_import_export.documents.import.populator.type:
     class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
     arguments:
       $targetProperty: type
-      $sourceArrayKey: type
       $defaultValue: 'page'
 
   neusta_pimcore_import_export.documents.import.populator.published:
     class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
     arguments:
       $targetProperty: published
-      $sourceArrayKey: published
       $defaultValue: false
 
   neusta_pimcore_import_export.documents.import.populator.path:
     class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
     arguments:
       $targetProperty: path
-      $sourceArrayKey: path
       $defaultValue: '/'
 
   neusta_pimcore_import_export.documents.import.populator.parentId:
     class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
     arguments:
       $targetProperty: parentId
-      $sourceArrayKey: parentId
       $defaultValue: 0
 
   Neusta\Pimcore\ImportExportBundle\Populator\PageImportPopulator: ~

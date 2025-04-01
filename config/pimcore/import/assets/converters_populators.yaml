@@ -33,25 +33,21 @@ services:
     class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
     arguments:
       $targetProperty: key
-      $sourceArrayKey: key
 
   neusta_pimcore_import_export.assets.import.populator.type:
     class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
     arguments:
       $targetProperty: type
-      $sourceArrayKey: type
       $defaultValue: 'asset'
 
   neusta_pimcore_import_export.assets.import.populator.path:
     class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
     arguments:
       $targetProperty: path
-      $sourceArrayKey: path
       $defaultValue: '/'
 
   neusta_pimcore_import_export.assets.import.populator.parentId:
     class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
     arguments:
       $targetProperty: parentId
-      $sourceArrayKey: parentId
       $defaultValue: 0
