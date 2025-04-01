@@ -67,25 +67,27 @@ class ZipImporter
      */
     private function collectAssetDirectories(string $basePath): array
     {
-        $assets = [];
         $entries = scandir($basePath);
-        if ($entries) {
-            foreach ($entries as $entry) {
-                if (\in_array($entry, ['.', '..'], true)) {
-                    continue;
-                }
+        if (!$entries) {
+            return [];
+        }
 
-                $fullPath = $basePath . \DIRECTORY_SEPARATOR . $entry;
+        $assets = [];
+        foreach ($entries as $entry) {
+            if (\in_array($entry, ['.', '..'], true)) {
+                continue;
+            }
 
-                // Nur Verzeichnisse betrachten
-                if (!is_dir($fullPath)) {
-                    continue;
-                }
+            $fullPath = $basePath . \DIRECTORY_SEPARATOR . $entry;
 
-                $files = $this->collectFilesFromDir($fullPath);
-                if (!empty($files)) {
-                    $assets[$entry] = $files;
-                }
+            // Nur Verzeichnisse betrachten
+            if (!is_dir($fullPath)) {
+                continue;
+            }
+
+            $files = $this->collectFilesFromDir($fullPath);
+            if (!empty($files)) {
+                $assets[$entry] = $files;
             }
         }
 
