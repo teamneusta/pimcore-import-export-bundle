@@ -39,7 +39,7 @@ class ExportDocumentsCommand extends AbstractExportBaseCommand
         $safeFilename = basename($exportFilename);
         if ($safeFilename !== $exportFilename) {
             $this->io->warning(\sprintf(
-                'For security reasons, path traversal is not allowed. Using "%s" instead of "%s".',
+                'For security reasons, path traversal is not recommended. Using "%s" instead of "%s".',
                 $safeFilename,
                 $exportFilename
             ));
