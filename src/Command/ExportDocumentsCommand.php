@@ -18,6 +18,8 @@ use Symfony\Component\Console\Input\InputInterface;
 )]
 class ExportDocumentsCommand extends AbstractExportBaseCommand
 {
+    protected static $defaultName = 'neusta:pimcore:export:documents';
+
     public function __construct(
         ExportRepositoryInterface $repository,
         Exporter $exporter,
@@ -28,6 +30,57 @@ class ExportDocumentsCommand extends AbstractExportBaseCommand
             ['yaml', 'json'],
             Document::class,
         );
+    }
+
+    protected function configure(): void
+    {
+        parent::configure();
+
+        $formatsList = implode(', ', $this->supportedFormats);
+
+        $this
+            ->setDescription('Exports documents from the system.')
+            ->setHelp(
+                <<<HELP
+                The <info>%command.name%</info> command exports documents.
+
+                Usage:
+
+                  <info>php %command.full_name%</info>
+
+                Currently supported formats:
+                  $formatsList
+
+                Options:
+                  --format      Specify the export format (e.g. --format=json)
+                  --output      full path filename where exported file will be stored
+
+                Example:
+                  php %command.full_name% --format=json --output=/your/path
+
+                Example Result (in yaml format):
+                    elements:
+                        -
+                            Pimcore\Model\Document:
+                                published: true
+                                navigation_name: Testseite
+                                navigation_title: ~
+                                title: Testseite
+                                controller: 'App\Controller\MyController::indexAction'
+                                editables:
+                                    main:
+                                        type: areablock
+                                        name: main
+                                        data: [...]
+
+                                id: 4
+                                parentId: 2
+                                type: page
+                                path: /seiten/
+                                language: 'de'
+                                key: 'Meine Testseite'
+                HELP
+            );
     }
 
     protected function exportInFile(array $allElements, InputInterface $input): bool
