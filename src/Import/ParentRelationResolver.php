@@ -73,7 +73,7 @@ class ParentRelationResolver
 
     private function generatePath(ElementInterface $parent, AbstractElement $element): string
     {
-        return rtrim($parent->getPath() ?? '', '/') . '/' . $element->getKey();
+        return rtrim($parent->getFullPath(), '/') . '/';
     }
 
     private function isCompatibleType(?ElementInterface $parent, AbstractElement $child): bool

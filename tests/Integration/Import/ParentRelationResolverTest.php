@@ -56,7 +56,6 @@ class ParentRelationResolverTest extends KernelTestCase
         $element->setParentId($parent->getId());
         $element->setKey('element');
         $this->resolver->resolve($element);
-
-        self::assertEquals('/parent', $element->getPath());
+        self::assertEquals('/parent/', $element->getPath());
     }
 }
