@@ -13,4 +13,11 @@ interface ExportRepositoryInterface
      * @return TElement
      */
     public function getById(int $id): ?AbstractElement;
+
+    /**
+     * @param TElement $root
+     *
+     * @return iterable<TElement>
+     */
+    public function findAllInTree(AbstractElement $root): iterable;
 }

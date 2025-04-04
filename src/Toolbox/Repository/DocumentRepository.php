@@ -3,6 +3,7 @@
 namespace Neusta\Pimcore\ImportExportBundle\Toolbox\Repository;
 
 use Pimcore\Model\Document;
+use Pimcore\Model\Element\AbstractElement;
 
 /**
  * @method Document         create(int $parentId, array $data = [], bool $save = true)
@@ -21,15 +22,17 @@ class DocumentRepository extends AbstractElementRepository implements ImportRepo
     }
 
     /**
+     * @param Document $root
+     *
      * @return iterable<Document>
      */
-    public function findAllDocsWithChildren(Document $page): iterable
+    public function findAllInTree(AbstractElement $root): iterable
     {
-        yield $page;
+        yield $root;
 
-        foreach ($page->getChildren(true) as $child) {
+        foreach ($root->getChildren(true) as $child) {
             if ($child instanceof Document) {
-                yield from $this->findAllDocsWithChildren($child);
+                yield from $this->findAllInTree($child);
             }
         }
     }

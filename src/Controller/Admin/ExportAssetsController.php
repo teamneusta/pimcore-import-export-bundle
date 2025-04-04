@@ -56,7 +56,7 @@ final class ExportAssetsController
         }
 
         // We need the list two times so generate an array first:
-        $assets = iterator_to_array($this->assetRepository->findAllAssetsWithChildren($asset), false);
+        $assets = iterator_to_array($this->assetRepository->findAllInTree($asset), false);
 
         return $this->exportAssets($assets, $request->query->getString('filename'), $request->query->getString('format'));
     }

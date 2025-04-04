@@ -3,6 +3,7 @@
 namespace Neusta\Pimcore\ImportExportBundle\Toolbox\Repository;
 
 use Pimcore\Model\Asset;
+use Pimcore\Model\Element\AbstractElement;
 
 /**
  * @method Asset         create(int $parentId, array $data = [], bool $save = true)
@@ -19,15 +20,17 @@ class AssetRepository extends AbstractElementRepository implements ImportReposit
     }
 
     /**
+     * @param Asset $root
+     *
      * @return iterable<Asset>
      */
-    public function findAllAssetsWithChildren(Asset $asset): iterable
+    public function findAllInTree(AbstractElement $root): iterable
     {
-        yield $asset;
+        yield $root;
 
-        foreach ($asset->getChildren() as $child) {
+        foreach ($root->getChildren() as $child) {
             if ($child instanceof Asset) {
-                yield from $this->findAllAssetsWithChildren($child);
+                yield from $this->findAllInTree($child);
             }
         }
     }

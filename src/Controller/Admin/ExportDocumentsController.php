@@ -52,7 +52,7 @@ final class ExportDocumentsController
             );
         }
 
-        $documents = $this->documentRepository->findAllDocsWithChildren($document);
+        $documents = $this->documentRepository->findAllInTree($document);
 
         return $this->exportDocuments($documents, $request->query->getString('filename'), $request->query->getString('format'));
     }

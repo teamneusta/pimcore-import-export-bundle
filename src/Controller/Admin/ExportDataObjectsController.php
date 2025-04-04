@@ -52,7 +52,7 @@ final class ExportDataObjectsController
             );
         }
 
-        $objects = $this->objectRepository->findAllObjectsWithChildren($object);
+        $objects = $this->objectRepository->findAllInTree($object);
 
         return $this->exportObjects($objects, $request->query->getString('filename'), $request->query->getString('format'));
     }

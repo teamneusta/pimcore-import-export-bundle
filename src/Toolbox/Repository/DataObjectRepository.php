@@ -4,6 +4,7 @@ namespace Neusta\Pimcore\ImportExportBundle\Toolbox\Repository;
 
 use Pimcore\Model\DataObject;
 use Pimcore\Model\DataObject\Concrete;
+use Pimcore\Model\Element\AbstractElement;
 
 /**
  * @method DataObject\Listing getList(array $config = [])
@@ -24,15 +25,17 @@ class DataObjectRepository extends AbstractElementRepository implements ImportRe
     }
 
     /**
+     * @param Concrete $root
+     *
      * @return iterable<Concrete>
      */
-    public function findAllObjectsWithChildren(Concrete $page): iterable
+    public function findAllInTree(AbstractElement $root): iterable
     {
-        yield $page;
+        yield $root;
 
-        foreach ($page->getChildren(includingUnpublished: true) as $child) {
+        foreach ($root->getChildren(includingUnpublished: true) as $child) {
             if ($child instanceof Concrete) {
-                yield from $this->findAllObjectsWithChildren($child);
+                yield from $this->findAllInTree($child);
             }
         }
     }
