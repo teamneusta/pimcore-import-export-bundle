@@ -1,0 +1,53 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  Neusta\Pimcore\ImportExportBundle\Toolbox\:
+    resource: '../../../src/Toolbox'
+
+  Neusta\Pimcore\ImportExportBundle\Tests\Integration\Documents\ImportExportYamlDriver: ~
+
+  ###########################################################
+  # Export Converter (Document/Page -> Page)
+  ###########################################################
+  neusta_pimcore_import_export.export_page:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
+    arguments:
+      $converter: '@neusta_pimcore_import_export.export_document'
+      $postPopulators:
+        - '@neusta_pimcore_import_export.page.title.populator'
+        - '@neusta_pimcore_import_export.page.controller.populator'
+        - '@neusta_pimcore_import_export.page.editables.populator'
+
+  ############
+  # Exporter #
+  ############
+  Neusta\Pimcore\ImportExportBundle\Export\Exporter:
+    class: Neusta\Pimcore\ImportExportBundle\Export\Exporter
+    arguments:
+      $typeToConverterMap:
+        Pimcore\Model\Asset\Image: '@neusta_pimcore_import_export.export_asset_image'
+        Pimcore\Model\Document\Page: '@neusta_pimcore_import_export.export_page'
+        Pimcore\Model\Document\PageSnippet: '@neusta_pimcore_import_export.export_page_snippet'
+        Pimcore\Model\Document\Folder: '@neusta_pimcore_import_export.export_folder'
+        Pimcore\Model\Concrete: '@neusta_pimcore_import_export.export_object'
+      $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
+
+  ############
+  # Importer #
+  ############
+  Neusta\Pimcore\ImportExportBundle\Import\Importer:
+    class: Neusta\Pimcore\ImportExportBundle\Import\Importer
+    arguments:
+      $typeToConverterMap:
+        Pimcore\Model\Asset\Image: '@neusta_pimcore_import_export.import_asset'
+        Pimcore\Model\Document\Page: '@neusta_pimcore_import_export.import_document'
+        Pimcore\Model\Document\PageSnippet: '@neusta_pimcore_import_export.import_document'
+        Pimcore\Model\Concrete: '@neusta_pimcore_import_export.import_object'
+      $parentRelationResolver: '@Neusta\Pimcore\ImportExportBundle\Import\ParentRelationResolver'
+      $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
+
+  Neusta\Pimcore\ImportExportBundle\Import\ParentRelationResolver: ~
+

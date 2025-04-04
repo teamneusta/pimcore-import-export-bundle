@@ -1,0 +1,53 @@
+###########################################################
+# Neusta Converter Bundle
+###########################################################
+neusta_converter:
+  converter:
+    ###########################################################
+    # Import Converter (Page -> PimcorePage)
+    ###########################################################
+    neusta_pimcore_import_export.import_asset:
+      target: Pimcore\Model\Asset
+      populators:
+        - neusta_pimcore_import_export.assets.import.populator.id
+        - neusta_pimcore_import_export.assets.import.populator.key
+        - neusta_pimcore_import_export.assets.import.populator.type
+        - neusta_pimcore_import_export.assets.import.populator.path
+        - neusta_pimcore_import_export.assets.import.populator.parentId
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  ###########################################################
+  # Import Populator (Asset -> Pimcore Asset)
+  ###########################################################
+  neusta_pimcore_import_export.assets.import.populator.id:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: id
+      $defaultValue: 0
+
+  neusta_pimcore_import_export.assets.import.populator.key:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: key
+
+  neusta_pimcore_import_export.assets.import.populator.type:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: type
+      $defaultValue: 'asset'
+
+  neusta_pimcore_import_export.assets.import.populator.path:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: path
+      $defaultValue: '/'
+
+  neusta_pimcore_import_export.assets.import.populator.parentId:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: parentId
+      $defaultValue: 0

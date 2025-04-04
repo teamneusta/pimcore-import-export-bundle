@@ -3,61 +3,127 @@ services:
     autowire: true
     autoconfigure: true
 
-  Neusta\Pimcore\ImportExportBundle\Toolbox\:
-    resource: '../src/Toolbox'
+  ############
+  # Commands #
+  ############
+  Neusta\Pimcore\ImportExportBundle\Command\ExportAssetsCommand:
+    arguments:
+      $repository: '@Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\AssetRepository'
+      $exporter: '@Neusta\Pimcore\ImportExportBundle\Export\Exporter'
+    tags: [ 'console.command' ]
 
-  ###########################################################
-  # Controller
-  ###########################################################
-  Neusta\Pimcore\ImportExportBundle\Controller\Admin\PageExportController:
+  Neusta\Pimcore\ImportExportBundle\Command\ExportDocumentsCommand:
+    arguments:
+      $repository: '@Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository'
+      $exporter: '@Neusta\Pimcore\ImportExportBundle\Export\Exporter'
+    tags: [ 'console.command' ]
+
+  Neusta\Pimcore\ImportExportBundle\Command\ExportDataObjectsCommand:
+    arguments:
+      $repository: '@Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DataObjectRepository'
+      $exporter: '@Neusta\Pimcore\ImportExportBundle\Export\Exporter'
+    tags: [ 'console.command' ]
+
+  Neusta\Pimcore\ImportExportBundle\Command\ImportAssetsCommand:
+    arguments:
+      $extractPath: sys_get_temp_dir() . '/pimcore_assets_import'
+      $importer: '@Neusta\Pimcore\ImportExportBundle\Import\Importer'
+    tags: [ 'console.command' ]
+
+  Neusta\Pimcore\ImportExportBundle\Command\ImportDataObjectsCommand:
+    arguments:
+      $importer: '@Neusta\Pimcore\ImportExportBundle\Import\Importer'
+    tags: [ 'console.command' ]
+
+  Neusta\Pimcore\ImportExportBundle\Command\ImportDocumentsCommand:
+    arguments:
+      $importer: '@Neusta\Pimcore\ImportExportBundle\Import\Importer'
+    tags: [ 'console.command' ]
+
+  ##############
+  # Controller #
+  ##############
+  Neusta\Pimcore\ImportExportBundle\Controller\Admin\ExportAssetsController:
     public: true
     tags: [ 'controller.service_arguments' ]
 
-  Neusta\Pimcore\ImportExportBundle\Controller\Admin\PageImportController:
+  Neusta\Pimcore\ImportExportBundle\Controller\Admin\ExportDataObjectsController:
     public: true
     tags: [ 'controller.service_arguments' ]
 
-  ###########################################################
-  # Import Populator (YamlExportPage -> Page)
-  ###########################################################
-  Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImportPopulator: ~
+  Neusta\Pimcore\ImportExportBundle\Controller\Admin\ExportDocumentsController:
+    public: true
+    tags: [ 'controller.service_arguments' ]
 
-  Neusta\Pimcore\ImportExportBundle\Documents\Import\PageImporter:
+  Neusta\Pimcore\ImportExportBundle\Controller\Admin\ImportAssetsController:
+    public: true
+    tags: [ 'controller.service_arguments' ]
+
+  Neusta\Pimcore\ImportExportBundle\Controller\Admin\ImportDocumentsController:
+    public: true
+    tags: [ 'controller.service_arguments' ]
+
+  Neusta\Pimcore\ImportExportBundle\Controller\Admin\ImportDataObjectsController:
+    public: true
+    tags: [ 'controller.service_arguments' ]
+
+  ############
+  # Importer #
+  ############
+  Neusta\Pimcore\ImportExportBundle\Import\Importer:
+    class: Neusta\Pimcore\ImportExportBundle\Import\Importer
     arguments:
-      $yamlToPageConverter: '@neusta_pimcore_import_export.import_page'
+      $typeToConverterMap:
+        Pimcore\Model\Asset: '@neusta_pimcore_import_export.import_asset'
+        Pimcore\Model\Document: '@neusta_pimcore_import_export.import_document'
+        Pimcore\Model\DataObject: '@neusta_pimcore_import_export.import_object'
+      $parentRelationResolver: '@Neusta\Pimcore\ImportExportBundle\Import\ParentRelationResolver'
+      $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
 
-  ###########################################################
-  # Export Populator (Page -> YamlExportPage)
-  ###########################################################
-  neusta_pimcore_import_export.page.editables.populator:
-    class: Neusta\ConverterBundle\Populator\ArrayConvertingPopulator
+  Neusta\Pimcore\ImportExportBundle\Import\ZipImporter: ~
+
+  ############
+  # Exporter #
+  ############
+  Neusta\Pimcore\ImportExportBundle\Export\Exporter:
+    class: Neusta\Pimcore\ImportExportBundle\Export\Exporter
     arguments:
-      $converter: '@neusta_pimcore_import_export.editable_converter'
-      $sourceArrayPropertyName: 'editables'
-      $targetPropertyName: 'editables'
+      $typeToConverterMap:
+        Pimcore\Model\Asset: '@neusta_pimcore_import_export.strategy.export_asset'
+        Pimcore\Model\Document: '@neusta_pimcore_import_export.strategy.export_document'
+        Pimcore\Model\DataObject: '@neusta_pimcore_import_export.export_object'
+      $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
 
-  neusta_pimcore_import_export.page.property.language.populator:
-    class: Neusta\Pimcore\ImportExportBundle\PimcoreConverter\Populator\PropertyBasedMappingPopulator
+  ##############
+  # Service    #
+  ##############
+  Neusta\Pimcore\ImportExportBundle\Export\Service\ZipService: ~
+
+  Neusta\Pimcore\ImportExportBundle\Import\ParentRelationResolver: ~
+
+  Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\AssetRepository: ~
+  Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DataObjectRepository: ~
+  Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository: ~
+
+
+  ##############
+  # Serializer #
+  ##############
+  Neusta\Pimcore\ImportExportBundle\Serializer\SerializerInterface:
+    alias: Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy
+
+  Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy:
     arguments:
-      $propertyKey: 'language'
-      $targetProperty: 'language'
+      $formatToSerializerMap:
+        yaml: '@Neusta\Pimcore\ImportExportBundle\Serializer\YamlSerializer'
+        json: '@Neusta\Pimcore\ImportExportBundle\Serializer\JsonSerializer'
 
-  neusta_pimcore_import_export.page.property.navigation_title.populator:
-    class: Neusta\Pimcore\ImportExportBundle\PimcoreConverter\Populator\PropertyBasedMappingPopulator
-    arguments:
-      $propertyKey: 'navigation_title'
-      $targetProperty: 'navigation_title'
+  Neusta\Pimcore\ImportExportBundle\Serializer\YamlSerializer: ~
+  Neusta\Pimcore\ImportExportBundle\Serializer\JsonSerializer: ~
 
-  neusta_pimcore_import_export.page.property.navigation_name.populator:
-    class: Neusta\Pimcore\ImportExportBundle\PimcoreConverter\Populator\PropertyBasedMappingPopulator
-    arguments:
-      $propertyKey: 'navigation_name'
-      $targetProperty: 'navigation_name'
-
-  Neusta\Pimcore\ImportExportBundle\Documents\Export\PageExporter:
-    arguments:
-      $pageToYamlConverter: '@neusta_pimcore_import_export.export_page'
-
+  #################
+  # EventListener #
+  #################
   Neusta\Pimcore\ImportExportBundle\EventListener\PimcoreAdminListener:
     tags:
       - { name: kernel.event_listener, event: pimcore.bundle_manager.paths.js, method: addJSFiles }

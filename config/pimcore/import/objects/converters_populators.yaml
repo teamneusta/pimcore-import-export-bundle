@@ -1,0 +1,87 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  neusta_pimcore_import_export.import_object:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\ConverterStrategy
+    arguments:
+      $converters: !tagged_iterator {tag: 'neusta_pimcore_import_export.objects.import.converter', default_priority_method: 'getPriority'}
+
+
+  ###########################################################
+  # Default Converter (ArrayObject -> Concrete)
+  ###########################################################
+  neusta_pimcore_import_export.import_object.default:
+    class: Neusta\ConverterBundle\Converter\GenericConverter
+    arguments:
+      $factory: '@Neusta\Pimcore\ImportExportBundle\Import\Factory\ContextBaseTargetFactory'
+      $populators:
+        - '@neusta_pimcore_import_export.dataobject.import.populator.id'
+        - '@neusta_pimcore_import_export.dataobject.import.populator.key'
+        - '@neusta_pimcore_import_export.dataobject.import.populator.type'
+        - '@neusta_pimcore_import_export.dataobject.import.populator.published'
+        - '@neusta_pimcore_import_export.dataobject.import.populator.path'
+        - '@neusta_pimcore_import_export.dataobject.import.populator.parentId'
+        - '@Neusta\Pimcore\ImportExportBundle\Populator\DataObjectImportRelationsPopulator'
+        - '@Neusta\Pimcore\ImportExportBundle\Populator\DataObjectImportFieldsPopulator'
+
+  neusta_pimcore_import_export.import_object.supports_aware:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\SupportsAwareGenericConverter
+    arguments:
+      $type: Pimcore\Model\DataObject
+      $converter: '@neusta_pimcore_import_export.import_object.default'
+    tags:
+      - { name: 'neusta_pimcore_import_export.objects.import.converter', priority: 0 }
+
+  ###########################################################
+  # Factory
+  ###########################################################
+  Neusta\Pimcore\ImportExportBundle\Import\Factory\ContextBaseTargetFactory: ~
+
+  ###########################################################
+  # Default Populator (ArrayObject -> Concrete)
+  ###########################################################
+  Neusta\Pimcore\ImportExportBundle\Populator\DataObjectImportFieldsPopulator: ~
+
+  Neusta\Pimcore\ImportExportBundle\Populator\DataObjectImportRelationsPopulator:
+    arguments:
+      $type2RepositoryMap:
+        Pimcore\Model\Asset: '@Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\AssetRepository'
+        Pimcore\Model\DataObject: '@Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DataObjectRepository'
+        Pimcore\Model\Document: '@Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository'
+
+  neusta_pimcore_import_export.dataobject.import.populator.id:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: id
+      $defaultValue: 0
+
+  neusta_pimcore_import_export.dataobject.import.populator.key:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: key
+
+  neusta_pimcore_import_export.dataobject.import.populator.type:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: type
+      $defaultValue: 'object'
+
+  neusta_pimcore_import_export.dataobject.import.populator.published:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: published
+      $defaultValue: false
+
+  neusta_pimcore_import_export.dataobject.import.populator.path:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: path
+      $defaultValue: '/'
+
+  neusta_pimcore_import_export.dataobject.import.populator.parentId:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: parentId
+      $defaultValue: 0

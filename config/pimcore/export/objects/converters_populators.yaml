@@ -1,0 +1,59 @@
+###########################################################
+# Neusta Converter Bundle
+###########################################################
+neusta_converter:
+  converter:
+    ###########################################################
+    # Export Converter (Document -> Page)
+    ###########################################################
+    neusta_pimcore_import_export.export_object:
+      target: Neusta\Pimcore\ImportExportBundle\Model\Object\DataObject
+      populators:
+        - neusta_pimcore_import_export.export_object.fields.populator
+        - neusta_pimcore_import_export.export_object.relations.populator
+      properties:
+        className: ~
+        id: ~
+        key: ~
+        type: ~
+        published: ~
+        path: ~
+        parentId: ~
+
+    neusta_pimcore_import_export.export_object.without.relations:
+      target: Neusta\Pimcore\ImportExportBundle\Model\Object\DataObject
+      populators:
+        - neusta_pimcore_import_export.export_object.fields.populator
+      properties:
+        className: ~
+        id: ~
+        key: ~
+        type: ~
+        published: ~
+        path: ~
+        parentId: ~
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  ###########################################################
+  # Export Converter (Concrete -> DataObject)
+  ###########################################################
+  neusta_pimcore_import_export.strategy.export_objects:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\TypeStrategyConverter
+    arguments:
+      $typeToConverterMap:
+        Pimcore\Model\DataObject\Concrete: '@neusta_pimcore_import_export.export_object'
+
+  neusta_pimcore_import_export.export_object.fields.populator:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\DataObjectExportFieldsPopulator
+
+  neusta_pimcore_import_export.export_object.relations.populator:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\DataObjectExportRelationsPopulator
+    arguments:
+      $typeToConverterMap:
+        Pimcore\Model\Asset: '@neusta_pimcore_import_export.strategy.export_asset'
+        Pimcore\Model\Document: '@neusta_pimcore_import_export.strategy.export_document'
+        Pimcore\Model\DataObject: '@neusta_pimcore_import_export.export_object.without.relations'

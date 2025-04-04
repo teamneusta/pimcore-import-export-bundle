@@ -1,0 +1,95 @@
+###########################################################
+# Neusta Converter Bundle
+###########################################################
+neusta_converter:
+  converter:
+    ###########################################################
+    # Export Converter (Pimcore Asset -> Folder)
+    ###########################################################
+    neusta_pimcore_import_export.export_asset_folder:
+      target: Neusta\Pimcore\ImportExportBundle\Model\Asset\Asset
+      properties:
+        id: ~
+        key: ~
+        type: ~
+        path: ~
+        parentId: ~
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  ###########################################################
+  # Export Converter (Pimcore Asset -> Asset)
+  ###########################################################
+  neusta_pimcore_import_export.strategy.export_asset:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\TypeStrategyConverter
+    arguments:
+      $typeToConverterMap:
+        Pimcore\Model\Asset\Archive: '@neusta_pimcore_import_export.export_asset_archive'
+        Pimcore\Model\Asset\Audio: '@neusta_pimcore_import_export.export_asset_audio'
+        Pimcore\Model\Asset\Document: '@neusta_pimcore_import_export.export_asset_document'
+        Pimcore\Model\Asset\Image: '@neusta_pimcore_import_export.export_asset_image'
+        Pimcore\Model\Asset\Text: '@neusta_pimcore_import_export.export_asset_text'
+        Pimcore\Model\Asset\Video: '@neusta_pimcore_import_export.export_asset_video'
+        Pimcore\Model\Asset\Folder: '@neusta_pimcore_import_export.export_asset_folder'
+        Pimcore\Model\Asset\Unknown: '@neusta_pimcore_import_export.export_asset_unknown'
+
+  neusta_pimcore_import_export.export_asset_archive:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
+    arguments:
+      $converter: '@neusta_pimcore_import_export.export_asset_folder'
+      $postPopulators:
+        - '@neusta_pimcore_import_export.asset.filename.populator'
+
+  neusta_pimcore_import_export.export_asset_audio:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
+    arguments:
+      $converter: '@neusta_pimcore_import_export.export_asset_folder'
+      $postPopulators:
+        - '@neusta_pimcore_import_export.asset.filename.populator'
+
+  neusta_pimcore_import_export.export_asset_document:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
+    arguments:
+      $converter: '@neusta_pimcore_import_export.export_asset_folder'
+      $postPopulators:
+        - '@neusta_pimcore_import_export.asset.filename.populator'
+
+  neusta_pimcore_import_export.export_asset_image:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
+    arguments:
+      $converter: '@neusta_pimcore_import_export.export_asset_folder'
+      $postPopulators:
+        - '@neusta_pimcore_import_export.asset.filename.populator'
+
+  neusta_pimcore_import_export.export_asset_text:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
+    arguments:
+      $converter: '@neusta_pimcore_import_export.export_asset_folder'
+      $postPopulators:
+        - '@neusta_pimcore_import_export.asset.filename.populator'
+
+  neusta_pimcore_import_export.export_asset_video:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
+    arguments:
+      $converter: '@neusta_pimcore_import_export.export_asset_folder'
+      $postPopulators:
+        - '@neusta_pimcore_import_export.asset.filename.populator'
+
+  neusta_pimcore_import_export.export_asset_unknown:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
+    arguments:
+      $converter: '@neusta_pimcore_import_export.export_asset_folder'
+      $postPopulators: []
+
+  ###########################################################
+  # Export Populator (Pimcore Asset -> Asset)
+  ###########################################################
+  neusta_pimcore_import_export.asset.filename.populator:
+    class: Neusta\ConverterBundle\Populator\PropertyMappingPopulator
+    arguments:
+      $sourceProperty: filename
+      $targetProperty: filename
+
