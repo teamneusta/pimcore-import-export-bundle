@@ -36,6 +36,9 @@ class ZipImporter
         }
 
         $yamlData = file_get_contents($yamlPath);
+        if ($yamlData === false) {
+            throw new \RuntimeException("Failed to read YAML file: $yamlPath");
+        }
 
         $assets = $this->collectAssetDirectories($extractPath);
 
@@ -105,7 +108,7 @@ class ZipImporter
             if ($file->isFile()) {
                 $filename = $file->getFilename();
                 $content = file_get_contents($file->getPathname());
-                if ($content) {
+                if ($content !== false) {
                     $files[$filename] = $content;
                 }
             }

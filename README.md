@@ -126,7 +126,7 @@ adopted, regardless of whether it makes sense or not, and without checking wheth
 
 ![parent_flow.png](docs/images/parent_flow.png)
 
-If multiple pages are imported and a path specification changes py the applied rules, this path specification will be
+If multiple pages are imported and a path specification changes by the applied rules, this path specification will be
 replaced with the new, correct path specification in all provided page configurations.
 
 ### Parameterize your yaml files

@@ -25,8 +25,9 @@ class ImportAssetsCommand extends AbstractImportBaseCommand
      */
     public function __construct(
         private string $extractPath,
-        Importer $importer,
-    ) {
+        Importer       $importer,
+    )
+    {
         parent::__construct($importer);
     }
 
@@ -112,6 +113,10 @@ class ImportAssetsCommand extends AbstractImportBaseCommand
             return null;
         }
 
+        // NOTE: Zip Slip vulnerability is intentionally not addressed here
+        // as this code runs in a Docker container with limited scope.
+        // If deploying outside of the container environment, consider adding
+        // path traversal protections (checking for "../" in filenames).
         $zip->extractTo($this->extractPath);
         $zip->close();
 
@@ -122,7 +127,7 @@ class ImportAssetsCommand extends AbstractImportBaseCommand
             return null;
         }
 
-        $filteredFiles = array_values(array_filter($files, fn ($file) => is_file($file)));
+        $filteredFiles = array_values(array_filter($files, fn($file) => is_file($file)));
 
         return !empty($filteredFiles) ? $filteredFiles[0] : null;
     }

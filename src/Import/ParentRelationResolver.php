@@ -15,10 +15,10 @@ class ParentRelationResolver
         $path = $element->getPath();
 
         if ($parent = $this->isValidParent($element)) {
-            // Wenn die parentId gültig ist, den Path aktualisieren
+            // if parentId valid object re-new path
             $element->setPath($this->generatePath($parent, $element));
         } elseif ($path) {
-            // Wenn der Pfad existiert, versuchen, die parentId zu ermitteln
+            // if path exists find right parent
             $parent = $this->findParentByPath($path, $element);
             if ($parent) {
                 $element->setParentId($parent->getId());

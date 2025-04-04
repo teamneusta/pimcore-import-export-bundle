@@ -5,6 +5,7 @@ namespace Neusta\Pimcore\ImportExportBundle\Import;
 use Neusta\ConverterBundle\Converter;
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Exception\ConverterException;
+use Neusta\Pimcore\ImportExportBundle\Import\Factory\ContextBaseTargetFactory;
 use Neusta\Pimcore\ImportExportBundle\Model\Element;
 use Neusta\Pimcore\ImportExportBundle\Serializer\SerializerInterface;
 use Pimcore\Model\Element\AbstractElement;
