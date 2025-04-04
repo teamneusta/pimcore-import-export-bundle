@@ -5,19 +5,19 @@ namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 use Neusta\Pimcore\ImportExportBundle\Controller\Admin\Base\AbstractImportBaseController;
 use Neusta\Pimcore\ImportExportBundle\Import\Importer;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DataObjectRepository;
-use Pimcore\Model\DataObject\Concrete;
+use Pimcore\Model\DataObject;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * @extends AbstractImportBaseController<Concrete>
+ * @extends AbstractImportBaseController<DataObject>
  */
 final class ImportDataObjectsController extends AbstractImportBaseController
 {
     /**
-     * @param Importer<\ArrayObject<int|string, mixed>, Concrete> $importer
+     * @param Importer<\ArrayObject<int|string, mixed>, DataObject> $importer
      */
     public function __construct(
         DataObjectRepository $repository,

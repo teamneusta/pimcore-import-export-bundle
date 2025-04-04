@@ -14,8 +14,8 @@ use Pimcore\Model\Element\AbstractElement;
  * @method bool               getHideUnpublished()
  * @method bool               doHideUnpublished()
  *
- * @implements ImportRepositoryInterface<Concrete>
- * @implements ExportRepositoryInterface<Concrete>
+ * @implements ImportRepositoryInterface<DataObject>
+ * @implements ExportRepositoryInterface<DataObject>
  */
 class DataObjectRepository extends AbstractElementRepository implements ImportRepositoryInterface, ExportRepositoryInterface
 {
@@ -25,35 +25,35 @@ class DataObjectRepository extends AbstractElementRepository implements ImportRe
     }
 
     /**
-     * @param Concrete $root
+     * @param DataObject $root
      *
-     * @return iterable<Concrete>
+     * @return iterable<DataObject>
      */
     public function findAllInTree(AbstractElement $root): iterable
     {
         yield $root;
 
         foreach ($root->getChildren(includingUnpublished: true) as $child) {
-            if ($child instanceof Concrete) {
+            if ($child instanceof DataObject) {
                 yield from $this->findAllInTree($child);
             }
         }
     }
 
-    public function getByPath(string $path): ?Concrete
+    public function getByPath(string $path): ?DataObject
     {
         $element = parent::getByPath($path);
-        if ($element instanceof Concrete) {
+        if ($element instanceof DataObject) {
             return $element;
         }
 
         return null;
     }
 
-    public function getById(int $id): ?Concrete
+    public function getById(int $id): ?DataObject
     {
         $element = parent::getById($id);
-        if ($element instanceof Concrete) {
+        if ($element instanceof DataObject) {
             return $element;
         }
 

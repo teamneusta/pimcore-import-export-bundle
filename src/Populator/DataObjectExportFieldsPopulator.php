@@ -5,14 +5,15 @@ namespace Neusta\Pimcore\ImportExportBundle\Populator;
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Populator;
 use Neusta\Pimcore\ImportExportBundle\Model\Object\DataObject;
-use Pimcore\Model\DataObject\Concrete;
+use Pimcore\Model\DataObject as PimcoreDataObject;
+use Pimcore\Model\Element\AbstractElement;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
- * @implements Populator<Concrete, DataObject, GenericContext|null>
+ * @implements Populator<PimcoreDataObject, DataObject, GenericContext|null>
  */
-class DataObjectExportPopulator implements Populator
+class DataObjectExportFieldsPopulator implements Populator
 {
     private PropertyAccessorInterface $propertyAccessor;
 
@@ -23,15 +24,21 @@ class DataObjectExportPopulator implements Populator
     }
 
     /**
-     * @param Concrete            $source
+     * @param PimcoreDataObject   $source
      * @param DataObject          $target
      * @param GenericContext|null $ctx
      */
     public function populate(object $target, object $source, ?object $ctx = null): void
     {
+        if (!$source instanceof PimcoreDataObject\Concrete) {
+            return;
+        }
+
         foreach ($source->getClass()->getFieldDefinitions() as $fieldName => $definition) {
             $value = $this->propertyAccessor->getValue($source, $fieldName);
-            $target->fields[$fieldName] = $value;
+            if (!$value instanceof AbstractElement) {
+                $target->fields[$fieldName] = $value;
+            }
         }
     }
 }

@@ -4,7 +4,7 @@ namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DataObjectRepository;
-use Pimcore\Model\DataObject\Concrete;
+use Pimcore\Model\DataObject;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +27,7 @@ final class ExportDataObjectsController
     public function export(Request $request): Response
     {
         $object = $this->objectRepository->getById($request->query->getInt('object_id'));
-        if (!$object instanceof Concrete) {
+        if (!$object instanceof DataObject) {
             return new JsonResponse(
                 \sprintf('Data Object with id "%s" was not found', $request->query->getInt('object_id')),
                 Response::HTTP_NOT_FOUND,
@@ -45,7 +45,7 @@ final class ExportDataObjectsController
     public function exportWithChildren(Request $request): Response
     {
         $object = $this->objectRepository->getById($request->query->getInt('object_id'));
-        if (!$object instanceof Concrete) {
+        if (!$object instanceof DataObject) {
             return new JsonResponse(
                 \sprintf('Data Object with id "%s" was not found', $request->query->getInt('object_id')),
                 Response::HTTP_NOT_FOUND,
@@ -58,12 +58,12 @@ final class ExportDataObjectsController
     }
 
     /**
-     * @param iterable<Concrete> $documents
+     * @param iterable<DataObject> $objects
      */
-    private function exportObjects(iterable $documents, string $filename, string $format): Response
+    private function exportObjects(iterable $objects, string $filename, string $format): Response
     {
         try {
-            $yaml = $this->exporter->export($documents, $format);
+            $yaml = $this->exporter->export($objects, $format);
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

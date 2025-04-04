@@ -10,4 +10,6 @@ class DataObject extends Element
     public bool $published = false;
     /** @var array<string, mixed> */
     public array $fields = []; // flexible set of property values
+    /** @var array<string, mixed> */
+    public array $relations = []; // flexible set of relations (assets, objects, documents)
 }

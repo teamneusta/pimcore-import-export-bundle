@@ -91,7 +91,7 @@ services:
       $typeToConverterMap:
         Pimcore\Model\Asset: '@neusta_pimcore_import_export.strategy.export_asset'
         Pimcore\Model\Document: '@neusta_pimcore_import_export.strategy.export_document'
-        Pimcore\Model\DataObject\Concrete: '@neusta_pimcore_import_export.export_object'
+        Pimcore\Model\DataObject: '@neusta_pimcore_import_export.export_object'
       $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
 
   ##############

@@ -30,6 +30,8 @@ class DataObjectImportPopulator implements Populator
     {
         if ($source->offsetExists('fields') && \is_array($source['fields'])) {
             foreach ($source['fields'] as $fieldName => $fieldValue) {
+                if (\is_array($fieldValue)) {
+                }
                 $this->propertyAccessor->setValue($target, $fieldName, $fieldValue);
             }
         }
