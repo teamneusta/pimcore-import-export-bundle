@@ -41,12 +41,12 @@ class ImportDocumentsCommand extends AbstractImportBaseCommand
 
             return Command::FAILURE;
         }
-
         if (!file_exists($filename)) {
             $this->io->error(\sprintf('Input file "%s" does not exist.', $filename));
 
             return Command::FAILURE;
         }
+
         $yamlInput = file_get_contents($filename);
         if (!$yamlInput) {
             $this->io->error('Input file could not be read');
