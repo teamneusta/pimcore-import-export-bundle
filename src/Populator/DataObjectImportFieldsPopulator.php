@@ -17,15 +17,14 @@ class DataObjectImportFieldsPopulator implements Populator
 
     public function __construct(
         ?PropertyAccessorInterface $propertyAccessor = null,
-    )
-    {
+    ) {
         $this->propertyAccessor = $propertyAccessor ?? PropertyAccess::createPropertyAccessor();
     }
 
     /**
      * @param \ArrayObject<int|string, mixed> $source
-     * @param Concrete $target
-     * @param GenericContext|null $ctx
+     * @param Concrete                        $target
+     * @param GenericContext|null             $ctx
      */
     public function populate(object $target, object $source, ?object $ctx = null): void
     {

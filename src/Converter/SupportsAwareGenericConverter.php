@@ -16,19 +16,16 @@ use Pimcore\Model\DataObject\Concrete;
 class SupportsAwareGenericConverter implements SupportsAwareConverterInterface
 {
     /**
-     * @param class-string $type
      * @param Converter<\ArrayObject<int|string, mixed>, TTarget, GenericContext|null> $converter
      */
     public function __construct(
-        private string    $type,
         private Converter $converter,
-    )
-    {
+    ) {
     }
 
     /**
      * @param \ArrayObject<int|string, mixed> $source
-     * @param GenericContext|null $ctx
+     * @param GenericContext|null             $ctx
      *
      * @return TTarget
      *
@@ -42,16 +39,16 @@ class SupportsAwareGenericConverter implements SupportsAwareConverterInterface
         if ($source->offsetExists('className')) {
             $ctx->setValue(ContextBaseTargetFactory::TARGET_TYPE, "Pimcore\Model\DataObject\\" . $source['className']);
         }
+
         return $this->converter->convert($source, $ctx);
     }
 
     /**
      * @param \ArrayObject<int|string, mixed> $source
-     * @param GenericContext|null $ctx
+     * @param GenericContext|null             $ctx
      */
     public function supports(object $source, ?object $ctx = null): bool
     {
-        return $source->offsetExists('className')
-            && "Pimcore\Model\DataObject\\" . $source['className'] instanceof $this->type;
+        return $source->offsetExists('className');
     }
 }

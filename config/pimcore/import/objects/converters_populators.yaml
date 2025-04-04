@@ -29,7 +29,6 @@ services:
   neusta_pimcore_import_export.import_object.supports_aware:
     class: Neusta\Pimcore\ImportExportBundle\Converter\SupportsAwareGenericConverter
     arguments:
-      $type: 'Pimcore\Model\DataObject'
       $converter: '@neusta_pimcore_import_export.import_object.default'
     tags:
       - { name: 'neusta_pimcore_import_export.objects.import.converter', priority: 0 }
