@@ -30,6 +30,9 @@ class DataObjectImportFieldsPopulator implements Populator
     {
         if ($source->offsetExists('fields') && \is_array($source['fields'])) {
             foreach ($source['fields'] as $fieldName => $fieldValue) {
+                // Handle nested arrays, possibly by recursively setting properties
+                // Example: Create a new instance or use a specific converter
+                // Skip setting this field directly for now
                 if (!\is_array($fieldValue)) {
                     $this->propertyAccessor->setValue($target, $fieldName, $fieldValue);
                 }

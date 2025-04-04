@@ -101,7 +101,7 @@ class ExportDocumentsCommand extends AbstractExportBaseCommand
 
         $this->io->writeln('Write in file <' . $exportFilename . '>');
         $this->io->newLine();
-        if (!file_put_contents($exportFilename, $yamlContent)) {
+        if (false === file_put_contents($exportFilename, $yamlContent)) {
             $this->io->error('An error occurred while writing the file');
 
             return false;

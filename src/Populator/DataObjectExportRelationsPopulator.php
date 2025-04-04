@@ -49,8 +49,7 @@ class DataObjectExportRelationsPopulator implements Populator
                 foreach (array_keys($this->typeToConverterMap) as $type) {
                     if ($value instanceof $type) {
                         $target->relations[$fieldName] = [$type => $this->typeToConverterMap[$type]->convert($value, $ctx)];
-
-                        return;
+                        break;
                     }
                 }
                 $target->relations[$fieldName] = ['could not be exported'];
