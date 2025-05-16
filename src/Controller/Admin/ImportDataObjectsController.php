@@ -6,6 +6,7 @@ use Neusta\Pimcore\ImportExportBundle\Controller\Admin\Base\AbstractImportBaseCo
 use Neusta\Pimcore\ImportExportBundle\Import\Importer;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DataObjectRepository;
 use Pimcore\Model\DataObject;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,10 +21,11 @@ final class ImportDataObjectsController extends AbstractImportBaseController
      * @param Importer<\ArrayObject<int|string, mixed>, DataObject> $importer
      */
     public function __construct(
+        LoggerInterface $logger,
         DataObjectRepository $repository,
         private Importer $importer,
     ) {
-        parent::__construct($repository, 'DataObject');
+        parent::__construct($logger, $repository, 'DataObject');
     }
 
     #[Route(

@@ -6,6 +6,7 @@ use Neusta\ConverterBundle\Exception\ConverterException;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\ImportRepositoryInterface;
 use Pimcore\Model\Element\AbstractElement;
 use Pimcore\Model\Element\DuplicateFullPathException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,6 +40,7 @@ abstract class AbstractImportBaseController
      * @param ImportRepositoryInterface<TElement> $repository
      */
     public function __construct(
+        protected LoggerInterface $logger,
         protected ImportRepositoryInterface $repository,
         protected string $elementType = 'Element',
     ) {
@@ -66,6 +68,12 @@ abstract class AbstractImportBaseController
             }
         } catch (\Exception $e) {
             return $this->createJsonResponse(false, $e->getMessage(), 500);
+        } finally {
+            try {
+                $this->cleanUp();
+            } catch (\Throwable $cleanupError) {
+                $this->logger->warning($cleanupError->getMessage());
+            }
         }
 
         return $this->createJsonResponse(true, $this->createResultMessage());
@@ -123,4 +131,9 @@ abstract class AbstractImportBaseController
      * @throws DuplicateFullPathException
      */
     abstract protected function importByFile(UploadedFile $file, string $format): array;
+
+    protected function cleanUp(): void
+    {
+        // implement clean ups in subclasses if necessary
+    }
 }
