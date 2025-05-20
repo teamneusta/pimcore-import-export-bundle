@@ -6,6 +6,7 @@ use Neusta\Pimcore\ImportExportBundle\Controller\Admin\Base\AbstractImportBaseCo
 use Neusta\Pimcore\ImportExportBundle\Import\Importer;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository;
 use Pimcore\Model\Document;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,10 +21,11 @@ final class ImportDocumentsController extends AbstractImportBaseController
      * @param Importer<\ArrayObject<int|string, mixed>, Document> $importer
      */
     public function __construct(
+        LoggerInterface $logger,
         DocumentRepository $repository,
         private Importer $importer,
     ) {
-        parent::__construct($repository, 'Document');
+        parent::__construct($logger, $repository, 'Document');
     }
 
     #[Route(

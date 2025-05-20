@@ -3,14 +3,18 @@
 namespace Neusta\Pimcore\ImportExportBundle\Import;
 
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 
 class ZipImporter
 {
+    /** @var string */
+    private const ZIPIMPORT_DIR_PREFIX = 'zipimport_';
     private Filesystem $filesystem;
     private string $tempDir;
 
-    public function __construct(?string $tempDir = null)
-    {
+    public function __construct(
+        ?string $tempDir = null,
+    ) {
         $this->filesystem = new Filesystem();
         $this->tempDir = $tempDir ?? sys_get_temp_dir();
     }
@@ -47,7 +51,7 @@ class ZipImporter
 
     private function createTempExtractPath(): string
     {
-        $extractPath = $this->tempDir . '/zipimport_' . uniqid();
+        $extractPath = $this->tempDir . '/' . self::ZIPIMPORT_DIR_PREFIX . uniqid();
         $this->filesystem->mkdir($extractPath);
 
         return $extractPath;
@@ -66,7 +70,7 @@ class ZipImporter
     }
 
     /**
-     * @return array<string, array<string, string>>
+     * @return array<string, array<string, \SplFileInfo>>
      */
     private function collectAssetDirectories(string $basePath): array
     {
@@ -88,7 +92,7 @@ class ZipImporter
                 continue;
             }
 
-            $files = $this->collectFilesFromDir($fullPath);
+            $files = $this->collectFileInfosFromDir($fullPath);
             if (!empty($files)) {
                 $assets[$entry] = $files;
             }
@@ -98,22 +102,31 @@ class ZipImporter
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, \SplFileInfo>
      */
-    private function collectFilesFromDir(string $dir): array
+    private function collectFileInfosFromDir(string $dir): array
     {
         $files = [];
         $rii = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir));
         foreach ($rii as $file) {
             if ($file->isFile()) {
                 $filename = $file->getFilename();
-                $content = file_get_contents($file->getPathname());
-                if (false !== $content) {
-                    $files[$filename] = $content;
-                }
+                $files[$filename] = new \SplFileInfo($file->getPathname());
             }
         }
 
         return $files;
+    }
+
+    public function cleanUp(): void
+    {
+        $finder = new Finder();
+        $finder->directories()
+            ->in($this->tempDir)
+            ->name(self::ZIPIMPORT_DIR_PREFIX . '*');
+
+        foreach ($finder as $dir) {
+            $this->filesystem->remove($dir->getRealPath());
+        }
     }
 }

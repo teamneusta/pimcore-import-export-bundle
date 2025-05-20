@@ -7,6 +7,7 @@ use Neusta\Pimcore\ImportExportBundle\Import\Importer;
 use Neusta\Pimcore\ImportExportBundle\Import\ZipImporter;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\AssetRepository;
 use Pimcore\Model\Asset;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,11 +22,12 @@ final class ImportAssetsController extends AbstractImportBaseController
      * @param Importer<\ArrayObject<int|string, mixed>, Asset> $importer
      */
     public function __construct(
+        LoggerInterface $logger,
         private Importer $importer,
         private ZipImporter $zipImporter,
         AssetRepository $assetRepository,
     ) {
-        parent::__construct($assetRepository, 'Asset');
+        parent::__construct($logger, $assetRepository, 'Asset');
     }
 
     #[Route(
@@ -52,10 +54,7 @@ final class ImportAssetsController extends AbstractImportBaseController
                     && $asset->getKey()
                     && \array_key_exists($asset->getKey(), $zipContent[$asset->getType()])
                 ) {
-                    $asset->setData($zipContent[$asset->getType()][$asset->getKey()]);
-                    if ($this->overwrite) {
-                        $asset->save(['versionNote' => 'added by pimcore-import-export-bundle']);
-                    }
+                    $asset->setData(file_get_contents($zipContent[$asset->getType()][$asset->getKey()]->getRealPath()));
                 }
             }
 
@@ -70,5 +69,10 @@ final class ImportAssetsController extends AbstractImportBaseController
         } catch (\Exception $e) {
             throw new \Exception('Error reading uploaded file: ' . $e->getMessage(), 0, $e);
         }
+    }
+
+    protected function cleanUp(): void
+    {
+        $this->zipImporter->cleanUp();
     }
 }
