@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1
+
+- bugfix: add controller field to converters_populators (#18)
+
 ## 2.0.0
 
 - feature: Import Pimcore DataObjects via `/admin/neusta/import-export/object/import`
