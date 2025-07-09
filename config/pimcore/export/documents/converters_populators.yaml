@@ -19,6 +19,7 @@ neusta_converter:
         published: ~
         path: ~
         parentId: ~
+        controller: ~
 
     neusta_pimcore_import_export.editable_converter:
       target: Neusta\Pimcore\ImportExportBundle\Model\Document\Editable
