@@ -19,6 +19,21 @@ neusta_converter:
         - neusta_pimcore_import_export.documents.import.populator.parentId
         - Neusta\Pimcore\ImportExportBundle\Populator\PageImportPopulator
 
+    neusta_pimcore_import_export.import_document_link:
+      target: Pimcore\Model\Document\Link
+      populators:
+        - neusta_pimcore_import_export.documents.import.populator.id
+        - neusta_pimcore_import_export.documents.import.populator.key
+        - neusta_pimcore_import_export.documents.import.populator.type
+        - neusta_pimcore_import_export.documents.import.populator.published
+        - neusta_pimcore_import_export.documents.import.populator.path
+        - neusta_pimcore_import_export.documents.import.populator.parentId
+        - neusta_pimcore_import_export.documents.import.populator.direct
+        - neusta_pimcore_import_export.documents.import.populator.linkType
+        - neusta_pimcore_import_export.documents.import.populator.internal
+        - neusta_pimcore_import_export.documents.import.populator.internalType
+        - Neusta\Pimcore\ImportExportBundle\Populator\PageImportPopulator
+
 services:
   _defaults:
     autowire: true
@@ -74,4 +89,40 @@ services:
       $targetProperty: parentId
       $defaultValue: 0
 
+  neusta_pimcore_import_export.documents.import.populator.direct:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: direct
+      $defaultValue: false
+
+  neusta_pimcore_import_export.documents.import.populator.linkType:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: linkType
+      $defaultValue: 'internal'
+
+  neusta_pimcore_import_export.documents.import.populator.internal:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: internal
+      $defaultValue: false
+
+  neusta_pimcore_import_export.documents.import.populator.internalType:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\ArrayPropertyPopulator
+    arguments:
+      $targetProperty: internalType
+      $defaultValue: false
+
   Neusta\Pimcore\ImportExportBundle\Populator\PageImportPopulator: ~
+
+  ###########################################################
+  # Import Converter Strategy
+  ###########################################################
+#  neusta_pimcore_import_export.strategy.import_document:
+#    class: Neusta\Pimcore\ImportExportBundle\Converter\TypeStrategyConverter
+#    arguments:
+#      $typeToConverterMap:
+#        Pimcore\Model\Document\Page: '@neusta_pimcore_import_export.import_document'
+#        Pimcore\Model\Document\Snippet: '@neusta_pimcore_import_export.import_document'
+#        Pimcore\Model\Document\Folder: '@neusta_pimcore_import_export.import_document'
+#        Pimcore\Model\Document\Link: '@neusta_pimcore_import_export.import_document_link'
