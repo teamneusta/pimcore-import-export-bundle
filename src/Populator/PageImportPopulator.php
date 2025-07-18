@@ -31,7 +31,7 @@ class PageImportPopulator implements Populator
      */
     public function populate(object $target, object $source, ?object $ctx = null): void
     {
-        if ($target instanceof PimcoreDocument\PageSnippet) {
+        if ($target instanceof PimcoreDocument) {
             foreach (self::TEXT_PROPERTIES as $property) {
                 if (isset($source[$property])) {
                     $target->setProperty($property, 'text', $source[$property]);

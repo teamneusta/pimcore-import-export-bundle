@@ -21,6 +21,26 @@ neusta_converter:
         parentId: ~
         controller: ~
 
+    neusta_pimcore_import_export.export_document_link:
+      target: Neusta\Pimcore\ImportExportBundle\Model\Document\DocumentLink
+      populators:
+        - neusta_pimcore_import_export.page.property.language.populator
+        - neusta_pimcore_import_export.page.property.navigation_title.populator
+        - neusta_pimcore_import_export.page.property.navigation_name.populator
+      properties:
+        id: ~
+        key: ~
+        type: ~
+        published: ~
+        path: ~
+        parentId: ~
+        internal: ~
+        internalType: ~
+        direct: ~
+        linkType: ~
+        href: ~
+
+
     neusta_pimcore_import_export.editable_converter:
       target: Neusta\Pimcore\ImportExportBundle\Model\Document\Editable
       populators:
@@ -44,6 +64,7 @@ services:
         Pimcore\Model\Document\Page: '@neusta_pimcore_import_export.export_page'
         Pimcore\Model\Document\Snippet: '@neusta_pimcore_import_export.export_page_snippet'
         Pimcore\Model\Document\Folder: '@neusta_pimcore_import_export.export_folder'
+        Pimcore\Model\Document\Link: '@neusta_pimcore_import_export.export_link'
 
   ###########################################################
   # Export Converter (Document/Folder -> Page)
@@ -60,6 +81,12 @@ services:
       $converter: '@neusta_pimcore_import_export.export_document'
       $postPopulators:
         - '@neusta_pimcore_import_export.page.editables.populator'
+
+  ###########################################################
+  # Export Converter (Document/Link -> Link)
+  ###########################################################
+  neusta_pimcore_import_export.export_link:
+    alias: neusta_pimcore_import_export.export_document_link
 
   ###########################################################
   # Export Converter (Document/Page -> Page)

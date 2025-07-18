@@ -36,7 +36,7 @@ class Exporter
         foreach ($elements as $element) {
             foreach (array_keys($this->typeToConverterMap) as $type) {
                 if ($element instanceof $type) {
-                    $yamlExportElements[] = [$type => $this->typeToConverterMap[$type]->convert($element)];
+                    $yamlExportElements[] = [get_class($element) => $this->typeToConverterMap[$type]->convert($element)];
                     continue 2;
                 }
             }
