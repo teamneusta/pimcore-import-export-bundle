@@ -34,7 +34,12 @@ final class ExportDocumentsController
             );
         }
 
-        return $this->exportDocuments([$document], $request->query->getString('filename'), 'yaml');
+        return $this->exportDocuments(
+            [$document],
+            $request->query->getString('filename'),
+            'yaml',
+            $request->query->getBoolean('ids_included', false),
+        );
     }
 
     #[Route(
@@ -54,16 +59,27 @@ final class ExportDocumentsController
 
         $documents = $this->documentRepository->findAllInTree($document);
 
-        return $this->exportDocuments($documents, $request->query->getString('filename'), $request->query->getString('format'));
+        return $this->exportDocuments(
+            $documents,
+            $request->query->getString('filename'),
+            $request->query->getString('format'),
+            $request->query->getBoolean('ids_included', false),
+        );
     }
 
     /**
      * @param iterable<Document> $documents
      */
-    private function exportDocuments(iterable $documents, string $filename, string $format): Response
+    private function exportDocuments(iterable $documents, string $filename, string $format, bool $includeIds): Response
     {
         try {
-            $yaml = $this->exporter->export($documents, $format);
+            $yaml = $this->exporter->export(
+                $documents,
+                $format,
+                [
+                    'includeIds' => $includeIds,
+                ]
+            );
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

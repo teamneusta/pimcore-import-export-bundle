@@ -7,8 +7,6 @@ elements:
             title: 'Test Document_1'
             controller: 'App\Controller\DefaultController::defaultAction'
             editables: {  }
-            id: 2
-            parentId: 1
             type: page
             path: /
             language: ''
@@ -21,8 +19,6 @@ elements:
             title: 'Test Document_2'
             controller: 'App\Controller\DefaultController::defaultAction'
             editables: {  }
-            id: 3
-            parentId: 1
             type: page
             path: /
             language: ''

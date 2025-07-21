@@ -27,16 +27,22 @@ class Exporter
      * Exports one or more Pimcore Elements in the given format (yaml, json, ...)).
      *
      * @param iterable<AbstractElement> $elements
+     * @param array<string, mixed>      $ctxParams
      *
      * @throws ConverterException
      */
-    public function export(iterable $elements, string $format): string
+    public function export(iterable $elements, string $format, array $ctxParams = []): string
     {
+        $ctx = new GenericContext();
+        foreach ($ctxParams as $key => $value) {
+            $ctx->setValue($key, $value);
+        }
+
         $yamlExportElements = [];
         foreach ($elements as $element) {
             foreach (array_keys($this->typeToConverterMap) as $type) {
                 if ($element instanceof $type) {
-                    $yamlExportElements[] = [$type => $this->typeToConverterMap[$type]->convert($element)];
+                    $yamlExportElements[] = [$type => $this->typeToConverterMap[$type]->convert($element, $ctx)];
                     continue 2;
                 }
             }

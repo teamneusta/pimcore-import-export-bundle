@@ -21,9 +21,11 @@ neusta_pimcore_import_export.plugin.asset.export = Class.create({
             iconCls: "pimcore_icon_asset pimcore_icon_overlay_download",
             handler: function () {
                 let defaultFilename = asset.data.key + '.yaml';
+                let includeIds = !confirm(t('neusta_pimcore_import_export_exclude_ids_question')); // Yes = false, No = true
+
                 let filename = prompt(t('neusta_pimcore_import_export_enter_filename'), defaultFilename);
                 if (filename) {
-                    pimcore.helpers.download(Routing.generate(route, {asset_id: asset.data.id, filename: filename, format: 'yaml'}));
+                    pimcore.helpers.download(Routing.generate(route, {asset_id: asset.data.id, filename: filename, format: 'yaml', ids_included: includeIds}));
                 }
             }
         }));

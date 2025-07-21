@@ -12,13 +12,12 @@ neusta_converter:
         - neusta_pimcore_import_export.page.property.language.populator
         - neusta_pimcore_import_export.page.property.navigation_title.populator
         - neusta_pimcore_import_export.page.property.navigation_name.populator
+        - Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator
       properties:
-        id: ~
         key: ~
         type: ~
         published: ~
         path: ~
-        parentId: ~
         controller: ~
 
     neusta_pimcore_import_export.editable_converter:
@@ -75,6 +74,8 @@ services:
   ###########################################################
   # Export Populator (Page -> Page)
   ###########################################################
+  Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator: ~
+
   neusta_pimcore_import_export.page.title.populator:
     class: Neusta\ConverterBundle\Populator\PropertyMappingPopulator
     arguments:

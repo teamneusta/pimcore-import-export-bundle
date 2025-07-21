@@ -38,14 +38,14 @@ class ExportDocumentsControllerTest extends TestCase
             $this->exporter->reveal(),
             $this->documentRepository->reveal(),
         );
-        $this->request = new Request(['doc_id' => 17]);
+        $this->request = new Request(['doc_id' => 17, 'ids_included' => false]);
     }
 
     public function testExportPage_regular_case(): void
     {
         $page = $this->prophesize(Page::class);
         $this->documentRepository->getById(17)->willReturn($page->reveal());
-        $this->exporter->export([$page->reveal()], 'yaml')->willReturn('TEST_YAML');
+        $this->exporter->export([$page->reveal()], 'yaml', ['includeIds' => false])->willReturn('TEST_YAML');
 
         $response = $this->controller->export($this->request);
 
@@ -59,7 +59,7 @@ class ExportDocumentsControllerTest extends TestCase
     {
         $page = $this->prophesize(Page::class);
         $this->documentRepository->getById(17)->willReturn($page->reveal());
-        $this->exporter->export([$page->reveal()], 'yaml')->willThrow(new \Exception('Problem'));
+        $this->exporter->export([$page->reveal()], 'yaml', ['includeIds' => false])->willThrow(new \Exception('Problem'));
 
         $response = $this->controller->export($this->request);
 

@@ -11,8 +11,6 @@ elements:
                     type: input
                     name: textInput
                     data: 'some text input'
-            id: 999
-            parentId: 4
             type: page
             path: /test/
             language: en

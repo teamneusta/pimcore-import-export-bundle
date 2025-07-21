@@ -38,6 +38,12 @@ abstract class AbstractExportBaseCommand extends AbstractCommand
     {
         $this
             ->addOption(
+                'includeIds',
+                null,
+                InputOption::VALUE_NONE,
+                'If set, the export will include asset/document/object IDs and ParentIDs - be aware with re-importing'
+            )
+            ->addOption(
                 'output',
                 'o',
                 InputOption::VALUE_OPTIONAL,

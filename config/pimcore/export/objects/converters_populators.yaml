@@ -9,16 +9,15 @@ neusta_converter:
     neusta_pimcore_import_export.export_object:
       target: Neusta\Pimcore\ImportExportBundle\Model\Object\DataObject
       populators:
+        - Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator
         - neusta_pimcore_import_export.export_object.fields.populator
         - neusta_pimcore_import_export.export_object.relations.populator
       properties:
         className: ~
-        id: ~
         key: ~
         type: ~
         published: ~
         path: ~
-        parentId: ~
 
     neusta_pimcore_import_export.export_object.without.relations:
       target: Neusta\Pimcore\ImportExportBundle\Model\Object\DataObject
@@ -46,6 +45,8 @@ services:
     arguments:
       $typeToConverterMap:
         Pimcore\Model\DataObject\Concrete: '@neusta_pimcore_import_export.export_object'
+
+  Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator: ~
 
   neusta_pimcore_import_export.export_object.fields.populator:
     class: Neusta\Pimcore\ImportExportBundle\Populator\DataObjectExportFieldsPopulator

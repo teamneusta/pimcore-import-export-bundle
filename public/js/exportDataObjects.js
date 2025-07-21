@@ -21,9 +21,11 @@ neusta_pimcore_import_export.plugin.object.export = Class.create({
             iconCls: icon,
             handler: function () {
                 let defaultFilename = object.data.key + '.yaml';
+                let includeIds = !confirm(t('neusta_pimcore_import_export_exclude_ids_question')); // Yes = false, No = true
+
                 let filename = prompt(t('neusta_pimcore_import_export_enter_filename'), defaultFilename);
                 if (filename) {
-                    pimcore.helpers.download(Routing.generate(route, {object_id: object.data.id, filename: filename, format: 'yaml'}));
+                    pimcore.helpers.download(Routing.generate(route, {object_id: object.data.id, filename: filename, format: 'yaml', ids_included: includeIds}));
                 }
             }
         }));

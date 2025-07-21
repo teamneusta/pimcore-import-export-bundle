@@ -37,7 +37,12 @@ final class ExportAssetsController
             );
         }
 
-        return $this->exportAssets([$asset], $request->query->getString('filename'), 'yaml');
+        return $this->exportAssets(
+            [$asset],
+            $request->query->getString('filename'),
+            'yaml',
+            $request->query->getBoolean('ids_included', false),
+        );
     }
 
     #[Route(
@@ -58,16 +63,25 @@ final class ExportAssetsController
         // We need the list two times so generate an array first:
         $assets = iterator_to_array($this->assetRepository->findAllInTree($asset), false);
 
-        return $this->exportAssets($assets, $request->query->getString('filename'), $request->query->getString('format'));
+        return $this->exportAssets(
+            $assets,
+            $request->query->getString('filename'),
+            $request->query->getString('format'),
+            $request->query->getBoolean('ids_included', false)
+        );
     }
 
     /**
      * @param array<Asset> $assets
      */
-    private function exportAssets(array $assets, string $filename, string $format): Response
+    private function exportAssets(array $assets, string $filename, string $format, bool $includeIds): Response
     {
         try {
-            $yaml = $this->exporter->export($assets, $format);
+            $yaml = $this->exporter->export(
+                $assets,
+                $format,
+                ['includeIds' => $includeIds],
+            );
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

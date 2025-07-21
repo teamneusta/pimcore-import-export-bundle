@@ -1,3 +1,4 @@
+neusta_pimcore_import_export_exclude_ids_question: 'Es werden keine IDs (id/parentId) exportiert. Die Zuordnung geschieht über Key und Pfad.'
 neusta_pimcore_import_export_enter_filename: 'Bitte gib einen Dateinamen ein (Standard: Document Key)'
 neusta_pimcore_import_export_export_menu_label: 'Exportiere in YAML'
 neusta_pimcore_import_export_export_with_children_menu_label: 'Exportiere in YAML mit Kindelementen'

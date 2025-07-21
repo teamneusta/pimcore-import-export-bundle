@@ -7,8 +7,6 @@ elements:
             title: 'Test Document_1'
             controller: 'App\Controller\DefaultController::defaultAction'
             editables: {  }
-            id: ~
-            parentId: 1
             type: page
             path: /will/not/overwritten/
             language: ''
@@ -21,8 +19,6 @@ elements:
             title: 'Test Document_2'
             controller: 'App\Controller\DefaultController::defaultAction'
             editables: {  }
-            id: ~
-            parentId: 1
             type: page
             path: /will/not/overwritten/
             language: ''
