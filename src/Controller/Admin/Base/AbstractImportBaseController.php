@@ -20,6 +20,7 @@ abstract class AbstractImportBaseController
     public const SUCCESS_ELEMENT_REPLACEMENT = 2;
     public const SUCCESS_WITHOUT_REPLACEMENT = 3;
     public const SUCCESS_NEW_ELEMENT = 4;
+    public const FAILURE_INCONSISTENCY = 5;
 
     /**
      * @var string[] Map of error codes to messages
@@ -29,6 +30,7 @@ abstract class AbstractImportBaseController
         self::SUCCESS_ELEMENT_REPLACEMENT => 'replaced successfully',
         self::SUCCESS_WITHOUT_REPLACEMENT => 'not replaced',
         self::SUCCESS_NEW_ELEMENT => 'imported successfully',
+        self::FAILURE_INCONSISTENCY => 'failed due to inconsistency in the data',
     ];
 
     protected bool $overwrite = false;
@@ -48,6 +50,7 @@ abstract class AbstractImportBaseController
             self::SUCCESS_ELEMENT_REPLACEMENT => 0,
             self::SUCCESS_WITHOUT_REPLACEMENT => 0,
             self::SUCCESS_NEW_ELEMENT => 0,
+            self::FAILURE_INCONSISTENCY => 0,
         ];
     }
 
@@ -92,8 +95,20 @@ abstract class AbstractImportBaseController
         $oldElement = $this->repository->getByPath('/' . $element->getFullPath());
         if (null !== $oldElement) {
             if ($this->overwrite) {
-                $oldElement->delete();
-                $element->save(['versionNote' => 'overwritten by pimcore-import-export-bundle']);
+                if (null === $element->getId() || $oldElement->getId() === $element->getId()) {
+                    $oldElement->delete();
+                    $element->save(['versionNote' => 'overwritten by pimcore-import-export-bundle']);
+                } else {
+                    $this->logger->error(
+                        \sprintf('Two pages with same key (%s) and path (%s) but different IDs (new ID: %d, old ID: %d) found. This seems to be an inconsistency of your importing data. Please check your import file.',
+                            $element->getKey(),
+                            $element->getPath(),
+                            $element->getId(),
+                            $oldElement->getId()
+                        ));
+
+                    return self::FAILURE_INCONSISTENCY;
+                }
 
                 return self::SUCCESS_ELEMENT_REPLACEMENT;
             }
@@ -107,21 +122,16 @@ abstract class AbstractImportBaseController
 
     protected function createResultMessage(): string
     {
-        $resultMessage = '';
+        $resultMessage = '<table><tr><th>' . $this->elementType . '</th><th>Count</th></tr>';
 
         foreach ($this->resultStatistics as $resultCode => $result) {
             if ($result > 0) {
-                if (1 === $result) {
-                    $start = 'One ' . $this->elementType;
-                } else {
-                    $start = \sprintf('%d ' . $this->elementType . 's', $result);
-                }
-                $message = \sprintf('%s %s', $start, $this->messagesMap[$resultCode]);
-                $resultMessage .= $message . '<br/><br/>';
+                $resultMessage .= '<tr><td>';
+                $resultMessage .= $this->messagesMap[$resultCode] . '</td><td>' . $result . '</td></tr>';
             }
         }
 
-        return '<p style="padding: 20px;">' . $resultMessage . '</p>';
+        return $resultMessage . '</table>';
     }
 
     /**
