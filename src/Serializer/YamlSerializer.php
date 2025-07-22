@@ -23,6 +23,9 @@ class YamlSerializer implements SerializerInterface
             'yaml_inline' => 6,
             'yaml_indent' => 0,
             'yaml_flags' => self::YAML_DUMP_FLAGS,
+            'attributes' => [
+                'type', 'id', 'parentId', 'path', 'language', 'key', 'published',  'controller', 'navigation_name', 'navigation_title', 'title', 'editables',
+            ],
         ]);
     }
 

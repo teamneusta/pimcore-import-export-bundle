@@ -121,6 +121,23 @@ services:
   Neusta\Pimcore\ImportExportBundle\Serializer\YamlSerializer: ~
   Neusta\Pimcore\ImportExportBundle\Serializer\JsonSerializer: ~
 
+  Neusta\Pimcore\ImportExportBundle\Serializer\Normalizer\PrioritizedAttributesNormalizer:
+    arguments:
+      $priorities:
+        - 'type'
+        - 'id'
+        - 'parentId'
+        - 'path'
+        - 'key'
+        - 'published'
+        - 'controller'
+        - 'language'
+        - 'navigation_name'
+        - 'navigation_title'
+        - 'title'
+        - 'editables'
+    tags: [ 'serializer.normalizer' ]
+
   #################
   # EventListener #
   #################

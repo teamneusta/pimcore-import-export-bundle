@@ -100,7 +100,8 @@ abstract class AbstractImportBaseController
                     $element->save(['versionNote' => 'overwritten by pimcore-import-export-bundle']);
                 } else {
                     $this->logger->error(
-                        \sprintf('Two pages with same key (%s) and path (%s) but different IDs (new ID: %d, old ID: %d) found. This seems to be an inconsistency of your importing data. Please check your import file.',
+                        \sprintf('Two %ss with same key (%s) and path (%s) but different IDs (new ID: %d, old ID: %d) found. This seems to be an inconsistency of your importing data. Please check your import file.',
+                            strtolower($this->elementType),
                             $element->getKey(),
                             $element->getPath(),
                             $element->getId(),
