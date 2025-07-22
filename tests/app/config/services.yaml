@@ -50,4 +50,3 @@ services:
       $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
 
   Neusta\Pimcore\ImportExportBundle\Import\ParentRelationResolver: ~
-
