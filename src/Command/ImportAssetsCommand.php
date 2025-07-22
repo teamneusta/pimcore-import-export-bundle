@@ -67,7 +67,7 @@ class ImportAssetsCommand extends AbstractImportBaseCommand
         }
 
         try {
-            $assets = $this->importer->import($yamlInput, $format, false);
+            $assets = $this->importer->import($yamlInput, $format, false, $input->getOption('overwrite'));
         } catch (\DomainException $e) {
             $this->io->error(\sprintf('Invalid %s format: %s', $format, $e->getMessage()));
 

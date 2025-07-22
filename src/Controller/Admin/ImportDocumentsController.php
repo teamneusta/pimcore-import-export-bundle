@@ -40,12 +40,12 @@ final class ImportDocumentsController extends AbstractImportBaseController
         return parent::import($request);
     }
 
-    protected function importByFile(UploadedFile $file, string $format): array
+    protected function importByFile(UploadedFile $file, string $format, bool $forcedSave = true, bool $overwrite = false): array
     {
         try {
             $content = $file->getContent();
 
-            return $this->importer->import($content, $format);
+            return $this->importer->import($content, $format, $forcedSave, $overwrite);
         } catch (\Exception $e) {
             throw new \Exception('Error reading uploaded file: ' . $e->getMessage(), 0, $e);
         }

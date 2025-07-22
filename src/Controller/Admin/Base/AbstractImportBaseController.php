@@ -67,11 +67,8 @@ abstract class AbstractImportBaseController
         $this->overwrite = $request->request->getBoolean('overwrite');
 
         try {
-            $elements = $this->importByFile($file, $format);
-            foreach ($elements as $element) {
-                ++$this->resultStatistics[$this->replaceIfExists($element)];
-            }
-        } catch (\Exception $e) {
+            $elements = $this->importByFile($file, $format, true, $this->overwrite);
+        } catch (\Throwable $e) {
             return $this->createJsonResponse(false, $e->getMessage(), 500);
         } finally {
             try {
@@ -98,6 +95,12 @@ abstract class AbstractImportBaseController
         if (null !== $oldElement) {
             if ($this->overwrite) {
                 if (0 === $element->getId() || null === $element->getId() || $oldElement->getId() === $element->getId()) {
+                    $children = method_exists($oldElement, 'getChildren') ? $oldElement->getChildren() : [];
+                    foreach ($children as $child) {
+                        // reassign children to the new element
+                        $child->setParent($element);
+                        $child->save();
+                    }
                     $oldElement->delete();
                     $this->parentRelationResolver->resolve($element);
                     $element->save(['versionNote' => 'overwritten by pimcore-import-export-bundle']);
@@ -150,7 +153,7 @@ abstract class AbstractImportBaseController
      * @throws ConverterException
      * @throws DuplicateFullPathException
      */
-    abstract protected function importByFile(UploadedFile $file, string $format): array;
+    abstract protected function importByFile(UploadedFile $file, string $format, bool $forcedSave = true, bool $overwrite = false): array;
 
     protected function cleanUp(): void
     {

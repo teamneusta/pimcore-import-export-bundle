@@ -42,14 +42,14 @@ final class ImportAssetsController extends AbstractImportBaseController
         return parent::import($request);
     }
 
-    protected function importByFile(UploadedFile $file, string $format): array
+    protected function importByFile(UploadedFile $file, string $format, bool $forcedSave = true, bool $overwrite = false): array
     {
         $extension = pathinfo($file->getClientOriginalName(), \PATHINFO_EXTENSION);
 
         // if file is ZIP add physical files to Assets
         if ('zip' === $extension) {
             $zipContent = $this->zipImporter->import($file->getPathname());
-            $assets = $this->importer->import($zipContent['yaml'], $format, true);
+            $assets = $this->importer->import($zipContent['yaml'], $format, $forcedSave, $overwrite);
             foreach ($assets as $asset) {
                 if (
                     \array_key_exists($asset->getType(), $zipContent)
@@ -67,7 +67,7 @@ final class ImportAssetsController extends AbstractImportBaseController
         try {
             $content = $file->getContent();
 
-            return $this->importer->import($content, $format);
+            return $this->importer->import($content, $format, $forcedSave, $overwrite);
         } catch (\Exception $e) {
             $this->applicationLogger->error($e->getMessage());
             throw new \Exception('Error reading uploaded file: ' . $e->getMessage(), 0, $e);
