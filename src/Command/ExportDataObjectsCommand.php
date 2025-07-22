@@ -81,7 +81,7 @@ class ExportDataObjectsCommand extends AbstractExportBaseCommand
 
     protected function exportInFile(array $allElements, InputInterface $input): bool
     {
-        $yamlContent = $this->exporter->export($allElements, $input->getOption('format'), ['includeIds' => $input->getOption('includeIds')]);
+        $yamlContent = $this->exporter->export($allElements, $input->getOption('format'), ['include-ids' => $input->getOption('includeIds')]);
 
         $exportFilename = $input->getOption('output');
         // Validate filename to prevent directory traversal
