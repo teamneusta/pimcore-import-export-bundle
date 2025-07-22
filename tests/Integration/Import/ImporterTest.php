@@ -33,7 +33,7 @@ class ImporterTest extends KernelTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Neither parentId nor path leads to a valid parent element');
-        $this->importer->import($yaml, 'yaml');
+        $this->importer->import($yaml, 'yaml', true);
     }
 
     public function testSinglePageExport_regular_case_parent_id(): void
@@ -56,7 +56,7 @@ class ImporterTest extends KernelTestCase
                         controller: /Some/Controller
             YAML;
 
-        $pages = $this->importer->import($yaml, 'yaml');
+        $pages = $this->importer->import($yaml, 'yaml', true);
         self::assertEquals(999, $pages[0]->getId());
         self::assertEquals('/', $pages[0]->getPath());
 
@@ -101,7 +101,7 @@ class ImporterTest extends KernelTestCase
             }
             JSON;
 
-        $pages = $this->importer->import($json, 'json');
+        $pages = $this->importer->import($json, 'json', true);
         self::assertEquals(999, $pages[0]->getId());
         self::assertEquals('/', $pages[0]->getPath());
 
@@ -134,7 +134,7 @@ class ImporterTest extends KernelTestCase
                         controller: /Some/Controller
             YAML;
 
-        $pages = $this->importer->import($yaml, 'yaml');
+        $pages = $this->importer->import($yaml, 'yaml', true);
         self::assertEquals(999, $pages[0]->getId());
         self::assertEquals('/', $pages[0]->getPath());
         self::assertEquals(1, $pages[0]->getParentId());
@@ -173,7 +173,7 @@ class ImporterTest extends KernelTestCase
                         key: test_document_1_1_1
             YAML;
 
-        $pages = $this->importer->import($yaml, 'yaml');
+        $pages = $this->importer->import($yaml, 'yaml', true);
 
         self::assertEquals('/test_document_1/test_document_1_1/', $pages[2]->getPath());
     }
@@ -209,7 +209,7 @@ class ImporterTest extends KernelTestCase
                         key: test_document_1_1_1
             YAML;
 
-        $pages = $this->importer->import($yaml, 'yaml');
+        $pages = $this->importer->import($yaml, 'yaml', true);
 
         self::assertEquals('/test_document_1/test_document_1_1/', $pages[3]->getPath());
     }

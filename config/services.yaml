@@ -136,6 +136,7 @@ services:
         - 'navigation_title'
         - 'title'
         - 'editables'
+        - 'filename'
     tags: [ 'serializer.normalizer' ]
 
   #################

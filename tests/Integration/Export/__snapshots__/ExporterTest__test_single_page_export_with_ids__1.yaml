@@ -2,6 +2,8 @@ elements:
     -
         Pimcore\Model\Document\Page:
             type: page
+            id: 999
+            parentId: 4
             path: /test/
             key: test_document_1
             published: false
