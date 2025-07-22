@@ -4,9 +4,10 @@ namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
 use Neusta\Pimcore\ImportExportBundle\Controller\Admin\Base\AbstractImportBaseController;
 use Neusta\Pimcore\ImportExportBundle\Import\Importer;
+use Neusta\Pimcore\ImportExportBundle\Import\ParentRelationResolver;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DataObjectRepository;
+use Pimcore\Bundle\ApplicationLoggerBundle\ApplicationLogger;
 use Pimcore\Model\DataObject;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,11 +22,12 @@ final class ImportDataObjectsController extends AbstractImportBaseController
      * @param Importer<\ArrayObject<int|string, mixed>, DataObject> $importer
      */
     public function __construct(
-        LoggerInterface $logger,
+        ApplicationLogger $applicationLogger,
         DataObjectRepository $repository,
+        ParentRelationResolver $parentRelationResolver,
         private Importer $importer,
     ) {
-        parent::__construct($logger, $repository, 'DataObject');
+        parent::__construct($applicationLogger, $repository, $parentRelationResolver, 'DataObject');
     }
 
     #[Route(
@@ -43,8 +45,9 @@ final class ImportDataObjectsController extends AbstractImportBaseController
         try {
             $content = $file->getContent();
 
-            return $this->importer->import($content, $format);
+            return $this->importer->import($content, $format, true);
         } catch (\Exception $e) {
+            $this->applicationLogger->error($e->getMessage());
             throw new \Exception('Error reading uploaded file: ' . $e->getMessage(), 0, $e);
         }
     }

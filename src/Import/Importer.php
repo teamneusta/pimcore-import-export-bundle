@@ -34,7 +34,7 @@ class Importer
      * @throws \DomainException
      * @throws \InvalidArgumentException
      */
-    public function import(string $yamlInput, string $format, bool $forcedSave = true): array
+    public function import(string $yamlInput, string $format, bool $forcedSave = false): array
     {
         $config = $this->serializer->deserialize($yamlInput, $format);
 

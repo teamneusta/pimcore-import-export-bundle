@@ -4,10 +4,11 @@ namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
 use Neusta\Pimcore\ImportExportBundle\Controller\Admin\Base\AbstractImportBaseController;
 use Neusta\Pimcore\ImportExportBundle\Import\Importer;
+use Neusta\Pimcore\ImportExportBundle\Import\ParentRelationResolver;
 use Neusta\Pimcore\ImportExportBundle\Import\ZipImporter;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\AssetRepository;
+use Pimcore\Bundle\ApplicationLoggerBundle\ApplicationLogger;
 use Pimcore\Model\Asset;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,12 +23,13 @@ final class ImportAssetsController extends AbstractImportBaseController
      * @param Importer<\ArrayObject<int|string, mixed>, Asset> $importer
      */
     public function __construct(
-        LoggerInterface $logger,
+        ApplicationLogger $applicationLogger,
         private Importer $importer,
+        ParentRelationResolver $parentRelationResolver,
         private ZipImporter $zipImporter,
         AssetRepository $assetRepository,
     ) {
-        parent::__construct($logger, $assetRepository, 'Asset');
+        parent::__construct($applicationLogger, $assetRepository, $parentRelationResolver, 'Asset');
     }
 
     #[Route(
@@ -47,7 +49,7 @@ final class ImportAssetsController extends AbstractImportBaseController
         // if file is ZIP add physical files to Assets
         if ('zip' === $extension) {
             $zipContent = $this->zipImporter->import($file->getPathname());
-            $assets = $this->importer->import($zipContent['yaml'], $format);
+            $assets = $this->importer->import($zipContent['yaml'], $format, true);
             foreach ($assets as $asset) {
                 if (
                     \array_key_exists($asset->getType(), $zipContent)
@@ -67,6 +69,7 @@ final class ImportAssetsController extends AbstractImportBaseController
 
             return $this->importer->import($content, $format);
         } catch (\Exception $e) {
+            $this->applicationLogger->error($e->getMessage());
             throw new \Exception('Error reading uploaded file: ' . $e->getMessage(), 0, $e);
         }
     }

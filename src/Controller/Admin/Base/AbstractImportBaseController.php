@@ -3,10 +3,11 @@
 namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin\Base;
 
 use Neusta\ConverterBundle\Exception\ConverterException;
+use Neusta\Pimcore\ImportExportBundle\Import\ParentRelationResolver;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\ImportRepositoryInterface;
+use Pimcore\Bundle\ApplicationLoggerBundle\ApplicationLogger;
 use Pimcore\Model\Element\AbstractElement;
 use Pimcore\Model\Element\DuplicateFullPathException;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,8 +43,9 @@ abstract class AbstractImportBaseController
      * @param ImportRepositoryInterface<TElement> $repository
      */
     public function __construct(
-        protected LoggerInterface $logger,
+        protected ApplicationLogger $applicationLogger,
         protected ImportRepositoryInterface $repository,
+        protected ParentRelationResolver $parentRelationResolver,
         protected string $elementType = 'Element',
     ) {
         $this->resultStatistics = [
@@ -75,7 +77,7 @@ abstract class AbstractImportBaseController
             try {
                 $this->cleanUp();
             } catch (\Throwable $cleanupError) {
-                $this->logger->warning($cleanupError->getMessage());
+                $this->applicationLogger->warning($cleanupError->getMessage());
             }
         }
 
@@ -92,31 +94,38 @@ abstract class AbstractImportBaseController
      */
     protected function replaceIfExists(AbstractElement $element): int
     {
-        $oldElement = $this->repository->getByPath('/' . $element->getFullPath());
+        $oldElement = $this->repository->getByPath($element->getFullPath());
         if (null !== $oldElement) {
             if ($this->overwrite) {
-                if (null === $element->getId() || $oldElement->getId() === $element->getId()) {
+                if (0 === $element->getId() || null === $element->getId() || $oldElement->getId() === $element->getId()) {
                     $oldElement->delete();
+                    $this->parentRelationResolver->resolve($element);
                     $element->save(['versionNote' => 'overwritten by pimcore-import-export-bundle']);
-                } else {
-                    $this->logger->error(
-                        \sprintf('Two %ss with same key (%s) and path (%s) but different IDs (new ID: %d, old ID: %d) found. This seems to be an inconsistency of your importing data. Please check your import file.',
-                            strtolower($this->elementType),
-                            $element->getKey(),
-                            $element->getPath(),
-                            $element->getId(),
-                            $oldElement->getId()
-                        ));
+                    $this->writeApplicationLog('[REPLACE] ', $element, $oldElement);
 
-                    return self::FAILURE_INCONSISTENCY;
+                    return self::SUCCESS_ELEMENT_REPLACEMENT;
                 }
 
-                return self::SUCCESS_ELEMENT_REPLACEMENT;
+                $this->applicationLogger->error(\sprintf('Two %ss with same key (%s) and path (%s) but different IDs (new ID: %d, old ID: %d) found. This seems to be an inconsistency of your importing data. Please check your import file.',
+                    strtolower($this->elementType),
+                    $element->getKey(),
+                    $element->getPath(),
+                    $element->getId(),
+                    $oldElement->getId()
+                ));
+
+                return self::FAILURE_INCONSISTENCY;
             }
+
+            $this->writeApplicationLog('[SKIP] ', $element, $oldElement);
 
             return self::SUCCESS_WITHOUT_REPLACEMENT;
         }
+
+        $this->parentRelationResolver->resolve($element);
         $element->save(['versionNote' => 'added by pimcore-import-export-bundle']);
+
+        $this->writeApplicationLog('[NEW] ', $element, null);
 
         return self::SUCCESS_NEW_ELEMENT;
     }
@@ -146,5 +155,22 @@ abstract class AbstractImportBaseController
     protected function cleanUp(): void
     {
         // implement clean ups in subclasses if necessary
+    }
+
+    private function writeApplicationLog(string $prefix, AbstractElement $newElement, ?AbstractElement $oldElement = null): void
+    {
+        $this->applicationLogger->info(
+            <<<MESSAGE
+            $prefix:
+                type: {$this->elementType}
+                key:  {$newElement->getKey()}
+                path: {$newElement->getPath()}
+                id:   {$newElement->getId()}
+            MESSAGE,
+            [
+                'relatedObject' => $oldElement,
+                'component' => 'Pimcore Import Export Bundle',
+            ]
+        );
     }
 }
