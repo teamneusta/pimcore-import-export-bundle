@@ -9,7 +9,7 @@ class PrioritizedAttributesNormalizer implements NormalizerInterface
 {
     private ObjectNormalizer $normalizer;
 
-    /** @var array<string> $priorities */
+    /** @var array<string> */
     private array $priorities;
 
     /**
@@ -22,11 +22,8 @@ class PrioritizedAttributesNormalizer implements NormalizerInterface
     }
 
     /**
-     * @param object $object
-     * @param string|null $format
+     * @param object               $object
      * @param array<string, mixed> $context
-     *
-     * @return array<string, mixed>
      */
     public function normalize($object, ?string $format = null, array $context = [])
     {
@@ -49,8 +46,8 @@ class PrioritizedAttributesNormalizer implements NormalizerInterface
         return array_merge($sorted, $data);
     }
 
-    public function supportsNormalization($data, ?string $format = null, array $context = []): bool
+    public function supportsNormalization($data, ?string $format = null): bool
     {
-        return \is_object($data) && $this->normalizer->supportsNormalization($data, $format, $context);
+        return \is_object($data) && $this->normalizer->supportsNormalization($data, $format);
     }
 }
