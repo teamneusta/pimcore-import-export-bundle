@@ -21,7 +21,6 @@ neusta_pimcore_import_export.plugin.asset.export = Class.create({
             iconCls: "pimcore_icon_asset pimcore_icon_overlay_download",
             handler: function () {
                 let defaultFilename = asset.data.key + '.yaml';
-                let includeIds = !confirm(t('neusta_pimcore_import_export_exclude_ids_question')); // Yes = false, No = true
 
                 let win = Ext.create('Ext.window.Window', {
                     title: t('neusta_pimcore_import_export_dialog_title'),
