@@ -80,13 +80,6 @@ neusta_pimcore_import_export.plugin.document.export = Class.create({
                 win.show();
             }
         }));
-
-        // let filename = prompt(t('neusta_pimcore_import_export_enter_filename'), defaultFilename);
-        //         if (filename) {
-        //             pimcore.helpers.download(Routing.generate(route, {doc_id: document.data.id, filename: filename, format: 'yaml', ids_included: includeIds}));
-        //         }
-        //     }
-        // }));
     }
 });
 
