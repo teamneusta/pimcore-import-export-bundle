@@ -9,12 +9,13 @@ use Neusta\Pimcore\ImportExportBundle\Model\Element;
 use Neusta\Pimcore\ImportExportBundle\Serializer\SerializerInterface;
 use Pimcore\Model\Element\AbstractElement;
 
+/**
+ * @template TSource of AbstractElement
+ * @template TTarget of Element
+ */
 class Exporter
 {
     /**
-     * @template TSource of AbstractElement
-     * @template TTarget of Element
-     *
      * @param array<class-string<TSource>, Converter<TSource, TTarget, GenericContext|null> > $typeToConverterMap
      */
     public function __construct(
@@ -26,8 +27,8 @@ class Exporter
     /**
      * Exports one or more Pimcore Elements in the given format (yaml, json, ...)).
      *
-     * @param iterable<AbstractElement> $elements
-     * @param array<string, mixed>      $ctxParams
+     * @param iterable<TSource>    $elements
+     * @param array<string, mixed> $ctxParams
      *
      * @throws ConverterException
      */

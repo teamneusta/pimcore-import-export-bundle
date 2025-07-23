@@ -3,6 +3,7 @@
 namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin\Base;
 
 use Neusta\ConverterBundle\Exception\ConverterException;
+use Neusta\Pimcore\ImportExportBundle\Import\EventSubscriber\StatisticsEventSubscriber;
 use Neusta\Pimcore\ImportExportBundle\Import\ParentRelationResolver;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\ImportRepositoryInterface;
 use Pimcore\Bundle\ApplicationLoggerBundle\ApplicationLogger;
@@ -36,9 +37,6 @@ abstract class AbstractImportBaseController
 
     protected bool $overwrite = false;
 
-    /** @var array<int, int> */
-    private array $resultStatistics;
-
     /**
      * @param ImportRepositoryInterface<TElement> $repository
      */
@@ -48,12 +46,6 @@ abstract class AbstractImportBaseController
         protected ParentRelationResolver $parentRelationResolver,
         protected string $elementType = 'Element',
     ) {
-        $this->resultStatistics = [
-            self::SUCCESS_ELEMENT_REPLACEMENT => 0,
-            self::SUCCESS_WITHOUT_REPLACEMENT => 0,
-            self::SUCCESS_NEW_ELEMENT => 0,
-            self::FAILURE_INCONSISTENCY => 0,
-        ];
     }
 
     public function import(Request $request): JsonResponse
@@ -67,7 +59,7 @@ abstract class AbstractImportBaseController
         $this->overwrite = $request->request->getBoolean('overwrite');
 
         try {
-            $elements = $this->importByFile($file, $format, true, $this->overwrite);
+            $this->importByFile($file, $format, true, $this->overwrite);
         } catch (\Throwable $e) {
             return $this->createJsonResponse(false, $e->getMessage(), 500);
         } finally {
@@ -78,7 +70,7 @@ abstract class AbstractImportBaseController
             }
         }
 
-        return $this->createJsonResponse(true, $this->createResultMessage());
+        return $this->createJsonResponse(true, $this->createResultMessage(StatisticsEventSubscriber::getStatistics()));
     }
 
     protected function createJsonResponse(bool $success, string $message, int $statusCode = 200): JsonResponse
@@ -87,60 +79,16 @@ abstract class AbstractImportBaseController
     }
 
     /**
-     * @param TElement $element
+     * @param array<string, int> $stats
      */
-    protected function replaceIfExists(AbstractElement $element): int
-    {
-        $oldElement = $this->repository->getByPath($element->getFullPath());
-        if (null !== $oldElement) {
-            if ($this->overwrite) {
-                if (0 === $element->getId() || null === $element->getId() || $oldElement->getId() === $element->getId()) {
-                    $children = method_exists($oldElement, 'getChildren') ? $oldElement->getChildren() : [];
-                    foreach ($children as $child) {
-                        // reassign children to the new element
-                        $child->setParent($element);
-                        $child->save();
-                    }
-                    $oldElement->delete();
-                    $this->parentRelationResolver->resolve($element);
-                    $element->save(['versionNote' => 'overwritten by pimcore-import-export-bundle']);
-                    $this->writeApplicationLog('[REPLACE] ', $element, $oldElement);
-
-                    return self::SUCCESS_ELEMENT_REPLACEMENT;
-                }
-
-                $this->applicationLogger->error(\sprintf('Two %ss with same key (%s) and path (%s) but different IDs (new ID: %d, old ID: %d) found. This seems to be an inconsistency of your importing data. Please check your import file.',
-                    strtolower($this->elementType),
-                    $element->getKey(),
-                    $element->getPath(),
-                    $element->getId(),
-                    $oldElement->getId()
-                ));
-
-                return self::FAILURE_INCONSISTENCY;
-            }
-
-            $this->writeApplicationLog('[SKIP] ', $element, $oldElement);
-
-            return self::SUCCESS_WITHOUT_REPLACEMENT;
-        }
-
-        $this->parentRelationResolver->resolve($element);
-        $element->save(['versionNote' => 'added by pimcore-import-export-bundle']);
-
-        $this->writeApplicationLog('[NEW] ', $element, null);
-
-        return self::SUCCESS_NEW_ELEMENT;
-    }
-
-    protected function createResultMessage(): string
+    protected function createResultMessage(array $stats): string
     {
         $resultMessage = '<table><tr><th>' . $this->elementType . '</th><th>Count</th></tr>';
 
-        foreach ($this->resultStatistics as $resultCode => $result) {
+        foreach ($stats as $resultCode => $result) {
             if ($result > 0) {
                 $resultMessage .= '<tr><td>';
-                $resultMessage .= $this->messagesMap[$resultCode] . '</td><td>' . $result . '</td></tr>';
+                $resultMessage .= $resultCode . '</td><td>' . $result . '</td></tr>';
             }
         }
 
@@ -158,22 +106,5 @@ abstract class AbstractImportBaseController
     protected function cleanUp(): void
     {
         // implement clean ups in subclasses if necessary
-    }
-
-    private function writeApplicationLog(string $prefix, AbstractElement $newElement, ?AbstractElement $oldElement = null): void
-    {
-        $this->applicationLogger->info(
-            <<<MESSAGE
-            $prefix:
-                type: {$this->elementType}
-                key:  {$newElement->getKey()}
-                path: {$newElement->getPath()}
-                id:   {$newElement->getId()}
-            MESSAGE,
-            [
-                'relatedObject' => $oldElement,
-                'component' => 'Pimcore Import Export Bundle',
-            ]
-        );
     }
 }

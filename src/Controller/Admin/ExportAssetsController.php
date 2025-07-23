@@ -4,8 +4,9 @@ namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
 use Neusta\Pimcore\ImportExportBundle\Export\Service\ZipService;
+use Neusta\Pimcore\ImportExportBundle\Model\Asset\Asset;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\AssetRepository;
-use Pimcore\Model\Asset;
+use Pimcore\Model\Asset as PimcoreAsset;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +16,9 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ExportAssetsController
 {
+    /**
+     * @param Exporter<PimcoreAsset, Asset> $exporter
+     */
     public function __construct(
         private Exporter $exporter,
         private AssetRepository $assetRepository,
@@ -30,7 +34,7 @@ final class ExportAssetsController
     public function export(Request $request): Response
     {
         $asset = $this->assetRepository->getById($request->query->getInt('asset_id'));
-        if (!$asset instanceof Asset) {
+        if (!$asset instanceof PimcoreAsset) {
             return new JsonResponse(
                 \sprintf('Asset with id "%s" was not found', $request->query->getInt('asset_id')),
                 Response::HTTP_NOT_FOUND,
@@ -53,7 +57,7 @@ final class ExportAssetsController
     public function exportWithChildren(Request $request): Response
     {
         $asset = $this->assetRepository->getById($request->query->getInt('asset_id'));
-        if (!$asset instanceof Asset) {
+        if (!$asset instanceof PimcoreAsset) {
             return new JsonResponse(
                 \sprintf('Asset with id "%s" was not found', $request->query->getInt('asset_id')),
                 Response::HTTP_NOT_FOUND,
@@ -72,7 +76,7 @@ final class ExportAssetsController
     }
 
     /**
-     * @param array<Asset> $assets
+     * @param array<PimcoreAsset> $assets
      */
     private function exportAssets(array $assets, string $filename, string $format, bool $includeIds): Response
     {

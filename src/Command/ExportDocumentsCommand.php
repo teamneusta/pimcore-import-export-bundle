@@ -4,13 +4,14 @@ namespace Neusta\Pimcore\ImportExportBundle\Command;
 
 use Neusta\Pimcore\ImportExportBundle\Command\Base\AbstractExportBaseCommand;
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
+use Neusta\Pimcore\ImportExportBundle\Model\Document\Document;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\ExportRepositoryInterface;
-use Pimcore\Model\Document;
+use Pimcore\Model\Document as PimcoreDocument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 
 /**
- * @extends AbstractExportBaseCommand<Document>
+ * @extends AbstractExportBaseCommand<PimcoreDocument, Document>
  */
 #[AsCommand(
     name: 'neusta:pimcore:export:documents',

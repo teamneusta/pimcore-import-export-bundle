@@ -5,13 +5,14 @@ namespace Neusta\Pimcore\ImportExportBundle\Command;
 use Neusta\Pimcore\ImportExportBundle\Command\Base\AbstractExportBaseCommand;
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
 use Neusta\Pimcore\ImportExportBundle\Export\Service\ZipService;
+use Neusta\Pimcore\ImportExportBundle\Model\Asset\Asset;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\ExportRepositoryInterface;
-use Pimcore\Model\Asset;
+use Pimcore\Model\Asset as PimcoreAsset;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 
 /**
- * @extends AbstractExportBaseCommand<Asset>
+ * @extends AbstractExportBaseCommand<PimcoreAsset, Asset>
  */
 #[AsCommand(
     name: 'neusta:pimcore:export:assets',

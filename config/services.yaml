@@ -89,6 +89,8 @@ services:
     arguments:
       $typeToConverterMap:
         Pimcore\Model\Asset: '@neusta_pimcore_import_export.strategy.export_asset'
+        Pimcore\Model\Document\Page: '@neusta_pimcore_import_export.strategy.export_document'
+        Pimcore\Model\Document\PageSnippet: '@neusta_pimcore_import_export.strategy.export_document'
         Pimcore\Model\Document: '@neusta_pimcore_import_export.strategy.export_document'
         Pimcore\Model\DataObject: '@neusta_pimcore_import_export.export_object'
       $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
@@ -173,3 +175,4 @@ services:
       - { name: kernel.event_listener, event: pimcore.bundle_manager.paths.js, method: addJSFiles }
 
   Neusta\Pimcore\ImportExportBundle\Import\EventSubscriber\ImportLoggingEventSubscriber: ~
+  Neusta\Pimcore\ImportExportBundle\Import\EventSubscriber\StatisticsEventSubscriber: ~

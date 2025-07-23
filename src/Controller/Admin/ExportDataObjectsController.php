@@ -3,8 +3,9 @@
 namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
+use Neusta\Pimcore\ImportExportBundle\Model\Object\DataObject;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DataObjectRepository;
-use Pimcore\Model\DataObject;
+use Pimcore\Model\DataObject as PimcoreDataObject;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +14,9 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ExportDataObjectsController
 {
+    /**
+     * @param Exporter<PimcoreDataObject, DataObject> $exporter
+     */
     public function __construct(
         private Exporter $exporter,
         private DataObjectRepository $objectRepository,
@@ -27,7 +31,7 @@ final class ExportDataObjectsController
     public function export(Request $request): Response
     {
         $object = $this->objectRepository->getById($request->query->getInt('object_id'));
-        if (!$object instanceof DataObject) {
+        if (!$object instanceof PimcoreDataObject) {
             return new JsonResponse(
                 \sprintf('Data Object with id "%s" was not found', $request->query->getInt('object_id')),
                 Response::HTTP_NOT_FOUND,
@@ -50,7 +54,7 @@ final class ExportDataObjectsController
     public function exportWithChildren(Request $request): Response
     {
         $object = $this->objectRepository->getById($request->query->getInt('object_id'));
-        if (!$object instanceof DataObject) {
+        if (!$object instanceof PimcoreDataObject) {
             return new JsonResponse(
                 \sprintf('Data Object with id "%s" was not found', $request->query->getInt('object_id')),
                 Response::HTTP_NOT_FOUND,
@@ -68,7 +72,7 @@ final class ExportDataObjectsController
     }
 
     /**
-     * @param iterable<DataObject> $objects
+     * @param iterable<PimcoreDataObject> $objects
      */
     private function exportObjects(iterable $objects, string $filename, string $format, bool $includeIds): Response
     {

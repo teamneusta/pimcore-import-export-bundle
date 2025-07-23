@@ -4,13 +4,14 @@ namespace Neusta\Pimcore\ImportExportBundle\Command;
 
 use Neusta\Pimcore\ImportExportBundle\Command\Base\AbstractExportBaseCommand;
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
+use Neusta\Pimcore\ImportExportBundle\Model\Object\DataObject;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\ExportRepositoryInterface;
 use Pimcore\Model\DataObject\Concrete;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 
 /**
- * @extends AbstractExportBaseCommand<Concrete>
+ * @extends AbstractExportBaseCommand<Concrete, DataObject>
  */
 #[AsCommand(
     name: 'neusta:pimcore:export:objects',

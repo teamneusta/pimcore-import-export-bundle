@@ -3,8 +3,9 @@
 namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
+use Neusta\Pimcore\ImportExportBundle\Model\Document\Document;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository;
-use Pimcore\Model\Document;
+use Pimcore\Model\Document as PimcoreDocument;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +14,9 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ExportDocumentsController
 {
+    /**
+     * @param Exporter<PimcoreDocument, Document> $exporter
+     */
     public function __construct(
         private Exporter $exporter,
         private DocumentRepository $documentRepository,
@@ -27,7 +31,7 @@ final class ExportDocumentsController
     public function export(Request $request): Response
     {
         $document = $this->documentRepository->getById($request->query->getInt('doc_id'));
-        if (!$document instanceof Document) {
+        if (!$document instanceof PimcoreDocument) {
             return new JsonResponse(
                 \sprintf('Document with id "%s" was not found', $request->query->getInt('doc_id')),
                 Response::HTTP_NOT_FOUND,
@@ -50,7 +54,7 @@ final class ExportDocumentsController
     public function exportWithChildren(Request $request): Response
     {
         $document = $this->documentRepository->getById($request->query->getInt('doc_id'));
-        if (!$document instanceof Document) {
+        if (!$document instanceof PimcoreDocument) {
             return new JsonResponse(
                 \sprintf('Document with id "%s" was not found', $request->query->getInt('doc_id')),
                 Response::HTTP_NOT_FOUND,
@@ -68,7 +72,7 @@ final class ExportDocumentsController
     }
 
     /**
-     * @param iterable<Document> $documents
+     * @param iterable<PimcoreDocument> $documents
      */
     private function exportDocuments(iterable $documents, string $filename, string $format, bool $includeIds): Response
     {
