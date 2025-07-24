@@ -6,11 +6,9 @@ elements:
             key: test_document_1
             published: true
             controller: 'App\Controller\DefaultController::defaultAction'
-            language: ''
-            navigation_name: ~
-            navigation_title: ~
             title: 'Test Document_1'
             editables: {  }
+            properties: {  }
     -
         Pimcore\Model\Document\Page:
             type: page
@@ -18,8 +16,6 @@ elements:
             key: test_document_2
             published: true
             controller: 'App\Controller\DefaultController::defaultAction'
-            language: ''
-            navigation_name: ~
-            navigation_title: ~
             title: 'Test Document_2'
             editables: {  }
+            properties: {  }

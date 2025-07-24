@@ -16,7 +16,12 @@ class ReplaceExistingElementStrategy implements MergeElementStrategy
      */
     public function mergeAndSave(AbstractElement $oldElement, AbstractElement $newElement): void
     {
-        $oldElement->delete();
-        $newElement->save();
+        try {
+            $oldElement->delete();
+            $newElement->save();
+        } catch (\Exception $e) {
+            // If save fails after delete, we're in an inconsistent state
+            throw new \RuntimeException('Failed to replace element: ' . $e->getMessage(), 0, $e);
+        }
     }
 }

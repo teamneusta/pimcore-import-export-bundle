@@ -25,7 +25,10 @@ class ImportLoggingEventSubscriber implements EventSubscriberInterface
 
     public function logImportEvent(ImportEvent $event): void
     {
-        if (ImportStatus::FAILED === $event->getStatus()) {
+        if (\in_array(
+            $event->getStatus(),
+            [ImportStatus::INCONSISTENCY, ImportStatus::FAILED]
+        )) {
             $this->writeApplicationError($event);
         } else {
             $this->writeApplicationLog($event);
@@ -35,17 +38,20 @@ class ImportLoggingEventSubscriber implements EventSubscriberInterface
     private function writeApplicationLog(ImportEvent $event): void
     {
         $prefix = \sprintf('[%s]', $event->getStatus()->value);
+        $key = $event->getNewElement()?->getKey() ?? 'N/A';
+        $path = $event->getNewElement()?->getPath() ?? 'N/A';
+        $id = $event->getNewElement()?->getId() ?? 'N/A';
 
         $this->applicationLogger->info(
             <<<MESSAGE
             $prefix:
                 type: {$event->getType()}
-                key:  {$event->getNewElement()?->getKey()}
-                path: {$event->getNewElement()?->getPath()}
-                id:   {$event->getNewElement()?->getId()}
+                key:  {$key}
+                path: {$path}
+                id:   {$id}
             MESSAGE,
             [
-                'relatedObject' => $event->getOldElement(),
+                'relatedObject' => $event->getOldElement() ?? 'N/A',
                 'component' => 'Pimcore Import Export Bundle',
             ]
         );
@@ -53,16 +59,26 @@ class ImportLoggingEventSubscriber implements EventSubscriberInterface
 
     private function writeApplicationError(ImportEvent $event): void
     {
+        $prefix = \sprintf('[%s]', $event->getStatus()->value);
+        $key = $event->getNewElement()?->getKey() ?? 'N/A';
+        $path = $event->getNewElement()?->getPath() ?? 'N/A';
+        $newId = $event->getNewElement()?->getId() ?? 'N/A';
+        $oldId = $event->getOldElement()?->getId() ?? 'N/A';
+        $errorMessage = $event->getErrorMessage() ?? 'N/A';
+
         $this->applicationLogger->error(
-            \sprintf('Two %ss with same key (%s) and path (%s) but different IDs (new ID: %d, old ID: %d) found. This seems to be an inconsistency of your importing data. Please check your import file.',
-                $event->getType(),
-                $event->getNewElement()?->getKey(),
-                $event->getNewElement()?->getPath(),
-                $event->getNewElement()?->getId(),
-                $event->getOldElement()?->getId(),
-            ),
+            <<<MESSAGE
+            Error: {$errorMessage}
+
+            $prefix:
+                type: {$event->getType()}
+                key:  {$key}
+                path: {$path}
+                id (new element):   {$newId}
+                id (old element):   {$oldId}
+            MESSAGE,
             [
-                'relatedObject' => $event->getOldElement(),
+                'relatedObject' => $event->getOldElement() ?? 'N/A',
                 'component' => 'Pimcore Import Export Bundle',
             ]
         );

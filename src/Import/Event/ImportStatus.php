@@ -7,5 +7,6 @@ enum ImportStatus: string
     case SKIPPED = 'SKIPPED';
     case CREATED = 'CREATED';
     case UPDATED = 'UPDATED';
+    case INCONSISTENCY = 'INCONSISTENCY';
     case FAILED = 'FAILED';
 }

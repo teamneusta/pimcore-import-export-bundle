@@ -4,5 +4,4 @@ elements:
             type: image
             path: /
             key: image_1
-            language: ''
             filename: image_1

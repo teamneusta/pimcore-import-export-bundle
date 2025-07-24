@@ -15,6 +15,7 @@ class ImportEvent
         protected readonly array $yamlContent,
         protected readonly ?AbstractElement $newElement,
         protected readonly ?AbstractElement $oldElement,
+        protected readonly ?string $errorMessage = null,
     ) {
     }
 
@@ -44,5 +45,10 @@ class ImportEvent
     public function getOldElement(): ?AbstractElement
     {
         return $this->oldElement;
+    }
+
+    public function getErrorMessage(): ?string
+    {
+        return $this->errorMessage;
     }
 }

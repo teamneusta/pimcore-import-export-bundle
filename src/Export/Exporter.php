@@ -5,9 +5,12 @@ namespace Neusta\Pimcore\ImportExportBundle\Export;
 use Neusta\ConverterBundle\Converter;
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Exception\ConverterException;
+use Neusta\Pimcore\ImportExportBundle\Import\Event\ImportEvent;
+use Neusta\Pimcore\ImportExportBundle\Import\Event\ImportStatus;
 use Neusta\Pimcore\ImportExportBundle\Model\Element;
 use Neusta\Pimcore\ImportExportBundle\Serializer\SerializerInterface;
 use Pimcore\Model\Element\AbstractElement;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @template TSource of AbstractElement
@@ -21,6 +24,7 @@ class Exporter
     public function __construct(
         private readonly array $typeToConverterMap,
         private readonly SerializerInterface $serializer,
+        private readonly EventDispatcherInterface $dispatcher,
     ) {
     }
 
@@ -43,7 +47,12 @@ class Exporter
         foreach ($elements as $element) {
             foreach (array_keys($this->typeToConverterMap) as $type) {
                 if ($element instanceof $type) {
-                    $yamlExportElements[] = [$type => $this->typeToConverterMap[$type]->convert($element, $ctx)];
+                    try {
+                        $yamlContent = $this->typeToConverterMap[$type]->convert($element, $ctx);
+                        $yamlExportElements[] = [$type => $yamlContent];
+                    } catch (ConverterException $e) {
+                        $this->dispatcher->dispatch(new ImportEvent(ImportStatus::FAILED, $type, [], $element, null, $e->getMessage()));
+                    }
                     continue 2;
                 }
             }

@@ -76,15 +76,31 @@ class Importer
                     if (!$oldElement) {
                         // New element - save it
                         $this->parentRelationResolver->resolve($result);
-                        $result->save(['versionNote' => 'created by pimcore-import-export-bundle']);
+                        try {
+                            $result->save(['versionNote' => 'created by pimcore-import-export-bundle']);
+                        } catch (\Exception $e) {
+                            $this->dispatcher->dispatch(new ImportEvent(ImportStatus::FAILED, $typeKey, $element, $result, $oldElement, $e->getMessage()));
+                        }
                         $this->dispatcher->dispatch(new ImportEvent(ImportStatus::CREATED, $typeKey, $element, $result, null));
                     } elseif ($overwrite) {
                         if ($this->newElementHasNoValidId($result) || $this->bothHaveSameId($oldElement, $result)) {
                             // Update existing element by new one
-                            $mergeStrategy->mergeAndSave($oldElement, $result);
+                            try {
+                                $mergeStrategy->mergeAndSave($oldElement, $result);
+                            } catch (\Exception $e) {
+                                $this->dispatcher->dispatch(new ImportEvent(ImportStatus::FAILED, $typeKey, $element, $result, $oldElement, $e->getMessage()));
+                            }
                             $this->dispatcher->dispatch(new ImportEvent(ImportStatus::UPDATED, $typeKey, $element, $result, $oldElement));
                         } else {
-                            $this->dispatcher->dispatch(new ImportEvent(ImportStatus::FAILED, $typeKey, $element, $result, $oldElement));
+                            $this->dispatcher->dispatch(new ImportEvent(
+                                ImportStatus::INCONSISTENCY, $typeKey, $element, $result, $oldElement,
+                                <<<ERR_MESSAGE
+                                Two elements with same key (%s) and path (%s) but different IDs (new ID: %d, old ID: %d) found.
+                                This seems to be an inconsistency of your importing data. Please check your import file.
+
+                                To enable overwriting of existing elements, the new element should have no or the same ID as the old element.
+                                ERR_MESSAGE
+                            ));
                         }
                     } else {
                         // Don't overwrite existing element
@@ -97,6 +113,7 @@ class Importer
             }
         }
 
+        /* @var array<TTarget> $elements */
         return $elements; // @phpstan-ignore-line
     }
 

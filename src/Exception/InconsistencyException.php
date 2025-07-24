@@ -2,6 +2,6 @@
 
 namespace Neusta\Pimcore\ImportExportBundle\Exception;
 
-class InconsistencyException extends \Exception
+class InconsistencyException extends \LogicException
 {
 }

@@ -63,7 +63,7 @@ neusta_pimcore_import_export.plugin.asset.export = Class.create({
                                         asset_id: asset.data.id,
                                         filename: values.filename,
                                         format: 'yaml',
-                                        ids_included: !!values.includeIds
+                                        include_ids: !!values.includeIds
                                     })
                                 );
                                 win.close();

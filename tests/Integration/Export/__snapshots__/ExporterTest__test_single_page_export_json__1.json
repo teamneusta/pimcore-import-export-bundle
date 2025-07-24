@@ -7,9 +7,6 @@
                 "key": "test_document_1",
                 "published": false,
                 "controller": "\/Some\/Controller",
-                "language": "en",
-                "navigation_name": "My Document",
-                "navigation_title": "My Document - Title",
                 "title": "The Title of my document",
                 "editables": [
                     {
@@ -17,7 +14,24 @@
                         "name": "textInput",
                         "data": "some text input"
                     }
-                ]
+                ],
+                "properties": {
+                    "language": {
+                        "type": "string",
+                        "key": "language",
+                        "value": "en"
+                    },
+                    "navigation_name": {
+                        "type": "string",
+                        "key": "navigation_name",
+                        "value": "My Document"
+                    },
+                    "navigation_title": {
+                        "type": "string",
+                        "key": "navigation_title",
+                        "value": "My Document - Title"
+                    }
+                }
             }
         }
     ]

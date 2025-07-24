@@ -38,7 +38,7 @@ class ExportDocumentsControllerTest extends TestCase
             $this->exporter->reveal(),
             $this->documentRepository->reveal(),
         );
-        $this->request = new Request(['doc_id' => 17, 'ids_included' => false]);
+        $this->request = new Request(['doc_id' => 17, 'include_ids' => false]);
     }
 
     public function testExportPage_regular_case(): void

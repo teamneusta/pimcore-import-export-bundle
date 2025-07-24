@@ -20,9 +20,15 @@ class RegisterTaggedConverterPass implements CompilerPassInterface
             }
         }
         foreach ($flattenedConverterDefs as $serviceId => $arguments) {
+            if (!$container->hasDefinition($serviceId)) {
+                continue;
+            }
             $definition = $container->getDefinition($serviceId);
 
             if (\array_key_exists('target', $arguments)) {
+                if (!\is_string($arguments['target'])) {
+                    continue;
+                }
                 $definition->addTag('neusta.import_export.converter', ['type' => $arguments['target']]);
             }
         }

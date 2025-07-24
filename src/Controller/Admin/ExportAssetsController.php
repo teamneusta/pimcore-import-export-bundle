@@ -45,7 +45,7 @@ final class ExportAssetsController
             [$asset],
             $request->query->getString('filename'),
             'yaml',
-            $request->query->getBoolean('ids_included', false),
+            $request->query->getBoolean('include_ids', false),
         );
     }
 
@@ -71,7 +71,7 @@ final class ExportAssetsController
             $assets,
             $request->query->getString('filename'),
             $request->query->getString('format'),
-            $request->query->getBoolean('ids_included', false)
+            $request->query->getBoolean('include_ids', false)
         );
     }
 

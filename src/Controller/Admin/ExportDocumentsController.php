@@ -42,7 +42,7 @@ final class ExportDocumentsController
             [$document],
             $request->query->getString('filename'),
             'yaml',
-            $request->query->getBoolean('ids_included', false),
+            $request->query->getBoolean('include_ids', false),
         );
     }
 
@@ -67,7 +67,7 @@ final class ExportDocumentsController
             $documents,
             $request->query->getString('filename'),
             $request->query->getString('format'),
-            $request->query->getBoolean('ids_included', false),
+            $request->query->getBoolean('include_ids', false),
         );
     }
 

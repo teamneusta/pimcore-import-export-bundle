@@ -101,6 +101,7 @@ services:
   Neusta\Pimcore\ImportExportBundle\Import\Strategy\Page\UpdateExistingPageStrategy:
     tags:
       - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Document' }
+      - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Document\Folder' }
       - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Document\Page' }
       - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Document\PageSnippet' }
 
@@ -130,6 +131,7 @@ services:
     public: true
     tags:
       - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Document' }
+      - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Document\Folder' }
       - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Document\Page' }
       - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Document\PageSnippet' }
 

@@ -21,16 +21,18 @@ class UpdateExistingPageStrategy implements MergeElementStrategy
     public function mergeAndSave(AbstractElement $oldElement, AbstractElement $newElement): void
     {
         $oldElement->setPublished($newElement->getPublished());
-        $oldElement->setController($newElement->getController());
+
+        if ($oldElement instanceof Document\PageSnippet && $newElement instanceof Document\PageSnippet) {
+            $oldElement->setEditables($newElement->getEditables());
+            $oldElement->setController($newElement->getController());
+        }
 
         if ($oldElement instanceof Document\Page && $newElement instanceof Document\Page) {
             $oldElement->setTitle($newElement->getTitle());
         }
-
-        $oldElement->setProperty('language', 'text', $newElement->getProperty('language'));
-        $oldElement->setProperty('navigation_name', 'text', $newElement->getProperty('navigation_name'));
-        $oldElement->setProperty('navigation_title', 'text', $newElement->getProperty('navigation_title'));
-        $oldElement->setEditables($newElement->getEditables());
+        foreach ($newElement->getProperties() as $property) {
+            $oldElement->setProperty($property->getName() ?? 'N/A', $property->getType() ?? 'N/A', $property->getData());
+        }
         $oldElement->save(['versionNote' => 'overwritten by pimcore-import-export-bundle']);
     }
 }
