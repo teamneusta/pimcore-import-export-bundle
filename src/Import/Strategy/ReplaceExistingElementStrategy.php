@@ -2,9 +2,7 @@
 
 namespace Neusta\Pimcore\ImportExportBundle\Import\Strategy;
 
-use Neusta\Pimcore\ImportExportBundle\Import\Strategy\MergeElementStrategy;
 use Pimcore\Model\Element\AbstractElement;
-use Pimcore\Model\Element\DuplicateFullPathException;
 
 /**
  * @implements MergeElementStrategy<AbstractElement>
@@ -12,7 +10,7 @@ use Pimcore\Model\Element\DuplicateFullPathException;
 class ReplaceExistingElementStrategy implements MergeElementStrategy
 {
     /**
-     * @throws DuplicateFullPathException
+     * @throws \RuntimeException
      */
     public function mergeAndSave(AbstractElement $oldElement, AbstractElement $newElement): void
     {
