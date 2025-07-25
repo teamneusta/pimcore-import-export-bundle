@@ -13,8 +13,8 @@ use Pimcore\Model\Element\DuplicateFullPathException;
 class UpdateExistingPageStrategy implements MergeElementStrategy
 {
     /**
-     * @param Document\PageSnippet $oldElement
-     * @param Document\PageSnippet $newElement
+     * @param Document $oldElement
+     * @param Document $newElement
      *
      * @throws DuplicateFullPathException
      */
