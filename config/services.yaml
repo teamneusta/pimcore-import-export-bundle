@@ -98,14 +98,14 @@ services:
   ##################
   # Merge Strategy #
   ##################
-  Neusta\Pimcore\ImportExportBundle\Import\Strategy\Page\UpdateExistingPageStrategy:
+  Neusta\Pimcore\ImportExportBundle\Import\Strategy\Document\UpdateExistingPageStrategy:
     tags:
       - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Document' }
       - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Document\Folder' }
       - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Document\Page' }
       - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Document\PageSnippet' }
 
-  Neusta\Pimcore\ImportExportBundle\Import\Strategy\ReplaceElementStrategy:
+  Neusta\Pimcore\ImportExportBundle\Import\Strategy\ReplaceExistingElementStrategy:
     tags:
       - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Asset' }
       - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Concrete' }

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Neusta\Pimcore\ImportExportBundle\Import\Strategy\Page;
+namespace Neusta\Pimcore\ImportExportBundle\Import\Strategy;
 
 use Neusta\Pimcore\ImportExportBundle\Import\Strategy\MergeElementStrategy;
 use Pimcore\Model\Element\AbstractElement;
