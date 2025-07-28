@@ -18,7 +18,7 @@ class PrioritizedAttributesNormalizer implements NormalizerInterface
     public function __construct(ObjectNormalizer $normalizer, array $priorities = [])
     {
         $this->normalizer = $normalizer;
-        $this->priorities = $priorities; // z.B.: ['type', 'id', 'parentId', 'path', ...]
+        $this->priorities = $priorities; // e.g.: ['type', 'id', 'parentId', 'path', ...]
     }
 
     /**
@@ -42,7 +42,7 @@ class PrioritizedAttributesNormalizer implements NormalizerInterface
             }
         }
 
-        // Hänge alle restlichen Properties hinten dran
+        // Append all remaining properties at the end
         return array_merge($sorted, $data);
     }
 
