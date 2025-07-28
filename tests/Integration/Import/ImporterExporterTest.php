@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Neusta\Pimcore\ImportExportBundle\Tests\Integration\Documents\Import;
+namespace Neusta\Pimcore\ImportExportBundle\Tests\Integration\Import;
 
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
 use Neusta\Pimcore\ImportExportBundle\Import\Importer;
@@ -30,14 +30,16 @@ class ImporterExporterTest extends KernelTestCase
         $asset = new Asset();
         $asset->setParentId(1);
         $asset->setPath('/');
-        $asset->setKey('logo_desktop.svg');
+        $asset->setKey('logo_desktop_' . uniqid() . '.svg');
         $asset->save();
+        self::assertNotNull($asset->getId(), 'Asset should be saved successfully');
 
         $document = new Page();
         $document->setParentId(1);
         $document->setPath('/');
         $document->setKey('Text für viele');
         $document->save();
+        self::assertNotNull($document->getId(), 'Page should be saved successfully');
     }
 
     public function testImportExport_regular_case(): void
@@ -47,6 +49,6 @@ class ImporterExporterTest extends KernelTestCase
         $document = Page::getByPath('/Test-Import-Export');
         $yamlExported = $this->exporter->export([$document], 'yaml');
 
-        self::assertEquals($yamlToImport, $yamlExported);
+        self::assertEquals(yaml_parse($yamlToImport), yaml_parse($yamlExported));
     }
 }

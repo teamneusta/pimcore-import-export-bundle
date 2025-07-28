@@ -3,6 +3,7 @@
 namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
 use Neusta\Pimcore\ImportExportBundle\Controller\Admin\Base\AbstractImportBaseController;
+use Neusta\Pimcore\ImportExportBundle\Import\EventSubscriber\StatisticsEventSubscriber;
 use Neusta\Pimcore\ImportExportBundle\Import\Importer;
 use Neusta\Pimcore\ImportExportBundle\Import\ParentRelationResolver;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository;
@@ -23,11 +24,12 @@ final class ImportDocumentsController extends AbstractImportBaseController
      */
     public function __construct(
         ApplicationLogger $applicationLogger,
+        StatisticsEventSubscriber $statisticsEventSubscriber,
         DocumentRepository $repository,
         ParentRelationResolver $parentRelationResolver,
         private Importer $importer,
     ) {
-        parent::__construct($applicationLogger, $repository, $parentRelationResolver, 'Document');
+        parent::__construct($applicationLogger, $statisticsEventSubscriber, $repository, $parentRelationResolver, 'Document');
     }
 
     #[Route(

@@ -9,7 +9,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class StatisticsEventSubscriber implements EventSubscriberInterface
 {
     /** @var array<string, int> */
-    protected static array $statistics = [];
+    private array $statistics = [];
 
     public static function getSubscribedEvents()
     {
@@ -23,9 +23,9 @@ class StatisticsEventSubscriber implements EventSubscriberInterface
     /**
      * @return array<string, int>
      */
-    public static function getStatistics(): array
+    public function getStatistics(): array
     {
-        return self::$statistics;
+        return $this->statistics;
     }
 
     public function countStatistics(ImportEvent $event): void
@@ -35,10 +35,10 @@ class StatisticsEventSubscriber implements EventSubscriberInterface
 
     public function incrementCounter(ImportStatus $status): void
     {
-        if (\array_key_exists($status->value, self::$statistics)) {
-            ++self::$statistics[$status->value];
+        if (\array_key_exists($status->value, $this->statistics)) {
+            ++$this->statistics[$status->value];
         } else {
-            self::$statistics[$status->value] = 1;
+            $this->statistics[$status->value] = 1;
         }
     }
 }

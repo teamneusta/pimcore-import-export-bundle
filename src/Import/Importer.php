@@ -87,10 +87,10 @@ class Importer
                             // Update existing element by new one
                             try {
                                 $mergeStrategy->mergeAndSave($oldElement, $result);
+                                $this->dispatcher->dispatch(new ImportEvent(ImportStatus::UPDATED, $typeKey, $element, $result, $oldElement));
                             } catch (\Exception $e) {
                                 $this->dispatcher->dispatch(new ImportEvent(ImportStatus::FAILED, $typeKey, $element, $result, $oldElement, $e->getMessage()));
                             }
-                            $this->dispatcher->dispatch(new ImportEvent(ImportStatus::UPDATED, $typeKey, $element, $result, $oldElement));
                         } else {
                             $this->dispatcher->dispatch(new ImportEvent(
                                 ImportStatus::INCONSISTENCY, $typeKey, $element, $result, $oldElement,

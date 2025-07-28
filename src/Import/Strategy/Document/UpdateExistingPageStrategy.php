@@ -17,6 +17,7 @@ class UpdateExistingPageStrategy implements MergeElementStrategy
      * @param Document $newElement
      *
      * @throws DuplicateFullPathException
+     * @throws \InvalidArgumentException
      */
     public function mergeAndSave(AbstractElement $oldElement, AbstractElement $newElement): void
     {
@@ -31,7 +32,12 @@ class UpdateExistingPageStrategy implements MergeElementStrategy
             $oldElement->setTitle($newElement->getTitle());
         }
         foreach ($newElement->getProperties() as $property) {
-            $oldElement->setProperty($property->getName() ?? 'N/A', $property->getType() ?? 'N/A', $property->getData());
+            $name = $property->getName();
+            $type = $property->getType();
+            if (null === $name || null === $type) {
+                continue; // Skip invalid properties
+            }
+            $oldElement->setProperty($name, $type, $property->getData());
         }
         $oldElement->save(['versionNote' => 'overwritten by pimcore-import-export-bundle']);
     }

@@ -42,6 +42,7 @@ abstract class AbstractImportBaseController
      */
     public function __construct(
         protected ApplicationLogger $applicationLogger,
+        protected StatisticsEventSubscriber $statisticsEventSubscriber,
         protected ImportRepositoryInterface $repository,
         protected ParentRelationResolver $parentRelationResolver,
         protected string $elementType = 'Element',
@@ -70,7 +71,7 @@ abstract class AbstractImportBaseController
             }
         }
 
-        return $this->createJsonResponse(true, $this->createResultMessage(StatisticsEventSubscriber::getStatistics()));
+        return $this->createJsonResponse(true, $this->createResultMessage($this->statisticsEventSubscriber->getStatistics()));
     }
 
     protected function createJsonResponse(bool $success, string $message, int $statusCode = 200): JsonResponse

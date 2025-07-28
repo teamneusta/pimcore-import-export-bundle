@@ -3,6 +3,7 @@
 namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
 use Neusta\Pimcore\ImportExportBundle\Controller\Admin\Base\AbstractImportBaseController;
+use Neusta\Pimcore\ImportExportBundle\Import\EventSubscriber\StatisticsEventSubscriber;
 use Neusta\Pimcore\ImportExportBundle\Import\Importer;
 use Neusta\Pimcore\ImportExportBundle\Import\ParentRelationResolver;
 use Neusta\Pimcore\ImportExportBundle\Import\ZipImporter;
@@ -24,12 +25,13 @@ final class ImportAssetsController extends AbstractImportBaseController
      */
     public function __construct(
         ApplicationLogger $applicationLogger,
+        StatisticsEventSubscriber $statisticsEventSubscriber,
         private Importer $importer,
         ParentRelationResolver $parentRelationResolver,
         private ZipImporter $zipImporter,
         AssetRepository $assetRepository,
     ) {
-        parent::__construct($applicationLogger, $assetRepository, $parentRelationResolver, 'Asset');
+        parent::__construct($applicationLogger, $statisticsEventSubscriber, $assetRepository, $parentRelationResolver, 'Asset');
     }
 
     #[Route(
