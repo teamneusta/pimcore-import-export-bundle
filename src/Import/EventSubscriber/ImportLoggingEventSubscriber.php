@@ -6,25 +6,31 @@ use Neusta\Pimcore\ImportExportBundle\Import\Event\ImportEvent;
 use Neusta\Pimcore\ImportExportBundle\Import\Event\ImportStatus;
 use Pimcore\Bundle\ApplicationLoggerBundle\ApplicationLogger;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class ImportLoggingEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         private readonly ApplicationLogger $applicationLogger,
+        private readonly KernelInterface $kernel,
     ) {
     }
 
     public static function getSubscribedEvents()
     {
         return [
-            //            ImportEvent::class => [
-            //                ['logImportEvent', 100],
-            //            ],
+            ImportEvent::class => [
+                ['logImportEvent', 100],
+            ],
         ];
     }
 
     public function logImportEvent(ImportEvent $event): void
     {
+        if ('test' === $this->kernel->getEnvironment()) {
+            return; // In our integration tests we have no installed Pimcore Application Logger bundle at the moment
+        }
+
         if (\in_array(
             $event->getStatus(),
             [ImportStatus::INCONSISTENCY, ImportStatus::FAILED]

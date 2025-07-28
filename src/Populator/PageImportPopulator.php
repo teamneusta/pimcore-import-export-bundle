@@ -30,20 +30,20 @@ class PageImportPopulator implements Populator
      */
     public function populate(object $target, object $source, ?object $ctx = null): void
     {
-        if ($target instanceof PimcoreDocument\PageSnippet && \is_array($source['properties'])) {
-            foreach ($source['properties'] as $property) {
-                if ($property['value'] && 'asset' === $property['type']) {
-                    $value = $this->assetRepository->getByPath($property['value']);
-                } elseif ($property['value'] && 'document' === $property['type']) {
-                    $value = $this->documentRepository->getByPath($property['value']);
-                } elseif ($property['value'] && 'object' === $property['type']) {
-                    $value = $this->objectRepository->getByPath($property['value']);
-                } else {
-                    $value = $property['value'];
-                }
-                $target->setProperty($property['key'], $property['type'], $value);
+        foreach ($source['properties'] ?? [] as $property) {
+            if ($property['value'] && 'asset' === $property['type']) {
+                $value = $this->assetRepository->getByPath($property['value']);
+            } elseif ($property['value'] && 'document' === $property['type']) {
+                $value = $this->documentRepository->getByPath($property['value']);
+            } elseif ($property['value'] && 'object' === $property['type']) {
+                $value = $this->objectRepository->getByPath($property['value']);
+            } else {
+                $value = $property['value'];
             }
+            $target->setProperty($property['key'], $property['type'], $value);
+        }
 
+        if ($target instanceof PimcoreDocument\PageSnippet) {
             /** @var array{type: string, data: mixed} $editable */
             foreach ($source['editables'] ?? [] as $key => $editable) {
                 if (!isset($editable['data'])) {

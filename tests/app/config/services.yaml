@@ -43,7 +43,7 @@ services:
   ##################
   # Merge Strategy #
   ##################
-  Neusta\Pimcore\ImportExportBundle\Import\Strategy\Page\UpdateExistingPageStrategy:
+  Neusta\Pimcore\ImportExportBundle\Import\Strategy\Document\UpdateExistingPageStrategy:
     tags:
       - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Document' }
       - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Document\Page' }
@@ -67,4 +67,3 @@ services:
       - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Document' }
       - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Document\Page' }
       - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Document\PageSnippet' }
-

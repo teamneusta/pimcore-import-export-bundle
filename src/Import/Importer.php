@@ -78,10 +78,10 @@ class Importer
                         $this->parentRelationResolver->resolve($result);
                         try {
                             $result->save(['versionNote' => 'created by pimcore-import-export-bundle']);
+                            $this->dispatcher->dispatch(new ImportEvent(ImportStatus::CREATED, $typeKey, $element, $result, null));
                         } catch (\Exception $e) {
                             $this->dispatcher->dispatch(new ImportEvent(ImportStatus::FAILED, $typeKey, $element, $result, $oldElement, $e->getMessage()));
                         }
-                        $this->dispatcher->dispatch(new ImportEvent(ImportStatus::CREATED, $typeKey, $element, $result, null));
                     } elseif ($overwrite) {
                         if ($this->newElementHasNoValidId($result) || $this->bothHaveSameId($oldElement, $result)) {
                             // Update existing element by new one

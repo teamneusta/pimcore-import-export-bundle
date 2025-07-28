@@ -51,12 +51,22 @@ class ImporterTest extends KernelTestCase
                         type: email
                         published: false
                         path: /path/will/be/overwritten/by/parent_id/
-                        language: fr
-                        navigation_name: 'My Document'
-                        navigation_title: 'My Document - Title'
                         key: test_document_1
                         title: 'The Title of My Document'
                         controller: /Some/Controller
+                        properties:
+                            language:
+                                type: string
+                                key: language
+                                value: fr
+                            navigation_name:
+                                type: string
+                                key: navigation_name
+                                value: 'My Document'
+                            navigation_title:
+                                type: string
+                                key: navigation_title
+                                value: 'My Document - Title'
             YAML;
 
         $pages = $this->importer->import($yaml, 'yaml', true, true);
@@ -85,9 +95,6 @@ class ImporterTest extends KernelTestCase
                             "type": "email",
                             "published": false,
                             "path": "\/path\/will\/be\/overwritten\/by\/parent_id/\/",
-                            "language": "fr",
-                            "navigation_name": "My Document",
-                            "navigation_title": "My Document - Title",
                             "key": "test_document_1",
                             "title": "The Title of My Document",
                             "controller": "\/Some\/Controller",
@@ -97,7 +104,24 @@ class ImporterTest extends KernelTestCase
                                     "name": "textInput",
                                     "data": "some text input"
                                 }
-                            ]
+                            ],
+                            "properties": {
+                                "language": {
+                                    "type": "string",
+                                    "key": "language",
+                                    "value": "fr"
+                                },
+                                "navigation_name": {
+                                    "type": "string",
+                                    "key": "navigation_name",
+                                    "value": "My Document"
+                                },
+                                "navigation_title": {
+                                    "type": "string",
+                                    "key": "navigation_title",
+                                    "value": "My Document - Title"
+                                }
+                            }
                         }
                     }
                 ]
@@ -129,12 +153,22 @@ class ImporterTest extends KernelTestCase
                         type: email
                         published: false
                         path: /
-                        language: en
-                        navigation_name: 'My Document'
-                        navigation_title: 'My Document - Title'
                         key: test_document_1
                         title: 'The Title of My Document'
                         controller: /Some/Controller
+                        properties:
+                            language:
+                                type: string
+                                key: language
+                                value: en
+                            navigation_name:
+                                type: string
+                                key: navigation_name
+                                value: 'My Document'
+                            navigation_title:
+                                type: string
+                                key: navigation_title
+                                value: 'My Document - Title'
             YAML;
 
         $pages = $this->importer->import($yaml, 'yaml', true, true);
