@@ -8,9 +8,16 @@ neusta_converter:
     ###########################################################
     neusta_pimcore_import_export.export_element:
       target: Neusta\Pimcore\ImportExportBundle\Model\Element
+      populators:
+        - Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator
       properties:
-        id: ~
         key: ~
         type: ~
         path: ~
-        parentId: ~
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator: ~

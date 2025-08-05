@@ -6,10 +6,9 @@ class Element
 {
     public const ELEMENTS = 'elements';
 
-    public ?int $id = null;
-    public int $parentId = 0;
+    public ?int $id; // important not to set default value here to avoid exporting null values automatically
+    public ?int $parentId; // important not to set default value here to avoid exporting null values automatically
     public string $type = 'element';
     public string $path = '';
-    public string $language = '';
     public string $key = '';
 }

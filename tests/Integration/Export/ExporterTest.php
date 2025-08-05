@@ -35,11 +35,32 @@ class ExporterTest extends KernelTestCase
         $this->assertMatchesSnapshot($yaml, new ImportExportYamlDriver());
     }
 
+    public function test_single_image_export_with_ids(): void
+    {
+        $asset = new Image();
+        $asset->setId(999);
+        $asset->setParentId(1);
+        $asset->setKey('image_1');
+        $asset->setType('image');
+        $asset->setPath('/');
+
+        $yaml = $this->exporter->export([$asset], 'yaml', ['includeIds' => true]);
+        $this->assertMatchesSnapshot($yaml, new ImportExportYamlDriver());
+    }
+
     public function test_single_page_export(): void
     {
         $page = $this->createPageWithInputEditable();
 
         $yaml = $this->exporter->export([$page], 'yaml');
+        $this->assertMatchesSnapshot($yaml, new ImportExportYamlDriver());
+    }
+
+    public function test_single_page_export_with_ids(): void
+    {
+        $page = $this->createPageWithInputEditable();
+
+        $yaml = $this->exporter->export([$page], 'yaml', ['includeIds' => true]);
         $this->assertMatchesSnapshot($yaml, new ImportExportYamlDriver());
     }
 
@@ -84,6 +105,21 @@ class ExporterTest extends KernelTestCase
         $page3->save();
 
         $yaml = $this->exporter->export([$page1, $page2, $page3], 'yaml');
+        $this->assertMatchesSnapshot($yaml, new ImportExportYamlDriver());
+    }
+
+    public function test_tree_pages_export_with_ids(): void
+    {
+        $page1 = $this->createSimplePage('1', 1, '/will/be/overwritten/');
+        $page1->save();
+
+        $page2 = $this->createSimplePage('2', $page1->getId(), '/will/be/overwritten/');
+        $page2->save();
+
+        $page3 = $this->createSimplePage('3', $page2->getId(), '/will/be/overwritten/');
+        $page3->save();
+
+        $yaml = $this->exporter->export([$page1, $page2, $page3], 'yaml', ['includeIds' => true]);
         $this->assertMatchesSnapshot($yaml, new ImportExportYamlDriver());
     }
 

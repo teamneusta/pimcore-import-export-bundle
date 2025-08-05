@@ -3,8 +3,9 @@
 namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
+use Neusta\Pimcore\ImportExportBundle\Model\Object\DataObject;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DataObjectRepository;
-use Pimcore\Model\DataObject;
+use Pimcore\Model\DataObject as PimcoreDataObject;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +14,9 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ExportDataObjectsController
 {
+    /**
+     * @param Exporter<PimcoreDataObject, DataObject> $exporter
+     */
     public function __construct(
         private Exporter $exporter,
         private DataObjectRepository $objectRepository,
@@ -27,14 +31,19 @@ final class ExportDataObjectsController
     public function export(Request $request): Response
     {
         $object = $this->objectRepository->getById($request->query->getInt('object_id'));
-        if (!$object instanceof DataObject) {
+        if (!$object instanceof PimcoreDataObject) {
             return new JsonResponse(
                 \sprintf('Data Object with id "%s" was not found', $request->query->getInt('object_id')),
                 Response::HTTP_NOT_FOUND,
             );
         }
 
-        return $this->exportObjects([$object], $request->query->getString('filename'), 'yaml');
+        return $this->exportObjects(
+            [$object],
+            $request->query->getString('filename'),
+            'yaml',
+            $request->query->getBoolean('include_ids', false),
+        );
     }
 
     #[Route(
@@ -45,7 +54,7 @@ final class ExportDataObjectsController
     public function exportWithChildren(Request $request): Response
     {
         $object = $this->objectRepository->getById($request->query->getInt('object_id'));
-        if (!$object instanceof DataObject) {
+        if (!$object instanceof PimcoreDataObject) {
             return new JsonResponse(
                 \sprintf('Data Object with id "%s" was not found', $request->query->getInt('object_id')),
                 Response::HTTP_NOT_FOUND,
@@ -54,16 +63,27 @@ final class ExportDataObjectsController
 
         $objects = $this->objectRepository->findAllInTree($object);
 
-        return $this->exportObjects($objects, $request->query->getString('filename'), $request->query->getString('format'));
+        return $this->exportObjects(
+            $objects,
+            $request->query->getString('filename'),
+            $request->query->getString('format'),
+            $request->query->getBoolean('include_ids', false),
+        );
     }
 
     /**
-     * @param iterable<DataObject> $objects
+     * @param iterable<PimcoreDataObject> $objects
      */
-    private function exportObjects(iterable $objects, string $filename, string $format): Response
+    private function exportObjects(iterable $objects, string $filename, string $format, bool $includeIds): Response
     {
         try {
-            $yaml = $this->exporter->export($objects, $format);
+            $yaml = $this->exporter->export(
+                $objects,
+                $format,
+                [
+                    'includeIds' => $includeIds,
+                ],
+            );
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

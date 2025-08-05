@@ -1,3 +1,6 @@
+imports:
+  - { resource: '../../../config/services.yaml' }
+
 services:
   _defaults:
     autowire: true
@@ -8,18 +11,6 @@ services:
     resource: '../../../src/Toolbox'
 
   Neusta\Pimcore\ImportExportBundle\Tests\Integration\Documents\ImportExportYamlDriver: ~
-
-  ###########################################################
-  # Export Converter (Document/Page -> Page)
-  ###########################################################
-  neusta_pimcore_import_export.export_page:
-    class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
-    arguments:
-      $converter: '@neusta_pimcore_import_export.export_document'
-      $postPopulators:
-        - '@neusta_pimcore_import_export.page.title.populator'
-        - '@neusta_pimcore_import_export.page.controller.populator'
-        - '@neusta_pimcore_import_export.page.editables.populator'
 
   ############
   # Exporter #
@@ -41,13 +32,38 @@ services:
   Neusta\Pimcore\ImportExportBundle\Import\Importer:
     class: Neusta\Pimcore\ImportExportBundle\Import\Importer
     arguments:
-      $typeToConverterMap:
-        Pimcore\Model\Asset\Image: '@neusta_pimcore_import_export.import_asset'
-        Pimcore\Model\Document\Page: '@neusta_pimcore_import_export.import_document'
-        Pimcore\Model\Document\PageSnippet: '@neusta_pimcore_import_export.import_document'
-        Pimcore\Model\Concrete: '@neusta_pimcore_import_export.import_object'
+      $repositoryLocator: !tagged_locator { tag: 'neusta.import_export.repository', index_by: 'type' }
+      $converterLocator: !tagged_locator { tag: 'neusta.import_export.converter', index_by: 'type' }
+      $mergeStrategyLocator: !tagged_locator { tag: 'neusta.import_export.merge_strategy', index_by: 'type' }
       $parentRelationResolver: '@Neusta\Pimcore\ImportExportBundle\Import\ParentRelationResolver'
       $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
 
   Neusta\Pimcore\ImportExportBundle\Import\ParentRelationResolver: ~
 
+  ##################
+  # Merge Strategy #
+  ##################
+  Neusta\Pimcore\ImportExportBundle\Import\Strategy\Document\UpdateExistingPageStrategy:
+    tags:
+      - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Document' }
+      - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Document\Page' }
+      - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Document\PageSnippet' }
+
+  Neusta\Pimcore\ImportExportBundle\Import\Strategy\ReplaceElementStrategy:
+    tags:
+      - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Asset' }
+      - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Concrete' }
+
+  Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\AssetRepository:
+    tags:
+      - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Asset' }
+
+  Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DataObjectRepository:
+    tags:
+      - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Concrete' }
+
+  Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository:
+    tags:
+      - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Document' }
+      - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Document\Page' }
+      - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Document\PageSnippet' }

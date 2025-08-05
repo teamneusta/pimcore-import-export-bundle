@@ -4,6 +4,8 @@ namespace Neusta\Pimcore\ImportExportBundle\Tests\Integration\Documents\Import;
 
 use Neusta\Pimcore\ImportExportBundle\Import\Importer;
 use Neusta\Pimcore\TestingFramework\Database\ResetDatabase;
+use Pimcore\Model\Document\Page;
+use Pimcore\Model\Version;
 use Pimcore\Test\KernelTestCase;
 use Spatie\Snapshots\MatchesSnapshots;
 
@@ -16,6 +18,7 @@ class ImporterTest extends KernelTestCase
 
     protected function setUp(): void
     {
+        Version::disable();
         $this->importer = self::getContainer()->get(Importer::class);
     }
 
@@ -33,7 +36,7 @@ class ImporterTest extends KernelTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Neither parentId nor path leads to a valid parent element');
-        $this->importer->import($yaml, 'yaml');
+        $this->importer->import($yaml, 'yaml', true, true);
     }
 
     public function testSinglePageExport_regular_case_parent_id(): void
@@ -48,15 +51,25 @@ class ImporterTest extends KernelTestCase
                         type: email
                         published: false
                         path: /path/will/be/overwritten/by/parent_id/
-                        language: fr
-                        navigation_name: 'My Document'
-                        navigation_title: 'My Document - Title'
                         key: test_document_1
                         title: 'The Title of My Document'
                         controller: /Some/Controller
+                        properties:
+                            language:
+                                type: string
+                                key: language
+                                value: fr
+                            navigation_name:
+                                type: string
+                                key: navigation_name
+                                value: 'My Document'
+                            navigation_title:
+                                type: string
+                                key: navigation_title
+                                value: 'My Document - Title'
             YAML;
 
-        $pages = $this->importer->import($yaml, 'yaml');
+        $pages = $this->importer->import($yaml, 'yaml', true, true);
         self::assertEquals(999, $pages[0]->getId());
         self::assertEquals('/', $pages[0]->getPath());
 
@@ -82,9 +95,6 @@ class ImporterTest extends KernelTestCase
                             "type": "email",
                             "published": false,
                             "path": "\/path\/will\/be\/overwritten\/by\/parent_id/\/",
-                            "language": "fr",
-                            "navigation_name": "My Document",
-                            "navigation_title": "My Document - Title",
                             "key": "test_document_1",
                             "title": "The Title of My Document",
                             "controller": "\/Some\/Controller",
@@ -94,14 +104,31 @@ class ImporterTest extends KernelTestCase
                                     "name": "textInput",
                                     "data": "some text input"
                                 }
-                            ]
+                            ],
+                            "properties": {
+                                "language": {
+                                    "type": "string",
+                                    "key": "language",
+                                    "value": "fr"
+                                },
+                                "navigation_name": {
+                                    "type": "string",
+                                    "key": "navigation_name",
+                                    "value": "My Document"
+                                },
+                                "navigation_title": {
+                                    "type": "string",
+                                    "key": "navigation_title",
+                                    "value": "My Document - Title"
+                                }
+                            }
                         }
                     }
                 ]
             }
             JSON;
 
-        $pages = $this->importer->import($json, 'json');
+        $pages = $this->importer->import($json, 'json', true, true);
         self::assertEquals(999, $pages[0]->getId());
         self::assertEquals('/', $pages[0]->getPath());
 
@@ -126,15 +153,25 @@ class ImporterTest extends KernelTestCase
                         type: email
                         published: false
                         path: /
-                        language: en
-                        navigation_name: 'My Document'
-                        navigation_title: 'My Document - Title'
                         key: test_document_1
                         title: 'The Title of My Document'
                         controller: /Some/Controller
+                        properties:
+                            language:
+                                type: string
+                                key: language
+                                value: en
+                            navigation_name:
+                                type: string
+                                key: navigation_name
+                                value: 'My Document'
+                            navigation_title:
+                                type: string
+                                key: navigation_title
+                                value: 'My Document - Title'
             YAML;
 
-        $pages = $this->importer->import($yaml, 'yaml');
+        $pages = $this->importer->import($yaml, 'yaml', true, true);
         self::assertEquals(999, $pages[0]->getId());
         self::assertEquals('/', $pages[0]->getPath());
         self::assertEquals(1, $pages[0]->getParentId());
@@ -173,7 +210,7 @@ class ImporterTest extends KernelTestCase
                         key: test_document_1_1_1
             YAML;
 
-        $pages = $this->importer->import($yaml, 'yaml');
+        $pages = $this->importer->import($yaml, 'yaml', true, true);
 
         self::assertEquals('/test_document_1/test_document_1_1/', $pages[2]->getPath());
     }
@@ -209,8 +246,44 @@ class ImporterTest extends KernelTestCase
                         key: test_document_1_1_1
             YAML;
 
-        $pages = $this->importer->import($yaml, 'yaml');
+        $pages = $this->importer->import($yaml, 'yaml', true, true);
 
         self::assertEquals('/test_document_1/test_document_1_1/', $pages[3]->getPath());
+    }
+
+    public function testMultiPagesImport_multi_children(): void
+    {
+        $parentPage = new Page();
+        $parentPage->setKey('test_document_1');
+        $parentPage->setParentId(1);
+        $parentPage->save();
+
+        $childPage = new Page();
+        $childPage->setKey('child_1');
+        $childPage->setParentId($parentPage->getId());
+        $childPage->save();
+
+        $yaml =
+            <<<YAML
+            elements:
+                -
+                    Pimcore\Model\Document\Page:
+                        path: /
+                        key: test_document_1
+                -
+                    Pimcore\Model\Document\Page:
+                        path: /test_document_1/
+                        key: child_2
+                -
+                    Pimcore\Model\Document\Page:
+                        path: /test_document_1/
+                        key: child_3
+            YAML;
+
+        $pages = $this->importer->import($yaml, 'yaml', true, true);
+
+        self::assertEquals($parentPage->getId(), $pages[1]->getParentId());
+        self::assertEquals($parentPage->getId(), $pages[2]->getParentId());
+        self::assertEquals($parentPage->getId(), $childPage->getParentId());
     }
 }

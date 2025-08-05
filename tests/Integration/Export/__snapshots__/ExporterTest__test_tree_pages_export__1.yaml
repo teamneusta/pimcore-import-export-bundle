@@ -1,43 +1,31 @@
 elements:
     -
         Pimcore\Model\Document\Page:
-            published: true
-            navigation_name: ~
-            navigation_title: ~
-            title: 'Test Document_1'
-            controller: 'App\Controller\DefaultController::defaultAction'
-            editables: {  }
-            id: 2
-            parentId: 1
             type: page
             path: /
-            language: ''
             key: test_document_1
+            published: true
+            controller: 'App\Controller\DefaultController::defaultAction'
+            title: 'Test Document_1'
+            editables: {  }
+            properties: {  }
     -
         Pimcore\Model\Document\Page:
-            published: true
-            navigation_name: ~
-            navigation_title: ~
-            title: 'Test Document_2'
-            controller: 'App\Controller\DefaultController::defaultAction'
-            editables: {  }
-            id: 3
-            parentId: 2
             type: page
             path: /test_document_1/
-            language: ''
             key: test_document_2
+            published: true
+            controller: 'App\Controller\DefaultController::defaultAction'
+            title: 'Test Document_2'
+            editables: {  }
+            properties: {  }
     -
         Pimcore\Model\Document\Page:
-            published: true
-            navigation_name: ~
-            navigation_title: ~
-            title: 'Test Document_3'
-            controller: 'App\Controller\DefaultController::defaultAction'
-            editables: {  }
-            id: 4
-            parentId: 3
             type: page
             path: /test_document_1/test_document_2/
-            language: ''
             key: test_document_3
+            published: true
+            controller: 'App\Controller\DefaultController::defaultAction'
+            title: 'Test Document_3'
+            editables: {  }
+            properties: {  }

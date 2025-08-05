@@ -4,6 +4,9 @@ namespace Neusta\Pimcore\ImportExportBundle\Populator;
 
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Populator;
+use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\AssetRepository;
+use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DataObjectRepository;
+use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository;
 use Pimcore\Model\Document as PimcoreDocument;
 use Psr\Log\LoggerInterface;
 
@@ -12,14 +15,10 @@ use Psr\Log\LoggerInterface;
  */
 class PageImportPopulator implements Populator
 {
-    private const TEXT_PROPERTIES = [
-        'language',
-        'navigation_title',
-        'navigation_name',
-        // Add more properties here if necessary
-    ];
-
     public function __construct(
+        private readonly AssetRepository $assetRepository,
+        private readonly DataObjectRepository $objectRepository,
+        private readonly DocumentRepository $documentRepository,
         private readonly ?LoggerInterface $logger = null,
     ) {
     }
@@ -31,13 +30,20 @@ class PageImportPopulator implements Populator
      */
     public function populate(object $target, object $source, ?object $ctx = null): void
     {
-        if ($target instanceof PimcoreDocument\PageSnippet) {
-            foreach (self::TEXT_PROPERTIES as $property) {
-                if (isset($source[$property])) {
-                    $target->setProperty($property, 'text', $source[$property]);
-                }
+        foreach ($source['properties'] ?? [] as $property) {
+            if ($property['value'] && 'asset' === $property['type']) {
+                $value = $this->assetRepository->getByPath($property['value']);
+            } elseif ($property['value'] && 'document' === $property['type']) {
+                $value = $this->documentRepository->getByPath($property['value']);
+            } elseif ($property['value'] && 'object' === $property['type']) {
+                $value = $this->objectRepository->getByPath($property['value']);
+            } else {
+                $value = $property['value'];
             }
+            $target->setProperty($property['key'], $property['type'], $value);
+        }
 
+        if ($target instanceof PimcoreDocument\PageSnippet) {
             /** @var array{type: string, data: mixed} $editable */
             foreach ($source['editables'] ?? [] as $key => $editable) {
                 if (!isset($editable['data'])) {

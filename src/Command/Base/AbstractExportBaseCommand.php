@@ -3,6 +3,7 @@
 namespace Neusta\Pimcore\ImportExportBundle\Command\Base;
 
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
+use Neusta\Pimcore\ImportExportBundle\Model\Element;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\ExportRepositoryInterface;
 use Pimcore\Console\AbstractCommand;
 use Pimcore\Model\Asset;
@@ -16,14 +17,16 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @template TElement of AbstractElement
+ * @template TSource of AbstractElement
+ * @template TTarget of Element
  */
 abstract class AbstractExportBaseCommand extends AbstractCommand
 {
     /**
-     * @param class-string                        $elementType
-     * @param array<string>                       $supportedFormats
-     * @param ExportRepositoryInterface<TElement> $repository
+     * @param class-string                       $elementType
+     * @param array<string>                      $supportedFormats
+     * @param ExportRepositoryInterface<TSource> $repository
+     * @param Exporter<TSource, TTarget>         $exporter
      */
     public function __construct(
         protected ExportRepositoryInterface $repository,
@@ -37,6 +40,12 @@ abstract class AbstractExportBaseCommand extends AbstractCommand
     protected function configure(): void
     {
         $this
+            ->addOption(
+                'include-ids',
+                null,
+                InputOption::VALUE_NONE,
+                'If set, the export will include asset/document/object IDs and ParentIDs - be aware with re-importing'
+            )
             ->addOption(
                 'output',
                 'o',
@@ -101,10 +110,10 @@ abstract class AbstractExportBaseCommand extends AbstractCommand
     }
 
     /**
-     * @param array<TElement> $allElements
-     * @param TElement        $rootElement
+     * @param array<TSource> $allElements
+     * @param TSource        $rootElement
      *
-     * @return array<TElement>
+     * @return array<TSource>
      */
     private function addElements(AbstractElement $rootElement, array $allElements): array
     {
@@ -125,7 +134,7 @@ abstract class AbstractExportBaseCommand extends AbstractCommand
     }
 
     /**
-     * @param array<TElement> $allElements
+     * @param array<TSource> $allElements
      *
      * @throws \Neusta\ConverterBundle\Exception\ConverterException
      */

@@ -38,6 +38,13 @@ class AbstractImportBaseCommand extends AbstractCommand
                 ''
             )
             ->addOption(
+                'overwrite',
+                null,
+                InputOption::VALUE_NONE,
+                'Overwrite or update existing elements in case of key-path-id matching [default: false]',
+                false
+            )
+            ->addOption(
                 'dry-run',
                 null,
                 InputOption::VALUE_NONE,

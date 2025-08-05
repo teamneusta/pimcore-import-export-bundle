@@ -1,0 +1,9 @@
+elements:
+    -
+        Pimcore\Model\Asset\Image:
+            type: image
+            id: 999
+            parentId: 1
+            path: /
+            key: image_1
+            filename: image_1

@@ -32,7 +32,7 @@ class ImportDataObjectsCommand extends AbstractImportBaseCommand
     {
         $this->io->title('Import Pimcore Data Objects given by file');
 
-        $this->io->writeln('Start importing objects from file');
+        $this->io->writeln('Start importing dataObjects from file');
         $this->io->newLine();
 
         $filename = $input->getOption('input');
@@ -49,7 +49,7 @@ class ImportDataObjectsCommand extends AbstractImportBaseCommand
         }
 
         try {
-            $documents = $this->importer->import($yamlInput, $format, !$input->getOption('dry-run'));
+            $dataObjects = $this->importer->import($yamlInput, $format, !$input->getOption('dry-run'), $input->getOption('overwrite'));
         } catch (\DomainException $e) {
             $this->io->error(\sprintf('Invalid %s format: %s', $format, $e->getMessage()));
 
@@ -64,7 +64,7 @@ class ImportDataObjectsCommand extends AbstractImportBaseCommand
             return Command::FAILURE;
         }
 
-        $this->io->success(\sprintf('%d Pimcore Data Objects have been imported successfully', \count($documents)));
+        $this->io->success(\sprintf('%d Pimcore Data Objects have been imported successfully', \count($dataObjects)));
 
         return Command::SUCCESS;
     }

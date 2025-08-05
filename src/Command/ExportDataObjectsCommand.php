@@ -4,13 +4,14 @@ namespace Neusta\Pimcore\ImportExportBundle\Command;
 
 use Neusta\Pimcore\ImportExportBundle\Command\Base\AbstractExportBaseCommand;
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
+use Neusta\Pimcore\ImportExportBundle\Model\Object\DataObject;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\ExportRepositoryInterface;
 use Pimcore\Model\DataObject\Concrete;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 
 /**
- * @extends AbstractExportBaseCommand<Concrete>
+ * @extends AbstractExportBaseCommand<Concrete, DataObject>
  */
 #[AsCommand(
     name: 'neusta:pimcore:export:objects',
@@ -81,7 +82,7 @@ class ExportDataObjectsCommand extends AbstractExportBaseCommand
 
     protected function exportInFile(array $allElements, InputInterface $input): bool
     {
-        $yamlContent = $this->exporter->export($allElements, $input->getOption('format'));
+        $yamlContent = $this->exporter->export($allElements, $input->getOption('format'), ['include-ids' => $input->getOption('include-ids')]);
 
         $exportFilename = $input->getOption('output');
         // Validate filename to prevent directory traversal

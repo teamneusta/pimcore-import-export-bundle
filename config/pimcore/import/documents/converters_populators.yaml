@@ -7,11 +7,33 @@ neusta_converter:
     # Import Converter (Page -> PimcorePage)
     ###########################################################
     neusta_pimcore_import_export.import_document:
+      target: Pimcore\Model\Document
+      populators:
+        - neusta_pimcore_import_export.documents.import.populator.id
+        - neusta_pimcore_import_export.documents.import.populator.key
+        - neusta_pimcore_import_export.documents.import.populator.type
+        - neusta_pimcore_import_export.documents.import.populator.published
+        - neusta_pimcore_import_export.documents.import.populator.path
+        - neusta_pimcore_import_export.documents.import.populator.parentId
+
+    neusta_pimcore_import_export.import_page:
       target: Pimcore\Model\Document\Page
       populators:
         - neusta_pimcore_import_export.documents.import.populator.id
         - neusta_pimcore_import_export.documents.import.populator.key
         - neusta_pimcore_import_export.documents.import.populator.title
+        - neusta_pimcore_import_export.documents.import.populator.controller
+        - neusta_pimcore_import_export.documents.import.populator.type
+        - neusta_pimcore_import_export.documents.import.populator.published
+        - neusta_pimcore_import_export.documents.import.populator.path
+        - neusta_pimcore_import_export.documents.import.populator.parentId
+        - Neusta\Pimcore\ImportExportBundle\Populator\PageImportPopulator
+
+    neusta_pimcore_import_export.import_page_snippet:
+      target: Pimcore\Model\Document\PageSnippet
+      populators:
+        - neusta_pimcore_import_export.documents.import.populator.id
+        - neusta_pimcore_import_export.documents.import.populator.key
         - neusta_pimcore_import_export.documents.import.populator.controller
         - neusta_pimcore_import_export.documents.import.populator.type
         - neusta_pimcore_import_export.documents.import.populator.published

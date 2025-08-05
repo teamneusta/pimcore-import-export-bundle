@@ -8,12 +8,12 @@ neusta_converter:
     ###########################################################
     neusta_pimcore_import_export.export_asset_folder:
       target: Neusta\Pimcore\ImportExportBundle\Model\Asset\Asset
+      populators:
+        - Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator
       properties:
-        id: ~
         key: ~
         type: ~
         path: ~
-        parentId: ~
 
 services:
   _defaults:
@@ -87,6 +87,8 @@ services:
   ###########################################################
   # Export Populator (Pimcore Asset -> Asset)
   ###########################################################
+  Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator: ~
+
   neusta_pimcore_import_export.asset.filename.populator:
     class: Neusta\ConverterBundle\Populator\PropertyMappingPopulator
     arguments:

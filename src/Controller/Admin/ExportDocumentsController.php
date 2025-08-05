@@ -3,8 +3,9 @@
 namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
+use Neusta\Pimcore\ImportExportBundle\Model\Document\Document;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository;
-use Pimcore\Model\Document;
+use Pimcore\Model\Document as PimcoreDocument;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +14,9 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ExportDocumentsController
 {
+    /**
+     * @param Exporter<PimcoreDocument, Document> $exporter
+     */
     public function __construct(
         private Exporter $exporter,
         private DocumentRepository $documentRepository,
@@ -27,14 +31,19 @@ final class ExportDocumentsController
     public function export(Request $request): Response
     {
         $document = $this->documentRepository->getById($request->query->getInt('doc_id'));
-        if (!$document instanceof Document) {
+        if (!$document instanceof PimcoreDocument) {
             return new JsonResponse(
                 \sprintf('Document with id "%s" was not found', $request->query->getInt('doc_id')),
                 Response::HTTP_NOT_FOUND,
             );
         }
 
-        return $this->exportDocuments([$document], $request->query->getString('filename'), 'yaml');
+        return $this->exportDocuments(
+            [$document],
+            $request->query->getString('filename'),
+            'yaml',
+            $request->query->getBoolean('include_ids', false),
+        );
     }
 
     #[Route(
@@ -45,7 +54,7 @@ final class ExportDocumentsController
     public function exportWithChildren(Request $request): Response
     {
         $document = $this->documentRepository->getById($request->query->getInt('doc_id'));
-        if (!$document instanceof Document) {
+        if (!$document instanceof PimcoreDocument) {
             return new JsonResponse(
                 \sprintf('Document with id "%s" was not found', $request->query->getInt('doc_id')),
                 Response::HTTP_NOT_FOUND,
@@ -54,16 +63,27 @@ final class ExportDocumentsController
 
         $documents = $this->documentRepository->findAllInTree($document);
 
-        return $this->exportDocuments($documents, $request->query->getString('filename'), $request->query->getString('format'));
+        return $this->exportDocuments(
+            $documents,
+            $request->query->getString('filename'),
+            $request->query->getString('format'),
+            $request->query->getBoolean('include_ids', false),
+        );
     }
 
     /**
-     * @param iterable<Document> $documents
+     * @param iterable<PimcoreDocument> $documents
      */
-    private function exportDocuments(iterable $documents, string $filename, string $format): Response
+    private function exportDocuments(iterable $documents, string $filename, string $format, bool $includeIds): Response
     {
         try {
-            $yaml = $this->exporter->export($documents, $format);
+            $yaml = $this->exporter->export(
+                $documents,
+                $format,
+                [
+                    'includeIds' => $includeIds,
+                ]
+            );
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

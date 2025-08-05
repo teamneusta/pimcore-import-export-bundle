@@ -1,0 +1,195 @@
+elements:
+    -
+        Pimcore\Model\Document\Page:
+            type: page
+            path: /
+            key: Test-Import-Export
+            published: true
+            controller: 'Neusta\TrinityPimcoreBundle\Controller\DefaultController::indexAction'
+            title: 'Text Editor'
+            editables:
+                main:
+                    type: areablock
+                    name: main
+                    data: [{ key: '1', type: trinity-layout-grid, hidden: false }]
+                'main:1.-col1':
+                    type: areablock
+                    name: 'main:1.-col1'
+                    data: [{ key: '1', type: trinity-headline, hidden: false }, { key: '2', type: trinity-text-editor, hidden: false }]
+                'main:1.-col1:1.headline-text':
+                    type: input
+                    name: 'main:1.-col1:1.headline-text'
+                    data: 'Text Editor'
+                'main:1.-col1:1.modifier':
+                    type: input
+                    name: 'main:1.-col1:1.modifier'
+                    data: ''
+                'main:1.-col1:1.position':
+                    type: select
+                    name: 'main:1.-col1:1.position'
+                    data: ''
+                'main:1.-col1:1.sectionID':
+                    type: input
+                    name: 'main:1.-col1:1.sectionID'
+                    data: ''
+                'main:1.-col1:1.variant':
+                    type: select
+                    name: 'main:1.-col1:1.variant'
+                    data: h2
+                'main:1.-col1:2.modifier':
+                    type: input
+                    name: 'main:1.-col1:2.modifier'
+                    data: ''
+                'main:1.-col1:2.text':
+                    type: wysiwyg
+                    name: 'main:1.-col1:2.text'
+                    data: |-
+                        <h2 class>📝 Was ist ein Text Editor (WYSIWYG Editor) im CMS?</h2>
+                        <p class>Ein <strong>Text Editor</strong> – auch oft <strong>WYSIWYG Editor</strong> genannt („What You See Is What You Get“) – ist ein zentrales Werkzeug in jedem CMS, mit dem Redakteur:innen Inhalte erstellen und bearbeiten können, <strong>ohne selbst HTML schreiben zu müssen</strong>.</p>
+                        <p class>Statt reinen Code zu tippen, arbeiten Nutzer:innen in einer Oberfläche, die ähnlich wie ein Textverarbeitungsprogramm aussieht – mit Buttons für <strong>Fett, Kursiv, Überschriften, Links, Listen, Bilder</strong> usw.</p>
+                        <p class>Man sieht also direkt beim Bearbeiten, <strong>wie der fertige Text später auf der Webseite aussehen wird</strong> – daher der Name WYSIWYG.</p>
+                        <hr />
+                        <h3 class>🎯 Warum sind WYSIWYG-Editoren so wichtig?</h3>
+                        <ul>
+                        <li class>
+                        <p class><strong>Einfache Bedienung:</strong> Auch ohne technisches Wissen können Inhalte gepflegt werden.</p>
+                        </li>
+                        <li class>
+                        <p class><strong>Schnelle Ergebnisse:</strong> Texte, Bilder und Links lassen sich intuitiv einfügen und formatieren.</p>
+                        </li>
+                        <li class>
+                        <p class><strong>Konsistentes Layout:</strong> Vorformatierte Stile sorgen dafür, dass Inhalte überall gleich gut aussehen.</p>
+                        </li>
+                        <li class>
+                        <p class><strong>Produktivität:</strong> Redakteur:innen müssen sich nicht um HTML-Fehler oder fehlerhafte Formatierungen kümmern.</p>
+                        </li>
+                        </ul>
+                        <hr />
+                        <h3 class>🛠️ Typische Funktionen eines CMS-Texteditors:</h3>
+                        <div class="group pointer-events-none relative flex justify-center *:pointer-events-auto">
+                        <div class="tableContainer horzScrollShadows relative">
+                        <table class="min-w-full">
+                        <thead>
+                        <tr>
+                        <th>Funktion</th>
+                        <th>Beschreibung</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                        <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]"><strong>Bold/Italic</strong></td>
+                        <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]">Text fett oder kursiv setzen</td>
+                        </tr>
+                        <tr>
+                        <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]"><strong>Überschriften</strong></td>
+                        <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]">Strukturieren von Inhalten (H2, H3 usw.)</td>
+                        </tr>
+                        <tr>
+                        <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]"><strong>Links einfügen</strong></td>
+                        <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]">Texte oder Bilder verlinken</td>
+                        </tr>
+                        <tr>
+                        <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]"><strong>Bilder hochladen</strong></td>
+                        <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]">Medien direkt in den Text integrieren</td>
+                        </tr>
+                        <tr>
+                        <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]"><strong>Listen</strong></td>
+                        <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]">Aufzählungen und Nummerierungen</td>
+                        </tr>
+                        <tr>
+                        <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]"><strong>Tabellen</strong></td>
+                        <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]">Daten übersichtlich darstellen</td>
+                        </tr>
+                        <tr>
+                        <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]"><strong>Code-Ansicht</strong></td>
+                        <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]">Optional: HTML manuell bearbeiten</td>
+                        </tr>
+                        </tbody>
+                        </table>
+                        </div>
+                        </div>
+                        <hr />
+                        <h3 class>📚 Verwendeter WYSIWYG-Editor</h3>
+                        <p><strong>In Pimcore 11 wechselte der Standard-WYSIWYG-Editor von CKEditor zu TinyMCE und ist Teil des </strong> <strong><a href="https://github.com/pimcore/pimcore/blob/11.x/bundles/TinymceBundle/README.md" target="_blank" rel="noopener">PimcoreTinymceBundle</a>.</strong><strong> </strong></p>
+                        <p class>Dieser Editor lässt sich anpassen, z. B. durch eigene Toolbars, spezielle Styles oder Integrationen (z. B. Mediabrowser, Linkbrowser im CMS).</p>
+                        <hr />
+                        <h3 class>✨ Fazit</h3>
+                        <p class>Ein <strong>guter Text Editor im CMS</strong> ist das Herzstück für die tägliche Arbeit von Redakteur:innen.<br />Er sorgt dafür, dass Inhalte <strong>leicht erstellt, schön formatiert und technisch sauber ausgeliefert</strong> werden – ohne dass jemand HTML-Profi sein muss.</p>
+                        <p class>Kurz gesagt:<br />👉 <strong>WYSIWYG-Editoren sind der Dreh- und Angelpunkt zwischen Inhalt, Technik und guter Nutzererfahrung.</strong></p>
+                'main:1.-col1:2.variant':
+                    type: select
+                    name: 'main:1.-col1:2.variant'
+                    data: ''
+                'main:1.modifier':
+                    type: input
+                    name: 'main:1.modifier'
+                    data: ''
+                'main:1.sectionID':
+                    type: input
+                    name: 'main:1.sectionID'
+                    data: ''
+                'main:1.variant':
+                    type: select
+                    name: 'main:1.variant'
+                    data: 1col
+            properties:
+                navigation_accesskey:
+                    key: navigation_accesskey
+                    type: text
+                    value: ''
+                navigation_anchor:
+                    key: navigation_anchor
+                    type: text
+                    value: ''
+                navigation_class:
+                    key: navigation_class
+                    type: text
+                    value: ''
+                navigation_exclude:
+                    key: navigation_exclude
+                    type: bool
+                    value: false
+                navigation_name:
+                    key: navigation_name
+                    type: text
+                    value: ''
+                navigation_parameters:
+                    key: navigation_parameters
+                    type: text
+                    value: ''
+                navigation_relation:
+                    key: navigation_relation
+                    type: text
+                    value: ''
+                navigation_tabindex:
+                    key: navigation_tabindex
+                    type: text
+                    value: ''
+                navigation_target:
+                    key: navigation_target
+                    type: text
+                    value: ~
+                navigation_title:
+                    key: navigation_title
+                    type: text
+                    value: ''
+                testPropertyAsset:
+                    key: testPropertyAsset
+                    type: asset
+                    value: /logo_desktop.svg
+                testPropertyCheckbox:
+                    key: testPropertyCheckbox
+                    type: bool
+                    value: false
+                testPropertyKey:
+                    key: testPropertyKey
+                    type: document
+                    value: '/Text für viele'
+                testPropertyObject:
+                    key: testPropertyObject
+                    type: object
+                    value: ~
+                testPropertyString:
+                    key: testPropertyString
+                    type: text
+                    value: 'Ich bin eine Zeichenkette'

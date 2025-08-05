@@ -60,7 +60,7 @@ class ImportDocumentsCommand extends AbstractImportBaseCommand
         }
 
         try {
-            $documents = $this->importer->import($yamlInput, $format, !$input->getOption('dry-run'));
+            $documents = $this->importer->import($yamlInput, $format, !$input->getOption('dry-run'), $input->getOption('overwrite'));
         } catch (\DomainException $e) {
             $this->io->error(\sprintf('Invalid %s format: %s', $format, $e->getMessage()));
 

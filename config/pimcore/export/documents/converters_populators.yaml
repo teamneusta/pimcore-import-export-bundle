@@ -9,17 +9,51 @@ neusta_converter:
     neusta_pimcore_import_export.export_document:
       target: Neusta\Pimcore\ImportExportBundle\Model\Document\Document
       populators:
-        - neusta_pimcore_import_export.page.property.language.populator
-        - neusta_pimcore_import_export.page.property.navigation_title.populator
-        - neusta_pimcore_import_export.page.property.navigation_name.populator
+        - Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator
+        - neusta_pimcore_import_export.document.properties.populator
       properties:
-        id: ~
         key: ~
         type: ~
         published: ~
         path: ~
-        parentId: ~
-        controller: ~
+
+    neusta_pimcore_import_export.export_folder:
+      target: Neusta\Pimcore\ImportExportBundle\Model\Document\Folder
+      populators:
+        - Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator
+        - neusta_pimcore_import_export.document.properties.populator
+      properties:
+        key: ~
+        type: ~
+        published: ~
+        path: ~
+
+    neusta_pimcore_import_export.export_page_snippet:
+      target: Neusta\Pimcore\ImportExportBundle\Model\Document\PageSnippet
+      populators:
+        - Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator
+        - neusta_pimcore_import_export.page_snippet.controller.populator
+        - neusta_pimcore_import_export.page_snippet.editables.populator
+        - neusta_pimcore_import_export.document.properties.populator
+      properties:
+        key: ~
+        type: ~
+        published: ~
+        path: ~
+
+    neusta_pimcore_import_export.export_page:
+      target: Neusta\Pimcore\ImportExportBundle\Model\Document\Page
+      populators:
+        - Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator
+        - neusta_pimcore_import_export.page_snippet.controller.populator
+        - neusta_pimcore_import_export.page_snippet.editables.populator
+        - neusta_pimcore_import_export.page.title.populator
+        - neusta_pimcore_import_export.document.properties.populator
+      properties:
+        key: ~
+        type: ~
+        published: ~
+        path: ~
 
     neusta_pimcore_import_export.editable_converter:
       target: Neusta\Pimcore\ImportExportBundle\Model\Document\Editable
@@ -28,6 +62,14 @@ neusta_converter:
       properties:
         type: ~
         name: ~
+
+    neusta_pimcore_import_export.property_converter:
+      target: Neusta\Pimcore\ImportExportBundle\Model\Property
+      populators:
+        - Neusta\Pimcore\ImportExportBundle\Populator\PropertyValuePopulator
+      properties:
+        key: name
+        type: ~
 
 services:
   _defaults:
@@ -42,52 +84,28 @@ services:
     arguments:
       $typeToConverterMap:
         Pimcore\Model\Document\Page: '@neusta_pimcore_import_export.export_page'
-        Pimcore\Model\Document\Snippet: '@neusta_pimcore_import_export.export_page_snippet'
+        Pimcore\Model\Document\PageSnippet: '@neusta_pimcore_import_export.export_page_snippet'
         Pimcore\Model\Document\Folder: '@neusta_pimcore_import_export.export_folder'
-
-  ###########################################################
-  # Export Converter (Document/Folder -> Page)
-  ###########################################################
-  neusta_pimcore_import_export.export_folder:
-    alias: neusta_pimcore_import_export.export_document
-
-  ###########################################################
-  # Export Converter (Document/PageSnippet -> Page)
-  ###########################################################
-  neusta_pimcore_import_export.export_page_snippet:
-    class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
-    arguments:
-      $converter: '@neusta_pimcore_import_export.export_document'
-      $postPopulators:
-        - '@neusta_pimcore_import_export.page.editables.populator'
-
-  ###########################################################
-  # Export Converter (Document/Page -> Page)
-  ###########################################################
-  neusta_pimcore_import_export.export_page:
-    class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter
-    arguments:
-      $converter: '@neusta_pimcore_import_export.export_page_snippet'
-      $postPopulators:
-        - '@neusta_pimcore_import_export.page.controller.populator'
-        - '@neusta_pimcore_import_export.page.title.populator'
+        Pimcore\Model\Document: '@neusta_pimcore_import_export.export_document'
 
   ###########################################################
   # Export Populator (Page -> Page)
   ###########################################################
+  Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator: ~
+
   neusta_pimcore_import_export.page.title.populator:
     class: Neusta\ConverterBundle\Populator\PropertyMappingPopulator
     arguments:
       $sourceProperty: title
       $targetProperty: title
 
-  neusta_pimcore_import_export.page.controller.populator:
+  neusta_pimcore_import_export.page_snippet.controller.populator:
     class: Neusta\ConverterBundle\Populator\PropertyMappingPopulator
     arguments:
       $sourceProperty: controller
       $targetProperty: controller
 
-  neusta_pimcore_import_export.page.editables.populator:
+  neusta_pimcore_import_export.page_snippet.editables.populator:
     class: Neusta\ConverterBundle\Populator\ArrayConvertingPopulator
     arguments:
       $converter: '@neusta_pimcore_import_export.editable_converter'
@@ -101,19 +119,12 @@ services:
       $targetProperty: 'language'
       $skipNull: true
 
-  neusta_pimcore_import_export.page.property.navigation_title.populator:
-    class: Neusta\Pimcore\ImportExportBundle\PimcoreConverter\Populator\PropertyBasedMappingPopulator
+  neusta_pimcore_import_export.document.properties.populator:
+    class: Neusta\ConverterBundle\Populator\ArrayConvertingPopulator
     arguments:
-      $propertyKey: 'navigation_title'
-      $targetProperty: 'navigation_title'
-      $skipNull: true
-
-  neusta_pimcore_import_export.page.property.navigation_name.populator:
-    class: Neusta\Pimcore\ImportExportBundle\PimcoreConverter\Populator\PropertyBasedMappingPopulator
-    arguments:
-      $propertyKey: 'navigation_name'
-      $targetProperty: 'navigation_name'
-      $skipNull: true
+      $converter: '@neusta_pimcore_import_export.property_converter'
+      $sourceArrayPropertyName: 'properties'
+      $targetPropertyName: 'properties'
 
   ###########################################################
   # Export Populator (Editable -> YamlEditable)
@@ -121,3 +132,4 @@ services:
   neusta_pimcore_import_export.editable.data.populator:
     class: Neusta\Pimcore\ImportExportBundle\Populator\EditableDataPopulator
 
+  Neusta\Pimcore\ImportExportBundle\Populator\PropertyValuePopulator: ~
