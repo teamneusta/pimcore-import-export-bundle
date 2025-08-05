@@ -75,6 +75,18 @@ All import commands follow a similar structure and support the following common 
 - `--input` or `-i`: Path to the input YAML file (required for import commands).
 - `--dry-run`: Perform the operation without persisting data (only available for import commands).
 
+### Notice: WYSIWYG - Editable
+
+For using a correct exporting and importing of WYSIWYG editables in older Pimcore versions (e.g. using `symfony/framework < 6.2.2`) you probably need to configure your Symfony HTML sanitizer as documented here:
+https://docs.pimcore.com/platform/2024.4/Pimcore/Documents/Editables/WYSIWYG#extending-symfony-html-sanitizer-configuration
+
+In our integration test we have used the following configuration:
+
+```yaml
+tests/app/config/packages/pimcore.yaml
+```
+because of already known bugs with `<a>` - HTML tag.
+
 ## Concepts
 
 ### Page Export
