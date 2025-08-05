@@ -51,7 +51,7 @@ class Exporter
                         $yamlContent = $this->typeToConverterMap[$type]->convert($element, $ctx);
                         $yamlExportElements[] = [$type => $yamlContent];
                     } catch (ConverterException $e) {
-                        $this->dispatcher->dispatch(new ImportEvent(ImportStatus::FAILED, $type, [], $element, null, $e->getMessage()));
+                        $this->dispatcher->dispatch(new ImportEvent(ImportStatus::Failed, $type, [], $element, null, $e->getMessage()));
                     }
                     continue 2;
                 }

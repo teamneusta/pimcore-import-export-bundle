@@ -14,14 +14,14 @@ elements:
                     data: 'some text input'
             properties:
                 language:
-                    type: string
                     key: language
+                    type: string
                     value: en
                 navigation_name:
-                    type: string
                     key: navigation_name
+                    type: string
                     value: 'My Document'
                 navigation_title:
-                    type: string
                     key: navigation_title
+                    type: string
                     value: 'My Document - Title'

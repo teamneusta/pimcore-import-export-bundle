@@ -33,7 +33,7 @@ class ImportLoggingEventSubscriber implements EventSubscriberInterface
 
         if (\in_array(
             $event->getStatus(),
-            [ImportStatus::INCONSISTENCY, ImportStatus::FAILED]
+            [ImportStatus::Inconsistency, ImportStatus::Failed]
         )) {
             $this->writeApplicationError($event);
         } else {

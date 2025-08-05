@@ -30,7 +30,7 @@ class ImporterExporterTest extends KernelTestCase
         $asset = new Asset();
         $asset->setParentId(1);
         $asset->setPath('/');
-        $asset->setKey('logo_desktop_' . uniqid() . '.svg');
+        $asset->setKey('logo_desktop.svg');
         $asset->save();
         self::assertNotNull($asset->getId(), 'Asset should be saved successfully');
 
@@ -49,6 +49,6 @@ class ImporterExporterTest extends KernelTestCase
         $document = Page::getByPath('/Test-Import-Export');
         $yamlExported = $this->exporter->export([$document], 'yaml');
 
-        self::assertEquals(yaml_parse($yamlToImport), yaml_parse($yamlExported));
+        self::assertEquals($yamlToImport, $yamlExported);
     }
 }

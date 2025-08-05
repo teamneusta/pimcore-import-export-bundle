@@ -134,62 +134,62 @@ elements:
                     data: 1col
             properties:
                 navigation_accesskey:
-                    type: text
                     key: navigation_accesskey
+                    type: text
                     value: ''
                 navigation_anchor:
-                    type: text
                     key: navigation_anchor
+                    type: text
                     value: ''
                 navigation_class:
-                    type: text
                     key: navigation_class
+                    type: text
                     value: ''
                 navigation_exclude:
-                    type: bool
                     key: navigation_exclude
+                    type: bool
                     value: false
                 navigation_name:
-                    type: text
                     key: navigation_name
+                    type: text
                     value: ''
                 navigation_parameters:
-                    type: text
                     key: navigation_parameters
+                    type: text
                     value: ''
                 navigation_relation:
-                    type: text
                     key: navigation_relation
+                    type: text
                     value: ''
                 navigation_tabindex:
-                    type: text
                     key: navigation_tabindex
+                    type: text
                     value: ''
                 navigation_target:
-                    type: text
                     key: navigation_target
+                    type: text
                     value: ~
                 navigation_title:
-                    type: text
                     key: navigation_title
+                    type: text
                     value: ''
                 testPropertyAsset:
-                    type: asset
                     key: testPropertyAsset
+                    type: asset
                     value: /logo_desktop.svg
                 testPropertyCheckbox:
-                    type: bool
                     key: testPropertyCheckbox
+                    type: bool
                     value: false
                 testPropertyKey:
-                    type: document
                     key: testPropertyKey
+                    type: document
                     value: '/Text für viele'
                 testPropertyObject:
-                    type: object
                     key: testPropertyObject
+                    type: object
                     value: ~
                 testPropertyString:
-                    type: text
                     key: testPropertyString
+                    type: text
                     value: 'Ich bin eine Zeichenkette'

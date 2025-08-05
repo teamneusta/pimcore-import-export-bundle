@@ -2,6 +2,7 @@
 
 namespace Neusta\Pimcore\ImportExportBundle\Serializer\Normalizer;
 
+use Neusta\Pimcore\ImportExportBundle\Model\Element;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
@@ -48,6 +49,6 @@ class PrioritizedAttributesNormalizer implements NormalizerInterface
 
     public function supportsNormalization($data, ?string $format = null): bool
     {
-        return \is_object($data) && $this->normalizer->supportsNormalization($data, $format);
+        return $data instanceof Element && $this->normalizer->supportsNormalization($data, $format);
     }
 }

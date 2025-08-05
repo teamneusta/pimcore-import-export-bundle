@@ -78,22 +78,22 @@ class Importer
                         $this->parentRelationResolver->resolve($result);
                         try {
                             $result->save(['versionNote' => 'created by pimcore-import-export-bundle']);
-                            $this->dispatcher->dispatch(new ImportEvent(ImportStatus::CREATED, $typeKey, $element, $result, null));
+                            $this->dispatcher->dispatch(new ImportEvent(ImportStatus::Created, $typeKey, $element, $result, null));
                         } catch (\Exception $e) {
-                            $this->dispatcher->dispatch(new ImportEvent(ImportStatus::FAILED, $typeKey, $element, $result, $oldElement, $e->getMessage()));
+                            $this->dispatcher->dispatch(new ImportEvent(ImportStatus::Failed, $typeKey, $element, $result, $oldElement, $e->getMessage()));
                         }
                     } elseif ($overwrite) {
                         if ($this->newElementHasNoValidId($result) || $this->bothHaveSameId($oldElement, $result)) {
                             // Update existing element by new one
                             try {
                                 $mergeStrategy->mergeAndSave($oldElement, $result);
-                                $this->dispatcher->dispatch(new ImportEvent(ImportStatus::UPDATED, $typeKey, $element, $result, $oldElement));
+                                $this->dispatcher->dispatch(new ImportEvent(ImportStatus::Updated, $typeKey, $element, $result, $oldElement));
                             } catch (\Exception $e) {
-                                $this->dispatcher->dispatch(new ImportEvent(ImportStatus::FAILED, $typeKey, $element, $result, $oldElement, $e->getMessage()));
+                                $this->dispatcher->dispatch(new ImportEvent(ImportStatus::Failed, $typeKey, $element, $result, $oldElement, $e->getMessage()));
                             }
                         } else {
                             $this->dispatcher->dispatch(new ImportEvent(
-                                ImportStatus::INCONSISTENCY, $typeKey, $element, $result, $oldElement,
+                                ImportStatus::Inconsistency, $typeKey, $element, $result, $oldElement,
                                 <<<ERR_MESSAGE
                                 Two elements with same key (%s) and path (%s) but different IDs (new ID: %d, old ID: %d) found.
                                 This seems to be an inconsistency of your importing data. Please check your import file.
@@ -104,7 +104,7 @@ class Importer
                         }
                     } else {
                         // Don't overwrite existing element
-                        $this->dispatcher->dispatch(new ImportEvent(ImportStatus::SKIPPED, $typeKey, $element, $result, $oldElement));
+                        $this->dispatcher->dispatch(new ImportEvent(ImportStatus::Skipped, $typeKey, $element, $result, $oldElement));
                     }
                 }
             }

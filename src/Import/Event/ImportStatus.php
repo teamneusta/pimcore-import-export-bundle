@@ -4,9 +4,9 @@ namespace Neusta\Pimcore\ImportExportBundle\Import\Event;
 
 enum ImportStatus: string
 {
-    case SKIPPED = 'SKIPPED';
-    case CREATED = 'CREATED';
-    case UPDATED = 'UPDATED';
-    case INCONSISTENCY = 'INCONSISTENCY';
-    case FAILED = 'FAILED';
+    case Skipped = 'SKIPPED';
+    case Created = 'CREATED';
+    case Updated = 'UPDATED';
+    case Inconsistency = 'INCONSISTENCY';
+    case Failed = 'FAILED';
 }
