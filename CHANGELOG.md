@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.0
+
+- feature: [With or Without IDs] Export and Import should be possible without IDs (#20)
+
 ## 2.0.1
 
 - bugfix: add controller field to converters_populators (#18)
