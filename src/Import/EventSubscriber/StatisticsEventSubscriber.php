@@ -33,7 +33,7 @@ class StatisticsEventSubscriber implements EventSubscriberInterface
         $this->incrementCounter($event->getStatus());
     }
 
-    public function incrementCounter(ImportStatus $status): void
+    private function incrementCounter(ImportStatus $status): void
     {
         if (\array_key_exists($status->value, $this->statistics)) {
             ++$this->statistics[$status->value];
