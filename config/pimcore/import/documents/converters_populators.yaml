@@ -30,7 +30,7 @@ neusta_converter:
         - Neusta\Pimcore\ImportExportBundle\Populator\PageImportPopulator
 
     neusta_pimcore_import_export.import_page_snippet:
-      target: Pimcore\Model\Document\PageSnippet
+      target_factory: Neusta\Pimcore\ImportExportBundle\Factory\PageSnippetFactory
       populators:
         - neusta_pimcore_import_export.documents.import.populator.id
         - neusta_pimcore_import_export.documents.import.populator.key
@@ -45,6 +45,12 @@ services:
   _defaults:
     autowire: true
     autoconfigure: true
+
+  ###########################################################
+  # Factories
+  ###########################################################
+  Neusta\Pimcore\ImportExportBundle\Factory\PageSnippetFactory:
+    public: true
 
   ###########################################################
   # Import Populator (Page -> Document)
