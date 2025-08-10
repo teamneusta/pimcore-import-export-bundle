@@ -32,6 +32,7 @@ class ImporterTest extends KernelTestCase
                         id: 999
                         path: /path-does-not-exist/
                         key: test_document_1
+                        type: page
             YAML;
 
         $this->expectException(\InvalidArgumentException::class);
@@ -92,7 +93,7 @@ class ImporterTest extends KernelTestCase
                         "Pimcore\\\\Model\\\\Document\\\\Page": {
                             "id": 999,
                             "parentId": 1,
-                            "type": "email",
+                            "type": "page",
                             "published": false,
                             "path": "\/path\/will\/be\/overwritten\/by\/parent_id/\/",
                             "key": "test_document_1",
@@ -134,7 +135,7 @@ class ImporterTest extends KernelTestCase
 
         self::assertEquals('test_document_1', $pages[0]->getKey());
         self::assertEquals('The Title of My Document', $pages[0]->getTitle());
-        self::assertEquals('email', $pages[0]->getType());
+        self::assertEquals('page', $pages[0]->getType());
         self::assertEquals('/Some/Controller', $pages[0]->getController());
         self::assertEquals('fr', $pages[0]->getProperty('language'));
         self::assertEquals('My Document', $pages[0]->getProperty('navigation_name'));
@@ -150,7 +151,7 @@ class ImporterTest extends KernelTestCase
                     Pimcore\Model\Document\Page:
                         id: 999
                         parentId: 99999
-                        type: email
+                        type: page
                         published: false
                         path: /
                         key: test_document_1
@@ -178,7 +179,7 @@ class ImporterTest extends KernelTestCase
 
         self::assertEquals('test_document_1', $pages[0]->getKey());
         self::assertEquals('The Title of My Document', $pages[0]->getTitle());
-        self::assertEquals('email', $pages[0]->getType());
+        self::assertEquals('page', $pages[0]->getType());
         self::assertEquals('/Some/Controller', $pages[0]->getController());
         self::assertEquals('en', $pages[0]->getProperty('language'));
         self::assertEquals('My Document', $pages[0]->getProperty('navigation_name'));
@@ -196,18 +197,21 @@ class ImporterTest extends KernelTestCase
                         id: 999
                         path: /my_path/
                         key: test_document_1
+                        type: page
                 -
                     Pimcore\Model\Document\Page:
                         parentId: 999
                         id: 1000
                         path: /my_path/test_document_1/
                         key: test_document_1_1
+                        type: page
                 -
                     Pimcore\Model\Document\Page:
                         parentId: 1000
                         id: 1001
                         path: /my_path/test_document_1/test_document_1_1/
                         key: test_document_1_1_1
+                        type: page
             YAML;
 
         $pages = $this->importer->import($yaml, 'yaml', true, true);
@@ -226,24 +230,28 @@ class ImporterTest extends KernelTestCase
                         id: 999
                         path: /
                         key: test_document_1
+                        type: page
                 -
                     Pimcore\Model\Document\Page:
                         parentId: 9999
                         id: 1000
                         path: /test_document_1/
                         key: test_document_1_1
+                        type: page
                 -
                     Pimcore\Model\Document\Page:
                         parentId: 9999
                         id: 1001
                         path: /test_document_1/
                         key: test_document_1_2
+                        type: page
                 -
                     Pimcore\Model\Document\Page:
                         parentId: 9999
                         id: 10011
                         path: /test_document_1/test_document_1_1/
                         key: test_document_1_1_1
+                        type: page
             YAML;
 
         $pages = $this->importer->import($yaml, 'yaml', true, true);
@@ -270,14 +278,17 @@ class ImporterTest extends KernelTestCase
                     Pimcore\Model\Document\Page:
                         path: /
                         key: test_document_1
+                        type: page
                 -
                     Pimcore\Model\Document\Page:
                         path: /test_document_1/
                         key: child_2
+                        type: page
                 -
                     Pimcore\Model\Document\Page:
                         path: /test_document_1/
                         key: child_3
+                        type: page
             YAML;
 
         $pages = $this->importer->import($yaml, 'yaml', true, true);

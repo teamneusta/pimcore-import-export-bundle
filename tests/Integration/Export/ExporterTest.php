@@ -7,6 +7,7 @@ use Neusta\Pimcore\TestingFramework\Database\ResetDatabase;
 use Pimcore\Model\Asset\Image;
 use Pimcore\Model\Document\Editable\Input;
 use Pimcore\Model\Document\Page;
+use Pimcore\Model\Document\Snippet;
 use Pimcore\Test\KernelTestCase;
 use Spatie\Snapshots\MatchesSnapshots;
 
@@ -45,6 +46,14 @@ class ExporterTest extends KernelTestCase
         $asset->setPath('/');
 
         $yaml = $this->exporter->export([$asset], 'yaml', ['includeIds' => true]);
+        $this->assertMatchesSnapshot($yaml, new ImportExportYamlDriver());
+    }
+
+    public function test_single_page_snippet_export(): void
+    {
+        $page = $this->createPageSnippetWithInputEditable();
+
+        $yaml = $this->exporter->export([$page], 'yaml');
         $this->assertMatchesSnapshot($yaml, new ImportExportYamlDriver());
     }
 
@@ -136,6 +145,27 @@ class ExporterTest extends KernelTestCase
         $page->setProperty('navigation_name', 'string', 'My Document');
         $page->setProperty('navigation_title', 'string', 'My Document - Title');
         $page->setTitle('The Title of my document');
+        $page->setController('/Some/Controller');
+        $inputEditable = new Input();
+        $inputEditable->setName('textInput');
+        $inputEditable->setDataFromResource('some text input');
+        $page->setEditables([$inputEditable]);
+
+        return $page;
+    }
+
+    private function createPageSnippetWithInputEditable(): Snippet
+    {
+        $page = new Snippet();
+        $page->setId(999);
+        $page->setParentId(4);
+        $page->setType('snippet');
+        $page->setPublished(false);
+        $page->setPath('/test/');
+        $page->setKey('test_document_1');
+        $page->setProperty('language', 'string', 'en');
+        $page->setProperty('navigation_name', 'string', 'My Document');
+        $page->setProperty('navigation_title', 'string', 'My Document - Title');
         $page->setController('/Some/Controller');
         $inputEditable = new Input();
         $inputEditable->setName('textInput');

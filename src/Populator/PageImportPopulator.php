@@ -30,6 +30,10 @@ class PageImportPopulator implements Populator
      */
     public function populate(object $target, object $source, ?object $ctx = null): void
     {
+        if ('page' === $source['type'] && isset($source['title'])) {
+            $target->setTitle($source['title']);
+        }
+
         foreach ($source['properties'] ?? [] as $property) {
             if ($property['value'] && 'asset' === $property['type']) {
                 $value = $this->assetRepository->getByPath($property['value']);
