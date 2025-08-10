@@ -1,8 +1,16 @@
 # Changelog
 
+## 3.0.0
+
+- BC-break: bugfix: Import of exported Page Snippet documents by changing type to `Pimcore\Model\Document\Snippet`
+  You have to change the key of your already exported YAML files 
+  from `Pimcore\Model\Document\PageSnippet` to `Pimcore\Model\Document\Snippet`
+- improvement: Refactoring of PageImportPopulator - separated into three new Populators
+
 ## 2.1.0
 
 - feature: [With or Without IDs] Export and Import should be possible without IDs (#20)
+- change: You have to change the key of already exported YAML files from `Pimcore\Model\Document` to `Pimcore\Model\Document\Page`
 
 ## 2.0.1
 
