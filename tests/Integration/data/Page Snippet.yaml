@@ -3,144 +3,252 @@ elements:
         Pimcore\Model\Document\Snippet:
             type: snippet
             path: /
-            key: 'Page Snippet'
-            published: false
-            controller: /Some/Controller
+            key: footer
+            published: true
+            controller: 'Neusta\TrinityPimcoreBundle\Controller\DefaultController::indexSnippetAction'
             editables:
-              main:
-                type: areablock
-                name: main
-                data: [{ key: '1', type: trinity-layout-grid, hidden: false }]
-              'main:1.-col1':
-                type: areablock
-                name: 'main:1.-col1'
-                data: [{ key: '1', type: trinity-headline, hidden: false }, { key: '2', type: trinity-text-editor, hidden: false }]
-              'main:1.-col1:1.headline-text':
-                type: input
-                name: 'main:1.-col1:1.headline-text'
-                data: 'Text Editor'
-              'main:1.-col1:1.modifier':
-                type: input
-                name: 'main:1.-col1:1.modifier'
-                data: ''
-              'main:1.-col1:1.position':
-                type: select
-                name: 'main:1.-col1:1.position'
-                data: ''
-              'main:1.-col1:1.sectionID':
-                type: input
-                name: 'main:1.-col1:1.sectionID'
-                data: ''
-              'main:1.-col1:1.variant':
-                type: select
-                name: 'main:1.-col1:1.variant'
-                data: h2
-              'main:1.-col1:2.modifier':
-                type: input
-                name: 'main:1.-col1:2.modifier'
-                data: ''
-              'main:1.-col1:2.text':
-                type: wysiwyg
-                name: 'main:1.-col1:2.text'
-                data: |-
-                  <h2 class>📝 Was ist ein Text Editor (WYSIWYG Editor) im CMS?</h2>
-                  <p class>Ein <strong>Text Editor</strong> – auch oft <strong>WYSIWYG Editor</strong> genannt („What You See Is What You Get“) – ist ein zentrales Werkzeug in jedem CMS, mit dem Redakteur:innen Inhalte erstellen und bearbeiten können, <strong>ohne selbst HTML schreiben zu müssen</strong>.</p>
-                  <p class>Statt reinen Code zu tippen, arbeiten Nutzer:innen in einer Oberfläche, die ähnlich wie ein Textverarbeitungsprogramm aussieht – mit Buttons für <strong>Fett, Kursiv, Überschriften, Links, Listen, Bilder</strong> usw.</p>
-                  <p class>Man sieht also direkt beim Bearbeiten, <strong>wie der fertige Text später auf der Webseite aussehen wird</strong> – daher der Name WYSIWYG.</p>
-                  <hr />
-                  <h3 class>🎯 Warum sind WYSIWYG-Editoren so wichtig?</h3>
-                  <ul>
-                  <li class>
-                  <p class><strong>Einfache Bedienung:</strong> Auch ohne technisches Wissen können Inhalte gepflegt werden.</p>
-                  </li>
-                  <li class>
-                  <p class><strong>Schnelle Ergebnisse:</strong> Texte, Bilder und Links lassen sich intuitiv einfügen und formatieren.</p>
-                  </li>
-                  <li class>
-                  <p class><strong>Konsistentes Layout:</strong> Vorformatierte Stile sorgen dafür, dass Inhalte überall gleich gut aussehen.</p>
-                  </li>
-                  <li class>
-                  <p class><strong>Produktivität:</strong> Redakteur:innen müssen sich nicht um HTML-Fehler oder fehlerhafte Formatierungen kümmern.</p>
-                  </li>
-                  </ul>
-                  <hr />
-                  <h3 class>🛠️ Typische Funktionen eines CMS-Texteditors:</h3>
-                  <div class="group pointer-events-none relative flex justify-center *:pointer-events-auto">
-                  <div class="tableContainer horzScrollShadows relative">
-                  <table class="min-w-full">
-                  <thead>
-                  <tr>
-                  <th>Funktion</th>
-                  <th>Beschreibung</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                  <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]"><strong>Bold/Italic</strong></td>
-                  <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]">Text fett oder kursiv setzen</td>
-                  </tr>
-                  <tr>
-                  <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]"><strong>Überschriften</strong></td>
-                  <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]">Strukturieren von Inhalten (H2, H3 usw.)</td>
-                  </tr>
-                  <tr>
-                  <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]"><strong>Links einfügen</strong></td>
-                  <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]">Texte oder Bilder verlinken</td>
-                  </tr>
-                  <tr>
-                  <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]"><strong>Bilder hochladen</strong></td>
-                  <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]">Medien direkt in den Text integrieren</td>
-                  </tr>
-                  <tr>
-                  <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]"><strong>Listen</strong></td>
-                  <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]">Aufzählungen und Nummerierungen</td>
-                  </tr>
-                  <tr>
-                  <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]"><strong>Tabellen</strong></td>
-                  <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]">Daten übersichtlich darstellen</td>
-                  </tr>
-                  <tr>
-                  <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]"><strong>Code-Ansicht</strong></td>
-                  <td class="max-w-[calc(var(--thread-content-max-width)*2/3)]">Optional: HTML manuell bearbeiten</td>
-                  </tr>
-                  </tbody>
-                  </table>
-                  </div>
-                  </div>
-                  <hr />
-                  <h3 class>📚 Verwendeter WYSIWYG-Editor</h3>
-                  <p><strong>In Pimcore 11 wechselte der Standard-WYSIWYG-Editor von CKEditor zu TinyMCE und ist Teil des </strong> <strong><a href="https://github.com/pimcore/pimcore/blob/11.x/bundles/TinymceBundle/README.md" target="_blank" rel="noopener">PimcoreTinymceBundle</a>.</strong><strong> </strong></p>
-                  <p class>Dieser Editor lässt sich anpassen, z. B. durch eigene Toolbars, spezielle Styles oder Integrationen (z. B. Mediabrowser, Linkbrowser im CMS).</p>
-                  <hr />
-                  <h3 class>✨ Fazit</h3>
-                  <p class>Ein <strong>guter Text Editor im CMS</strong> ist das Herzstück für die tägliche Arbeit von Redakteur:innen.<br />Er sorgt dafür, dass Inhalte <strong>leicht erstellt, schön formatiert und technisch sauber ausgeliefert</strong> werden – ohne dass jemand HTML-Profi sein muss.</p>
-                  <p class>Kurz gesagt:<br />👉 <strong>WYSIWYG-Editoren sind der Dreh- und Angelpunkt zwischen Inhalt, Technik und guter Nutzererfahrung.</strong></p>
-              'main:1.-col1:2.variant':
-                type: select
-                name: 'main:1.-col1:2.variant'
-                data: ''
-              'main:1.modifier':
-                type: input
-                name: 'main:1.modifier'
-                data: ''
-              'main:1.sectionID':
-                type: input
-                name: 'main:1.sectionID'
-                data: ''
-              'main:1.variant':
-                type: select
-                name: 'main:1.variant'
-                data: 1col
+                main:
+                    type: areablock
+                    name: main
+                    data: [{ key: '1', type: trinity-footer, hidden: false }]
+                'main:1.button':
+                    type: area
+                    name: 'main:1.button'
+                    data: { type: trinity-button }
+                'main:1.button:1.link':
+                    type: area
+                    name: 'main:1.button:1.link'
+                    data: { type: trinity-link }
+                'main:1.button:1.link:1.external_url':
+                    type: input
+                    name: 'main:1.button:1.link:1.external_url'
+                    data: ''
+                'main:1.button:1.link:1.icon':
+                    type: area
+                    name: 'main:1.button:1.link:1.icon'
+                    data: { type: trinity-icon }
+                'main:1.button:1.link:1.icon:1.icon':
+                    type: select
+                    name: 'main:1.button:1.link:1.icon:1.icon'
+                    data: arrow-right
+                'main:1.button:1.link:1.icon:1.icon-border':
+                    type: select
+                    name: 'main:1.button:1.link:1.icon:1.icon-border'
+                    data: ''
+                'main:1.button:1.link:1.icon:1.modifier':
+                    type: input
+                    name: 'main:1.button:1.link:1.icon:1.modifier'
+                    data: ''
+                'main:1.button:1.link:1.icon:1.sectionID':
+                    type: input
+                    name: 'main:1.button:1.link:1.icon:1.sectionID'
+                    data: ''
+                'main:1.button:1.link:1.icon:1.variant':
+                    type: select
+                    name: 'main:1.button:1.link:1.icon:1.variant'
+                    data: c-icon--base
+                'main:1.button:1.link:1.internal_page':
+                    type: relation
+                    name: 'main:1.button:1.link:1.internal_page'
+                    data: { id: ~, type: ~, subtype: ~ }
+                'main:1.button:1.link:1.modifier':
+                    type: input
+                    name: 'main:1.button:1.link:1.modifier'
+                    data: ''
+                'main:1.button:1.link:1.newTab':
+                    type: checkbox
+                    name: 'main:1.button:1.link:1.newTab'
+                    data: false
+                'main:1.button:1.link:1.noFollow':
+                    type: checkbox
+                    name: 'main:1.button:1.link:1.noFollow'
+                    data: false
+                'main:1.button:1.link:1.section_ID':
+                    type: input
+                    name: 'main:1.button:1.link:1.section_ID'
+                    data: ''
+                'main:1.button:1.link:1.seoTitle':
+                    type: input
+                    name: 'main:1.button:1.link:1.seoTitle'
+                    data: ''
+                'main:1.button:1.link:1.text':
+                    type: input
+                    name: 'main:1.button:1.link:1.text'
+                    data: 'Drück mich'
+                'main:1.button:1.modifier':
+                    type: input
+                    name: 'main:1.button:1.modifier'
+                    data: ''
+                'main:1.button:1.section_ID':
+                    type: input
+                    name: 'main:1.button:1.section_ID'
+                    data: ''
+                'main:1.button:1.variant':
+                    type: select
+                    name: 'main:1.button:1.variant'
+                    data: c-btn
+                'main:1.button:1.variantButtonForm':
+                    type: select
+                    name: 'main:1.button:1.variantButtonForm'
+                    data: ''
+                'main:1.button:1.variantButtonIconOrientation':
+                    type: select
+                    name: 'main:1.button:1.variantButtonIconOrientation'
+                    data: ''
+                'main:1.button:1.variantButtonSize':
+                    type: select
+                    name: 'main:1.button:1.variantButtonSize'
+                    data: ''
+                'main:1.contact_city':
+                    type: input
+                    name: 'main:1.contact_city'
+                    data: Bremen
+                'main:1.contact_company':
+                    type: input
+                    name: 'main:1.contact_company'
+                    data: 'Neusta SD'
+                'main:1.contact_email':
+                    type: input
+                    name: 'main:1.contact_email'
+                    data: info@neusta.de
+                'main:1.contact_fax':
+                    type: input
+                    name: 'main:1.contact_fax'
+                    data: '+49 421 20696-99'
+                'main:1.contact_headline':
+                    type: input
+                    name: 'main:1.contact_headline'
+                    data: 'Dies ist der Footer (linker Teil)'
+                'main:1.contact_phone_addition':
+                    type: input
+                    name: 'main:1.contact_phone_addition'
+                    data: 9-17
+                'main:1.contact_phone_label':
+                    type: input
+                    name: 'main:1.contact_phone_label'
+                    data: Telefon
+                'main:1.contact_phone_url':
+                    type: input
+                    name: 'main:1.contact_phone_url'
+                    data: '+49 421 206960'
+                'main:1.contact_street':
+                    type: input
+                    name: 'main:1.contact_street'
+                    data: Konsul-Smidt-Straße
+                'main:1.contact_street_number':
+                    type: input
+                    name: 'main:1.contact_street_number'
+                    data: '24'
+                'main:1.contact_zip':
+                    type: input
+                    name: 'main:1.contact_zip'
+                    data: '28217'
+                'main:1.footer_links':
+                    type: block
+                    name: 'main:1.footer_links'
+                    data: {  }
+                'main:1.footer_social_media_bar':
+                    type: area
+                    name: 'main:1.footer_social_media_bar'
+                    data: { type: trinity-social-media-bar }
+                'main:1.footer_social_media_bar:1.modifier':
+                    type: input
+                    name: 'main:1.footer_social_media_bar:1.modifier'
+                    data: ''
+                'main:1.footer_social_media_bar:1.sectionID':
+                    type: input
+                    name: 'main:1.footer_social_media_bar:1.sectionID'
+                    data: ''
+                'main:1.footer_social_media_bar:1.socialMediaItems':
+                    type: block
+                    name: 'main:1.footer_social_media_bar:1.socialMediaItems'
+                    data: {  }
+                'main:1.footer_social_media_bar:1.variant':
+                    type: select
+                    name: 'main:1.footer_social_media_bar:1.variant'
+                    data: c-social-media-bar--center
+                'main:1.infobox_headline':
+                    type: input
+                    name: 'main:1.infobox_headline'
+                    data: 'Dies ist der Footer (rechter Teil)'
+                'main:1.infobox_text':
+                    type: input
+                    name: 'main:1.infobox_text'
+                    data: 'Hier ist eine Information'
+                'main:1.link':
+                    type: area
+                    name: 'main:1.link'
+                    data: { type: trinity-link }
+                'main:1.link:1.external_url':
+                    type: input
+                    name: 'main:1.link:1.external_url'
+                    data: 'https://maps.app.goo.gl/KS6Tuk7snshJL4bj7'
+                'main:1.link:1.internal_page':
+                    type: relation
+                    name: 'main:1.link:1.internal_page'
+                    data: { id: ~, type: ~, subtype: ~ }
+                'main:1.link:1.modifier':
+                    type: input
+                    name: 'main:1.link:1.modifier'
+                    data: ''
+                'main:1.link:1.newTab':
+                    type: checkbox
+                    name: 'main:1.link:1.newTab'
+                    data: false
+                'main:1.link:1.noFollow':
+                    type: checkbox
+                    name: 'main:1.link:1.noFollow'
+                    data: false
+                'main:1.link:1.section_ID':
+                    type: input
+                    name: 'main:1.link:1.section_ID'
+                    data: ''
+                'main:1.link:1.seoTitle':
+                    type: input
+                    name: 'main:1.link:1.seoTitle'
+                    data: ''
+                'main:1.link:1.text':
+                    type: input
+                    name: 'main:1.link:1.text'
+                    data: 'Standort Bremen'
+                'main:1.modifier':
+                    type: input
+                    name: 'main:1.modifier'
+                    data: ''
+                'main:1.navigation_item':
+                    type: block
+                    name: 'main:1.navigation_item'
+                    data: {  }
+                'main:1.sectionID':
+                    type: input
+                    name: 'main:1.sectionID'
+                    data: ''
+                'main:1.variant':
+                    type: select
+                    name: 'main:1.variant'
+                    data: ''
             properties:
                 language:
                     key: language
-                    type: string
-                    value: en
-                navigation_name:
-                    key: navigation_name
-                    type: string
-                    value: 'My Document'
-                navigation_title:
-                    key: navigation_title
-                    type: string
-                    value: 'My Document - Title'
+                    type: text
+                    value: ''
+                neusta_trinity_pimcore_footer:
+                    key: neusta_trinity_pimcore_footer
+                    type: document
+                    value: ~
+                neusta_trinity_pimcore_footer_visible:
+                    key: neusta_trinity_pimcore_footer_visible
+                    type: bool
+                    value: true
+                neusta_trinity_pimcore_header:
+                    key: neusta_trinity_pimcore_header
+                    type: document
+                    value: ~
+                neusta_trinity_pimcore_header_visible:
+                    key: neusta_trinity_pimcore_header_visible
+                    type: bool
+                    value: true
+                slotName:
+                    key: slotName
+                    type: text
+                    value: footer

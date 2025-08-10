@@ -57,7 +57,7 @@ class ImporterExporterTest extends KernelTestCase
     {
         $yamlToImport = file_get_contents(__DIR__ . '/../data/Page Snippet.yaml');
         $this->importer->import($yamlToImport, 'yaml', true, true);
-        $document = Snippet::getByPath('/Page Snippet');
+        $document = Snippet::getByPath('/footer');
         $yamlExported = $this->exporter->export([$document], 'yaml');
 
         self::assertEquals($yamlToImport, $yamlExported);
