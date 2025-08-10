@@ -18,7 +18,7 @@ class PageTitlePopulator implements Populator
      */
     public function populate(object $target, object $source, ?object $ctx = null): void
     {
-        if ('page' === $source['type'] && isset($source['title']) && $target instanceof PimcoreDocument\Page) {
+        if ($target instanceof PimcoreDocument\Page && isset($source['title'])) {
             $target->setTitle($source['title']);
         }
     }
