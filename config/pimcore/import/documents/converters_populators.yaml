@@ -27,10 +27,12 @@ neusta_converter:
         - neusta_pimcore_import_export.documents.import.populator.published
         - neusta_pimcore_import_export.documents.import.populator.path
         - neusta_pimcore_import_export.documents.import.populator.parentId
-        - Neusta\Pimcore\ImportExportBundle\Populator\PageImportPopulator
+        - Neusta\Pimcore\ImportExportBundle\Populator\Document\EditablesPopulator
+        - Neusta\Pimcore\ImportExportBundle\Populator\Document\PropertiesPopulator
+        - Neusta\Pimcore\ImportExportBundle\Populator\Document\PageTitlePopulator
 
-    neusta_pimcore_import_export.import_page_snippet:
-      target: Pimcore\Model\Document\PageSnippet
+    neusta_pimcore_import_export.import_snippet:
+      target: Pimcore\Model\Document\Snippet
       populators:
         - neusta_pimcore_import_export.documents.import.populator.id
         - neusta_pimcore_import_export.documents.import.populator.key
@@ -39,7 +41,8 @@ neusta_converter:
         - neusta_pimcore_import_export.documents.import.populator.published
         - neusta_pimcore_import_export.documents.import.populator.path
         - neusta_pimcore_import_export.documents.import.populator.parentId
-        - Neusta\Pimcore\ImportExportBundle\Populator\PageImportPopulator
+        - Neusta\Pimcore\ImportExportBundle\Populator\Document\EditablesPopulator
+        - Neusta\Pimcore\ImportExportBundle\Populator\Document\PropertiesPopulator
 
 services:
   _defaults:
@@ -96,4 +99,6 @@ services:
       $targetProperty: parentId
       $defaultValue: 0
 
-  Neusta\Pimcore\ImportExportBundle\Populator\PageImportPopulator: ~
+  Neusta\Pimcore\ImportExportBundle\Populator\Document\PropertiesPopulator: ~
+  Neusta\Pimcore\ImportExportBundle\Populator\Document\EditablesPopulator: ~
+  Neusta\Pimcore\ImportExportBundle\Populator\Document\PageTitlePopulator: ~

@@ -21,7 +21,7 @@ services:
       $typeToConverterMap:
         Pimcore\Model\Asset\Image: '@neusta_pimcore_import_export.export_asset_image'
         Pimcore\Model\Document\Page: '@neusta_pimcore_import_export.export_page'
-        Pimcore\Model\Document\PageSnippet: '@neusta_pimcore_import_export.export_page_snippet'
+        Pimcore\Model\Document\Snippet: '@neusta_pimcore_import_export.export_snippet'
         Pimcore\Model\Document\Folder: '@neusta_pimcore_import_export.export_folder'
         Pimcore\Model\Concrete: '@neusta_pimcore_import_export.export_object'
       $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
@@ -47,7 +47,7 @@ services:
     tags:
       - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Document' }
       - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Document\Page' }
-      - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Document\PageSnippet' }
+      - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Document\Snippet' }
 
   Neusta\Pimcore\ImportExportBundle\Import\Strategy\ReplaceElementStrategy:
     tags:
@@ -66,4 +66,4 @@ services:
     tags:
       - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Document' }
       - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Document\Page' }
-      - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Document\PageSnippet' }
+      - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Document\Snippet' }

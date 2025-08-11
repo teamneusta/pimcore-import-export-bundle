@@ -2,7 +2,7 @@
 
 namespace Neusta\Pimcore\ImportExportBundle\Model\Document;
 
-class Page extends PageSnippet
+class Page extends Snippet
 {
     public ?string $title = null;
 }

@@ -7,6 +7,7 @@ use Neusta\Pimcore\ImportExportBundle\Import\Importer;
 use Neusta\Pimcore\TestingFramework\Database\ResetDatabase;
 use Pimcore\Model\Asset;
 use Pimcore\Model\Document\Page;
+use Pimcore\Model\Document\Snippet;
 use Pimcore\Model\Version;
 use Pimcore\Test\KernelTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -47,6 +48,16 @@ class ImporterExporterTest extends KernelTestCase
         $yamlToImport = file_get_contents(__DIR__ . '/../data/Text Editor.yaml');
         $this->importer->import($yamlToImport, 'yaml', true, true);
         $document = Page::getByPath('/Test-Import-Export');
+        $yamlExported = $this->exporter->export([$document], 'yaml');
+
+        self::assertEquals($yamlToImport, $yamlExported);
+    }
+
+    public function testImportExport_regular_case_page_snippet(): void
+    {
+        $yamlToImport = file_get_contents(__DIR__ . '/../data/Page Snippet.yaml');
+        $this->importer->import($yamlToImport, 'yaml', true, true);
+        $document = Snippet::getByPath('/footer');
         $yamlExported = $this->exporter->export([$document], 'yaml');
 
         self::assertEquals($yamlToImport, $yamlExported);

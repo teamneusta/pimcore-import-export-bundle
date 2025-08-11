@@ -28,12 +28,12 @@ neusta_converter:
         published: ~
         path: ~
 
-    neusta_pimcore_import_export.export_page_snippet:
-      target: Neusta\Pimcore\ImportExportBundle\Model\Document\PageSnippet
+    neusta_pimcore_import_export.export_snippet:
+      target: Neusta\Pimcore\ImportExportBundle\Model\Document\Snippet
       populators:
         - Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator
-        - neusta_pimcore_import_export.page_snippet.controller.populator
-        - neusta_pimcore_import_export.page_snippet.editables.populator
+        - neusta_pimcore_import_export.snippet.controller.populator
+        - neusta_pimcore_import_export.snippet.editables.populator
         - neusta_pimcore_import_export.document.properties.populator
       properties:
         key: ~
@@ -45,8 +45,8 @@ neusta_converter:
       target: Neusta\Pimcore\ImportExportBundle\Model\Document\Page
       populators:
         - Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator
-        - neusta_pimcore_import_export.page_snippet.controller.populator
-        - neusta_pimcore_import_export.page_snippet.editables.populator
+        - neusta_pimcore_import_export.snippet.controller.populator
+        - neusta_pimcore_import_export.snippet.editables.populator
         - neusta_pimcore_import_export.page.title.populator
         - neusta_pimcore_import_export.document.properties.populator
       properties:
@@ -84,7 +84,7 @@ services:
     arguments:
       $typeToConverterMap:
         Pimcore\Model\Document\Page: '@neusta_pimcore_import_export.export_page'
-        Pimcore\Model\Document\PageSnippet: '@neusta_pimcore_import_export.export_page_snippet'
+        Pimcore\Model\Document\PageSnippet: '@neusta_pimcore_import_export.export_snippet'
         Pimcore\Model\Document\Folder: '@neusta_pimcore_import_export.export_folder'
         Pimcore\Model\Document: '@neusta_pimcore_import_export.export_document'
 
@@ -99,13 +99,13 @@ services:
       $sourceProperty: title
       $targetProperty: title
 
-  neusta_pimcore_import_export.page_snippet.controller.populator:
+  neusta_pimcore_import_export.snippet.controller.populator:
     class: Neusta\ConverterBundle\Populator\PropertyMappingPopulator
     arguments:
       $sourceProperty: controller
       $targetProperty: controller
 
-  neusta_pimcore_import_export.page_snippet.editables.populator:
+  neusta_pimcore_import_export.snippet.editables.populator:
     class: Neusta\ConverterBundle\Populator\ArrayConvertingPopulator
     arguments:
       $converter: '@neusta_pimcore_import_export.editable_converter'

@@ -1,0 +1,254 @@
+elements:
+    -
+        Pimcore\Model\Document\Snippet:
+            type: snippet
+            path: /
+            key: footer
+            published: true
+            controller: 'Neusta\TrinityPimcoreBundle\Controller\DefaultController::indexSnippetAction'
+            editables:
+                main:
+                    type: areablock
+                    name: main
+                    data: [{ key: '1', type: trinity-footer, hidden: false }]
+                'main:1.button':
+                    type: area
+                    name: 'main:1.button'
+                    data: { type: trinity-button }
+                'main:1.button:1.link':
+                    type: area
+                    name: 'main:1.button:1.link'
+                    data: { type: trinity-link }
+                'main:1.button:1.link:1.external_url':
+                    type: input
+                    name: 'main:1.button:1.link:1.external_url'
+                    data: ''
+                'main:1.button:1.link:1.icon':
+                    type: area
+                    name: 'main:1.button:1.link:1.icon'
+                    data: { type: trinity-icon }
+                'main:1.button:1.link:1.icon:1.icon':
+                    type: select
+                    name: 'main:1.button:1.link:1.icon:1.icon'
+                    data: arrow-right
+                'main:1.button:1.link:1.icon:1.icon-border':
+                    type: select
+                    name: 'main:1.button:1.link:1.icon:1.icon-border'
+                    data: ''
+                'main:1.button:1.link:1.icon:1.modifier':
+                    type: input
+                    name: 'main:1.button:1.link:1.icon:1.modifier'
+                    data: ''
+                'main:1.button:1.link:1.icon:1.sectionID':
+                    type: input
+                    name: 'main:1.button:1.link:1.icon:1.sectionID'
+                    data: ''
+                'main:1.button:1.link:1.icon:1.variant':
+                    type: select
+                    name: 'main:1.button:1.link:1.icon:1.variant'
+                    data: c-icon--base
+                'main:1.button:1.link:1.internal_page':
+                    type: relation
+                    name: 'main:1.button:1.link:1.internal_page'
+                    data: { id: ~, type: ~, subtype: ~ }
+                'main:1.button:1.link:1.modifier':
+                    type: input
+                    name: 'main:1.button:1.link:1.modifier'
+                    data: ''
+                'main:1.button:1.link:1.newTab':
+                    type: checkbox
+                    name: 'main:1.button:1.link:1.newTab'
+                    data: false
+                'main:1.button:1.link:1.noFollow':
+                    type: checkbox
+                    name: 'main:1.button:1.link:1.noFollow'
+                    data: false
+                'main:1.button:1.link:1.section_ID':
+                    type: input
+                    name: 'main:1.button:1.link:1.section_ID'
+                    data: ''
+                'main:1.button:1.link:1.seoTitle':
+                    type: input
+                    name: 'main:1.button:1.link:1.seoTitle'
+                    data: ''
+                'main:1.button:1.link:1.text':
+                    type: input
+                    name: 'main:1.button:1.link:1.text'
+                    data: 'Drück mich'
+                'main:1.button:1.modifier':
+                    type: input
+                    name: 'main:1.button:1.modifier'
+                    data: ''
+                'main:1.button:1.section_ID':
+                    type: input
+                    name: 'main:1.button:1.section_ID'
+                    data: ''
+                'main:1.button:1.variant':
+                    type: select
+                    name: 'main:1.button:1.variant'
+                    data: c-btn
+                'main:1.button:1.variantButtonForm':
+                    type: select
+                    name: 'main:1.button:1.variantButtonForm'
+                    data: ''
+                'main:1.button:1.variantButtonIconOrientation':
+                    type: select
+                    name: 'main:1.button:1.variantButtonIconOrientation'
+                    data: ''
+                'main:1.button:1.variantButtonSize':
+                    type: select
+                    name: 'main:1.button:1.variantButtonSize'
+                    data: ''
+                'main:1.contact_city':
+                    type: input
+                    name: 'main:1.contact_city'
+                    data: Bremen
+                'main:1.contact_company':
+                    type: input
+                    name: 'main:1.contact_company'
+                    data: 'Neusta SD'
+                'main:1.contact_email':
+                    type: input
+                    name: 'main:1.contact_email'
+                    data: info@neusta.de
+                'main:1.contact_fax':
+                    type: input
+                    name: 'main:1.contact_fax'
+                    data: '+49 421 20696-99'
+                'main:1.contact_headline':
+                    type: input
+                    name: 'main:1.contact_headline'
+                    data: 'Dies ist der Footer (linker Teil)'
+                'main:1.contact_phone_addition':
+                    type: input
+                    name: 'main:1.contact_phone_addition'
+                    data: 9-17
+                'main:1.contact_phone_label':
+                    type: input
+                    name: 'main:1.contact_phone_label'
+                    data: Telefon
+                'main:1.contact_phone_url':
+                    type: input
+                    name: 'main:1.contact_phone_url'
+                    data: '+49 421 206960'
+                'main:1.contact_street':
+                    type: input
+                    name: 'main:1.contact_street'
+                    data: Konsul-Smidt-Straße
+                'main:1.contact_street_number':
+                    type: input
+                    name: 'main:1.contact_street_number'
+                    data: '24'
+                'main:1.contact_zip':
+                    type: input
+                    name: 'main:1.contact_zip'
+                    data: '28217'
+                'main:1.footer_links':
+                    type: block
+                    name: 'main:1.footer_links'
+                    data: {  }
+                'main:1.footer_social_media_bar':
+                    type: area
+                    name: 'main:1.footer_social_media_bar'
+                    data: { type: trinity-social-media-bar }
+                'main:1.footer_social_media_bar:1.modifier':
+                    type: input
+                    name: 'main:1.footer_social_media_bar:1.modifier'
+                    data: ''
+                'main:1.footer_social_media_bar:1.sectionID':
+                    type: input
+                    name: 'main:1.footer_social_media_bar:1.sectionID'
+                    data: ''
+                'main:1.footer_social_media_bar:1.socialMediaItems':
+                    type: block
+                    name: 'main:1.footer_social_media_bar:1.socialMediaItems'
+                    data: {  }
+                'main:1.footer_social_media_bar:1.variant':
+                    type: select
+                    name: 'main:1.footer_social_media_bar:1.variant'
+                    data: c-social-media-bar--center
+                'main:1.infobox_headline':
+                    type: input
+                    name: 'main:1.infobox_headline'
+                    data: 'Dies ist der Footer (rechter Teil)'
+                'main:1.infobox_text':
+                    type: input
+                    name: 'main:1.infobox_text'
+                    data: 'Hier ist eine Information'
+                'main:1.link':
+                    type: area
+                    name: 'main:1.link'
+                    data: { type: trinity-link }
+                'main:1.link:1.external_url':
+                    type: input
+                    name: 'main:1.link:1.external_url'
+                    data: 'https://maps.app.goo.gl/KS6Tuk7snshJL4bj7'
+                'main:1.link:1.internal_page':
+                    type: relation
+                    name: 'main:1.link:1.internal_page'
+                    data: { id: ~, type: ~, subtype: ~ }
+                'main:1.link:1.modifier':
+                    type: input
+                    name: 'main:1.link:1.modifier'
+                    data: ''
+                'main:1.link:1.newTab':
+                    type: checkbox
+                    name: 'main:1.link:1.newTab'
+                    data: false
+                'main:1.link:1.noFollow':
+                    type: checkbox
+                    name: 'main:1.link:1.noFollow'
+                    data: false
+                'main:1.link:1.section_ID':
+                    type: input
+                    name: 'main:1.link:1.section_ID'
+                    data: ''
+                'main:1.link:1.seoTitle':
+                    type: input
+                    name: 'main:1.link:1.seoTitle'
+                    data: ''
+                'main:1.link:1.text':
+                    type: input
+                    name: 'main:1.link:1.text'
+                    data: 'Standort Bremen'
+                'main:1.modifier':
+                    type: input
+                    name: 'main:1.modifier'
+                    data: ''
+                'main:1.navigation_item':
+                    type: block
+                    name: 'main:1.navigation_item'
+                    data: {  }
+                'main:1.sectionID':
+                    type: input
+                    name: 'main:1.sectionID'
+                    data: ''
+                'main:1.variant':
+                    type: select
+                    name: 'main:1.variant'
+                    data: ''
+            properties:
+                language:
+                    key: language
+                    type: text
+                    value: ''
+                neusta_trinity_pimcore_footer:
+                    key: neusta_trinity_pimcore_footer
+                    type: document
+                    value: ~
+                neusta_trinity_pimcore_footer_visible:
+                    key: neusta_trinity_pimcore_footer_visible
+                    type: bool
+                    value: true
+                neusta_trinity_pimcore_header:
+                    key: neusta_trinity_pimcore_header
+                    type: document
+                    value: ~
+                neusta_trinity_pimcore_header_visible:
+                    key: neusta_trinity_pimcore_header_visible
+                    type: bool
+                    value: true
+                slotName:
+                    key: slotName
+                    type: text
+                    value: footer
