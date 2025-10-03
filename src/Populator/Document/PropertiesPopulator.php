@@ -38,7 +38,7 @@ class PropertiesPopulator implements Populator
             } else {
                 $value = $property['value'];
             }
-            $target->setProperty($property['key'], $property['type'], $value);
+            $target->setProperty($property['key'], $property['type'], $value, $property['inherited'] ?? false);
         }
     }
 }

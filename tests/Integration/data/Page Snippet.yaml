@@ -232,23 +232,29 @@ elements:
                     key: language
                     type: text
                     value: ''
+                    inherited: false
                 neusta_trinity_pimcore_footer:
                     key: neusta_trinity_pimcore_footer
                     type: document
                     value: ~
+                    inherited: false
                 neusta_trinity_pimcore_footer_visible:
                     key: neusta_trinity_pimcore_footer_visible
                     type: bool
                     value: true
+                    inherited: false
                 neusta_trinity_pimcore_header:
                     key: neusta_trinity_pimcore_header
                     type: document
                     value: ~
+                    inherited: false
                 neusta_trinity_pimcore_header_visible:
                     key: neusta_trinity_pimcore_header_visible
                     type: bool
                     value: true
+                    inherited: false
                 slotName:
                     key: slotName
                     type: text
                     value: footer
+                    inherited: true
