@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.1
+
+- bugfix: [Inherited Properties] add inherited field to export and skip inherited properties on import 
+
 ## 3.0.0
 
 - BC-break: bugfix: Import of exported Page Snippet documents by changing type to `Pimcore\Model\Document\Snippet`
