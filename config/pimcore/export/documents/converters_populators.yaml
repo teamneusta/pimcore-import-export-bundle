@@ -70,6 +70,7 @@ neusta_converter:
       properties:
         key: name
         type: ~
+        inherited: ~
 
 services:
   _defaults:

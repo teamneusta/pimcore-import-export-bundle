@@ -141,7 +141,7 @@ class ExporterTest extends KernelTestCase
         $page->setPublished(false);
         $page->setPath('/test/');
         $page->setKey('test_document_1');
-        $page->setProperty('language', 'string', 'en');
+        $page->setProperty('language', 'string', 'en', true);
         $page->setProperty('navigation_name', 'string', 'My Document');
         $page->setProperty('navigation_title', 'string', 'My Document - Title');
         $page->setTitle('The Title of my document');

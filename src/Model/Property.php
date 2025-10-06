@@ -7,4 +7,5 @@ class Property
     public string $key;
     public string $type;
     public mixed $value;
+    public bool $inherited;
 }

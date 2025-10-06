@@ -137,59 +137,74 @@ elements:
                     key: navigation_accesskey
                     type: text
                     value: ''
+                    inherited: false
                 navigation_anchor:
                     key: navigation_anchor
                     type: text
                     value: ''
+                    inherited: false
                 navigation_class:
                     key: navigation_class
                     type: text
                     value: ''
+                    inherited: false
                 navigation_exclude:
                     key: navigation_exclude
                     type: bool
                     value: false
+                    inherited: false
                 navigation_name:
                     key: navigation_name
                     type: text
                     value: ''
+                    inherited: false
                 navigation_parameters:
                     key: navigation_parameters
                     type: text
                     value: ''
+                    inherited: false
                 navigation_relation:
                     key: navigation_relation
                     type: text
                     value: ''
+                    inherited: false
                 navigation_tabindex:
                     key: navigation_tabindex
                     type: text
                     value: ''
+                    inherited: false
                 navigation_target:
                     key: navigation_target
                     type: text
                     value: ~
+                    inherited: false
                 navigation_title:
                     key: navigation_title
                     type: text
                     value: ''
+                    inherited: false
                 testPropertyAsset:
                     key: testPropertyAsset
                     type: asset
                     value: /logo_desktop.svg
+                    inherited: false
                 testPropertyCheckbox:
                     key: testPropertyCheckbox
                     type: bool
                     value: false
+                    inherited: false
                 testPropertyKey:
                     key: testPropertyKey
                     type: document
                     value: '/Text für viele'
+                    inherited: false
                 testPropertyObject:
                     key: testPropertyObject
                     type: object
                     value: ~
+                    inherited: false
                 testPropertyString:
                     key: testPropertyString
                     type: text
                     value: 'Ich bin eine Zeichenkette'
+                    inherited: false
