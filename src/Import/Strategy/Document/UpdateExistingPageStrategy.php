@@ -38,7 +38,7 @@ class UpdateExistingPageStrategy implements MergeElementStrategy
             if (null === $name || null === $type || true === $inherited) {
                 continue; // Skip invalid and inherited properties
             }
-            $oldElement->setProperty($name, $type, $property->getData(), $property->getInherited(), $property->getInheritable());
+            $oldElement->setProperty($name, $type, $property->getData(), false, $property->getInheritable());
         }
         $oldElement->save(['versionNote' => 'overwritten by pimcore-import-export-bundle']);
     }
