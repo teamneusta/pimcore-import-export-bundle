@@ -16,6 +16,13 @@
     Neusta\Pimcore\ImportExportBundle\NeustaPimcoreImportExportBundle::class => ['all' => true],
     ```
 
+3.  **Assets Install**
+    
+    ```shell
+    bin/console assets:install public --symlink
+    ```
+    Assets will be installed as symlinks in folder public.
+
 ## Usage
 
 ### Pimcore Admin Backend
