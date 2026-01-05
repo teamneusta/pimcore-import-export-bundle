@@ -21,3 +21,25 @@ services:
     autoconfigure: true
 
   Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator: ~
+
+  ###########################################################
+  # Export Converter (Concrete -> DataObject)
+  ###########################################################
+  neusta_pimcore_import_export.strategy.export_all_types:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\TypeStrategyConverter
+    arguments:
+      $typeToConverterMap:
+        Pimcore\Model\Asset\Archive: '@neusta_pimcore_import_export.export_asset_archive'
+        Pimcore\Model\Asset\Audio: '@neusta_pimcore_import_export.export_asset_audio'
+        Pimcore\Model\Asset\Document: '@neusta_pimcore_import_export.export_asset_document'
+        Pimcore\Model\Asset\Image: '@neusta_pimcore_import_export.export_asset_image'
+        Pimcore\Model\Asset\Text: '@neusta_pimcore_import_export.export_asset_text'
+        Pimcore\Model\Asset\Video: '@neusta_pimcore_import_export.export_asset_video'
+        Pimcore\Model\Asset\Folder: '@neusta_pimcore_import_export.export_asset_folder'
+        Pimcore\Model\Asset\Unknown: '@neusta_pimcore_import_export.export_asset_unknown'
+        Pimcore\Model\DataObject\Concrete: '@neusta_pimcore_import_export.export_object'
+        Pimcore\Model\Document\Page: '@neusta_pimcore_import_export.export_page'
+        Pimcore\Model\Document\PageSnippet: '@neusta_pimcore_import_export.export_snippet'
+        Pimcore\Model\Document\Folder: '@neusta_pimcore_import_export.export_folder'
+        Pimcore\Model\Document: '@neusta_pimcore_import_export.export_document'
+

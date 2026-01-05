@@ -32,6 +32,14 @@ neusta_converter:
         path: ~
         parentId: ~
 
+    neusta_pimcore_import_export.export_object.field.input:
+      target: Neusta\Pimcore\ImportExportBundle\Model\Object\Data\StringProperty
+      properties:
+        key: ~
+        type: ~
+        value: ~
+        inherited: ~
+
 services:
   _defaults:
     autowire: true
@@ -46,10 +54,23 @@ services:
       $typeToConverterMap:
         Pimcore\Model\DataObject\Concrete: '@neusta_pimcore_import_export.export_object'
 
+  neusta_pimcore_import_export.strategy.export_object.fields:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\TypeStrategyConverter
+    arguments:
+      $typeToConverterMap:
+        Pimcore\Model\DataObject\ClassDefinition\Data\Input: '@neusta_pimcore_import_export.export_object.field.input'
+
+  neusta_pimcore_import_export.strategy.export_object.field_converter:
+    class: Neusta\Pimcore\ImportExportBundle\Converter\FieldConverter
+    arguments:
+      $typeStrategyConverter: '@neusta_pimcore_import_export.strategy.export_object.fields'
+
   Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator: ~
 
   neusta_pimcore_import_export.export_object.fields.populator:
     class: Neusta\Pimcore\ImportExportBundle\Populator\DataObjectExportFieldsPopulator
+    arguments:
+      $fieldConverter: '@neusta_pimcore_import_export.strategy.export_object.field_converter'
 
   neusta_pimcore_import_export.export_object.relations.populator:
     class: Neusta\Pimcore\ImportExportBundle\Populator\DataObjectExportRelationsPopulator

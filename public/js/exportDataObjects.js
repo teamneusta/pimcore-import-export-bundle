@@ -21,7 +21,7 @@ neusta_pimcore_import_export.plugin.object.export = Class.create({
             iconCls: icon,
             handler: function () {
                 let defaultFilename = object.data.key + '.yaml';
-                let includeIds = !confirm(t('neusta_pimcore_import_export_exclude_ids_question')); // Yes = false, No = true
+                let includeIds = !confirm(t('neusta_pimcore_import_export_exclude_ids_label')); // Yes = false, No = true
 
                 let win = Ext.create('Ext.window.Window', {
                     title: t('neusta_pimcore_import_export_dialog_title'),

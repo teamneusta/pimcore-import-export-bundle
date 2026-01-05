@@ -87,12 +87,7 @@ services:
   Neusta\Pimcore\ImportExportBundle\Export\Exporter:
     class: Neusta\Pimcore\ImportExportBundle\Export\Exporter
     arguments:
-      $typeToConverterMap:
-        Pimcore\Model\Asset: '@neusta_pimcore_import_export.strategy.export_asset'
-        Pimcore\Model\Document\Page: '@neusta_pimcore_import_export.strategy.export_document'
-        Pimcore\Model\Document\Snippet: '@neusta_pimcore_import_export.strategy.export_document'
-        Pimcore\Model\Document: '@neusta_pimcore_import_export.strategy.export_document'
-        Pimcore\Model\DataObject: '@neusta_pimcore_import_export.export_object'
+      $typeStrategyConverter: '@neusta_pimcore_import_export.strategy.export_all_types'
       $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
 
   ##################

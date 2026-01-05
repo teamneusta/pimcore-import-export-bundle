@@ -2,9 +2,9 @@
 
 namespace Neusta\Pimcore\ImportExportBundle\Export;
 
-use Neusta\ConverterBundle\Converter;
-use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Exception\ConverterException;
+use Neusta\Pimcore\ImportExportBundle\Converter\Context\ConverterContext;
+use Neusta\Pimcore\ImportExportBundle\Converter\TypeStrategyConverter;
 use Neusta\Pimcore\ImportExportBundle\Import\Event\ImportEvent;
 use Neusta\Pimcore\ImportExportBundle\Import\Event\ImportStatus;
 use Neusta\Pimcore\ImportExportBundle\Model\Element;
@@ -19,10 +19,10 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class Exporter
 {
     /**
-     * @param array<class-string<TSource>, Converter<TSource, TTarget, GenericContext|null> > $typeToConverterMap
+     * @param TypeStrategyConverter<TSource, TTarget, ConverterContext|null> $typeStrategyConverter
      */
     public function __construct(
-        private readonly array $typeToConverterMap,
+        private readonly TypeStrategyConverter $typeStrategyConverter,
         private readonly SerializerInterface $serializer,
         private readonly EventDispatcherInterface $dispatcher,
     ) {
@@ -38,24 +38,21 @@ class Exporter
      */
     public function export(iterable $elements, string $format, array $ctxParams = []): string
     {
-        $ctx = new GenericContext();
+        $ctx = ConverterContext::create();
         foreach ($ctxParams as $key => $value) {
             $ctx->setValue($key, $value);
         }
 
         $yamlExportElements = [];
         foreach ($elements as $element) {
-            foreach (array_keys($this->typeToConverterMap) as $type) {
-                if ($element instanceof $type) {
-                    try {
-                        $yamlContent = $this->typeToConverterMap[$type]->convert($element, $ctx);
-                        $yamlExportElements[] = [$type => $yamlContent];
-                    } catch (ConverterException $e) {
-                        $this->dispatcher->dispatch(new ImportEvent(ImportStatus::Failed, $type, [], $element, null, $e->getMessage()));
-                    }
-                    continue 2;
-                }
+            $fqcn = get_class($element);
+            $yamlContent = null;
+            try {
+                $yamlContent = $this->typeStrategyConverter->convert($element, $ctx);
+            } catch (ConverterException $e) {
+                $this->dispatcher->dispatch(new ImportEvent(ImportStatus::Failed, $fqcn, [], $element, null, $e->getMessage()));
             }
+            $yamlExportElements[] = [$fqcn => $yamlContent];
         }
 
         return $this->serializer->serialize([Element::ELEMENTS => $yamlExportElements], $format);
