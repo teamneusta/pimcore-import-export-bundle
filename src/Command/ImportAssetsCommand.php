@@ -126,7 +126,7 @@ class ImportAssetsCommand extends AbstractImportBaseCommand
             return null;
         }
 
-        $filteredFiles = array_values(array_filter($files, fn ($file) => is_file($file)));
+        $filteredFiles = array_values(array_filter($files, static fn ($file) => is_file($file)));
 
         return !empty($filteredFiles) ? $filteredFiles[0] : null;
     }
