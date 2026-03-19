@@ -30,7 +30,7 @@ jobs:
         run: composer validate --ansi --strict
 
       - name: Install dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
 
       - name: Check PHP code style
         run: composer cs:check
