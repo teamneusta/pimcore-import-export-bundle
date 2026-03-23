@@ -78,14 +78,6 @@ jobs:
           dependency-versions: ${{ matrix.dependencies }}
           composer-options: ${{ matrix.composer-options }}
 
-      - name: Determine PHPUnit extra args
-        run: |
-          if [[ "${{ matrix.php-version }}" == "8.4" && "${{ matrix.dependencies }}" == "lowest" ]]; then
-            echo "PHPUNIT_EXTRA_ARGS=" >> "$GITHUB_ENV"
-          else
-            echo "PHPUNIT_EXTRA_ARGS=-- --disallow-test-output" >> "$GITHUB_ENV"
-          fi
-
       - name: Execute tests
         env:
           MYSQL_HOST: '127.0.0.1'
@@ -93,4 +85,9 @@ jobs:
           PIMCORE_ENCRYPTION_SECRET: ${{ secrets.PIMCORE_ENCRYPTION_SECRET }}
           PIMCORE_INSTANCE_IDENTIFIER: ${{ secrets.PIMCORE_INSTANCE_IDENTIFIER }}
           PIMCORE_PRODUCT_KEY: ${{ secrets.PIMCORE_PRODUCT_KEY }}
-        run: composer tests $PHPUNIT_EXTRA_ARGS
+        run: |
+            phpunit_options="-- --disallow-test-output"
+            if [[ "${{ matrix.php-version }}" == "8.4" && "${{ matrix.dependencies }}" == "lowest" ]]; then
+              phpunit_options=""
+            fi
+            composer tests $phpunit_options
