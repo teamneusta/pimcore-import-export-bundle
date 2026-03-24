@@ -1,7 +1,6 @@
 # Composer
 /composer.lock
 /vendor/
-/auth.json
 
 # Docker Compose
 /compose.override.yaml

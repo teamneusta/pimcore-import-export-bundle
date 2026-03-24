@@ -1,0 +1,29 @@
+elements:
+    -
+        Pimcore\Model\Document\Snippet:
+            type: snippet
+            path: /test/
+            key: test_document_1
+            published: false
+            controller: /Some/Controller
+            editables:
+                -
+                    type: input
+                    name: textInput
+                    data: 'some text input'
+            properties:
+                language:
+                    key: language
+                    type: string
+                    value: en
+                    inherited: false
+                navigation_name:
+                    key: navigation_name
+                    type: string
+                    value: 'My Document'
+                    inherited: false
+                navigation_title:
+                    key: navigation_title
+                    type: string
+                    value: 'My Document - Title'
+                    inherited: false
