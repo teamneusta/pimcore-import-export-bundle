@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.0
+
+- update: add Pimcore 12 support and drop support for Pimcore <11.5
+- switched to MIT license
+
 ## 3.0.1
 
 - bugfix: [Inherited Properties] add inherited field to export and skip inherited properties on import 
