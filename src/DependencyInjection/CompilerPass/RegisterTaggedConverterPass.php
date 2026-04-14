@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class RegisterTaggedConverterPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $converterDefs = $container->getExtensionConfig('neusta_converter');
         $flattenedConverterDefs = [];

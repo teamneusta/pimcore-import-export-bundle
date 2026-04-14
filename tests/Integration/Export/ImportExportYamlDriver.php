@@ -21,7 +21,7 @@ class ImportExportYamlDriver implements Driver
         return 'yaml';
     }
 
-    public function match($expected, $actual)
+    public function match($expected, $actual): void
     {
         Assert::assertEquals($expected, $actual);
     }
