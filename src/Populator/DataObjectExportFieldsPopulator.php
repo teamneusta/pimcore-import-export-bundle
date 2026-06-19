@@ -42,9 +42,18 @@ class DataObjectExportFieldsPopulator implements Populator
                 continue;
             }
 
-            if (!$value instanceof AbstractElement) {
+            if ($this->isSerializable($value)) {
                 $target->fields[$fieldName] = $value;
             }
         }
+    }
+
+    /**
+     * @param mixed $value
+     * @return bool
+     */
+    public function isSerializable(mixed $value): bool
+    {
+        return !$value instanceof AbstractElement && !$value instanceof PimcoreDataObject\Objectbrick;
     }
 }

@@ -4,7 +4,7 @@ namespace Neusta\Pimcore\ImportExportBundle\Model\Object;
 
 use Neusta\Pimcore\ImportExportBundle\Model\Element;
 
-class DataObject extends Element
+class DataObject extends Folder
 {
     public string $className;
     public bool $published = false;

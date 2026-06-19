@@ -2,7 +2,10 @@
 
 namespace Neusta\Pimcore\ImportExportBundle\Populator;
 
+use Neusta\ConverterBundle\Converter;
+use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Populator;
+use Neusta\Pimcore\ImportExportBundle\Model\Element;
 use Neusta\Pimcore\ImportExportBundle\Model\Object\DataObject;
 use Pimcore\Model\Asset as PimcoreAsset;
 use Pimcore\Model\DataObject as PimcoreDataObject;
@@ -18,8 +21,16 @@ class DataObjectExportRelationsPopulator implements Populator
 {
     private PropertyAccessorInterface $propertyAccessor;
 
-    public function __construct(?PropertyAccessorInterface $propertyAccessor = null)
-    {
+    /**
+     * @template TSource of AbstractElement
+     * @template TTarget of Element
+     *
+     * @param array<class-string<TSource>, Converter<TSource, TTarget, GenericContext|null> > $typeToConverterMap
+     */
+    public function __construct(
+        ?PropertyAccessorInterface $propertyAccessor,
+        private readonly array $typeToConverterMap,
+    ) {
         $this->propertyAccessor = $propertyAccessor ?? PropertyAccess::createPropertyAccessor();
     }
 
@@ -37,7 +48,7 @@ class DataObjectExportRelationsPopulator implements Populator
             $value = $this->propertyAccessor->getValue($source, $fieldName);
             if ($value instanceof AbstractElement) {
                 if (null === $value->getId()) {
-                    $target->relations[$fieldName] = ['could not be exported'];
+                    $target->relations[$fieldName] = [AbstractElement::class => null];
                     continue;
                 }
 
@@ -48,7 +59,7 @@ class DataObjectExportRelationsPopulator implements Populator
                     default => $value::class,
                 };
 
-                $target->relations[$fieldName] = [$type => ['id' => $value->getId()]];
+                $target->relations[$fieldName] = [$type => $this->typeToConverterMap[$type]->convert($value, $ctx)];
             }
         }
     }
