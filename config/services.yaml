@@ -109,6 +109,7 @@ services:
     tags:
       - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Asset' }
       - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Concrete' }
+      - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\DataObject' }
 
   ##############
   # Service    #
@@ -126,6 +127,7 @@ services:
     public: true
     tags:
       - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Concrete' }
+      - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\DataObject' }
 
   Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository:
     public: true

@@ -21,7 +21,7 @@ class ContextBaseTargetFactory implements TargetFactory
         }
 
         $type = $ctx->getValue(self::TARGET_TYPE);
-        if (!$type instanceof DataObject) {
+        if (!\is_string($type) || !is_a($type, DataObject::class, true)) {
             throw new ConverterException($type . ' should be subtype of DataObject');
         }
 
