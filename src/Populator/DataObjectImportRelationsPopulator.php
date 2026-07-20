@@ -40,7 +40,7 @@ class DataObjectImportRelationsPopulator implements Populator
                     if (\array_key_exists('id', $relation)) {
                         $relatedElement = $this->type2RepositoryMap[$type]->getById($relation['id']);
                         $this->propertyAccessor->setValue($target, $fieldName, $relatedElement);
-                    } else if (\array_key_exists('path', $relation)) {
+                    } elseif (\array_key_exists('path', $relation)) {
                         // Finde das related Object anhand des Pfads und des Schlüssels
                         $relatedElement = $this->type2RepositoryMap[$type]->getByPath($relation['path'] . '/' . $relation['key']);
                         $this->propertyAccessor->setValue($target, $fieldName, $relatedElement);

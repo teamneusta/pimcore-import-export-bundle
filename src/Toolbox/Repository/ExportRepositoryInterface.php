@@ -15,6 +15,11 @@ interface ExportRepositoryInterface
     public function getById(int $id): ?AbstractElement;
 
     /**
+     * @return TElement
+     */
+    public function getByPath(string $fullPath): ?AbstractElement;
+
+    /**
      * @param TElement $root
      *
      * @return iterable<TElement>
