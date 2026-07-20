@@ -6,6 +6,7 @@ use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Populator;
 use Neusta\Pimcore\ImportExportBundle\Model\Object\DataObject;
 use Pimcore\Model\DataObject as PimcoreDataObject;
+use Pimcore\Model\DataObject\Localizedfield;
 use Pimcore\Model\Element\AbstractElement;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -36,9 +37,19 @@ class DataObjectExportFieldsPopulator implements Populator
 
         foreach ($source->getClass()->getFieldDefinitions() as $fieldName => $definition) {
             $value = $this->propertyAccessor->getValue($source, $fieldName);
-            if (!$value instanceof AbstractElement) {
+            if ($value instanceof Localizedfield) {
+                $target->fields[$fieldName] = $value->getItems();
+                continue;
+            }
+
+            if ($this->isSerializable($value)) {
                 $target->fields[$fieldName] = $value;
             }
         }
+    }
+
+    public function isSerializable(mixed $value): bool
+    {
+        return !$value instanceof AbstractElement && !$value instanceof PimcoreDataObject\Objectbrick;
     }
 }

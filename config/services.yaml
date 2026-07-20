@@ -92,6 +92,7 @@ services:
         Pimcore\Model\Document\Page: '@neusta_pimcore_import_export.strategy.export_document'
         Pimcore\Model\Document\Snippet: '@neusta_pimcore_import_export.strategy.export_document'
         Pimcore\Model\Document: '@neusta_pimcore_import_export.strategy.export_document'
+        Pimcore\Model\DataObject\Folder: '@neusta_pimcore_import_export.export_object.folder'
         Pimcore\Model\DataObject: '@neusta_pimcore_import_export.export_object'
       $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
 
@@ -109,6 +110,7 @@ services:
     tags:
       - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Asset' }
       - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Concrete' }
+      - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\DataObject' }
 
   ##############
   # Service    #
@@ -126,6 +128,7 @@ services:
     public: true
     tags:
       - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Concrete' }
+      - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\DataObject' }
 
   Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository:
     public: true
