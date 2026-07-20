@@ -48,10 +48,6 @@ class DataObjectExportFieldsPopulator implements Populator
         }
     }
 
-    /**
-     * @param mixed $value
-     * @return bool
-     */
     public function isSerializable(mixed $value): bool
     {
         return !$value instanceof AbstractElement && !$value instanceof PimcoreDataObject\Objectbrick;

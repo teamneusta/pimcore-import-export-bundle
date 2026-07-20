@@ -15,7 +15,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
- * @implements Populator<PimcoreDataObject, DataObject, object|null>
+ * @implements Populator<PimcoreDataObject, DataObject, GenericContext|null>
  */
 class DataObjectExportRelationsPopulator implements Populator
 {
@@ -35,8 +35,9 @@ class DataObjectExportRelationsPopulator implements Populator
     }
 
     /**
-     * @param PimcoreDataObject $source
-     * @param DataObject        $target
+     * @param PimcoreDataObject   $source
+     * @param DataObject          $target
+     * @param GenericContext|null $ctx
      */
     public function populate(object $target, object $source, ?object $ctx = null): void
     {
