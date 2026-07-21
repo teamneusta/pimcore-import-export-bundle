@@ -109,7 +109,6 @@ services:
   Neusta\Pimcore\ImportExportBundle\Import\Strategy\ReplaceExistingElementStrategy:
     tags:
       - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Asset' }
-      - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Concrete' }
       - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\DataObject' }
 
   ##############
@@ -139,8 +138,8 @@ services:
   Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DataObjectRepository:
     public: true
     tags:
-      - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Concrete' }
       - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\DataObject' }
+      - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Concrete' }
 
   Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository:
     public: true
