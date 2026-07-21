@@ -8,7 +8,6 @@ services:
     arguments:
       $converters: !tagged_iterator {tag: 'neusta_pimcore_import_export.objects.import.converter', default_priority_method: 'getPriority'}
     tags:
-      - { name: 'neusta.import_export.converter', type: 'Pimcore\Model\Concrete' }
       - { name: 'neusta.import_export.converter', type: 'Pimcore\Model\DataObject' }
 
 

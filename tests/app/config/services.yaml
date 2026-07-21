@@ -25,7 +25,7 @@ services:
         Pimcore\Model\Document\Page: '@neusta_pimcore_import_export.export_page'
         Pimcore\Model\Document\Snippet: '@neusta_pimcore_import_export.export_snippet'
         Pimcore\Model\Document\Folder: '@neusta_pimcore_import_export.export_folder'
-        Pimcore\Model\Concrete: '@neusta_pimcore_import_export.export_object'
+        Pimcore\Model\DataObject: '@neusta_pimcore_import_export.export_object'
       $serializer: '@Neusta\Pimcore\ImportExportBundle\Serializer\SerializerStrategy'
 
   ############
@@ -54,7 +54,7 @@ services:
   Neusta\Pimcore\ImportExportBundle\Import\Strategy\ReplaceElementStrategy:
     tags:
       - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Asset' }
-      - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\Concrete' }
+      - { name: 'neusta.import_export.merge_strategy', type: 'Pimcore\Model\DataObject' }
 
   Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\AssetRepository:
     tags:
@@ -62,7 +62,7 @@ services:
 
   Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DataObjectRepository:
     tags:
-      - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\Concrete' }
+      - { name: 'neusta.import_export.repository', type: 'Pimcore\Model\DataObject' }
 
   Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository:
     tags:
