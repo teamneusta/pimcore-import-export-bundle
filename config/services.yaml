@@ -121,6 +121,16 @@ services:
 
   Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\TagRepository: ~
 
+  Neusta\Pimcore\ImportExportBundle\Import\Registry\PendingTagsRegistry: ~
+
+  Neusta\Pimcore\ImportExportBundle\Populator\ImportTagsPopulator: ~
+
+  neusta_pimcore_import_export.import.tags.populator:
+    alias: Neusta\Pimcore\ImportExportBundle\Populator\ImportTagsPopulator
+    public: true
+
+  Neusta\Pimcore\ImportExportBundle\Import\EventSubscriber\ImportTagsEventSubscriber: ~
+
   Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\AssetRepository:
     public: true
     tags:
