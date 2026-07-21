@@ -10,6 +10,8 @@ services:
   Neusta\Pimcore\ImportExportBundle\Toolbox\:
     resource: '../../../src/Toolbox'
 
+  Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\TagRepository: ~
+
   Neusta\Pimcore\ImportExportBundle\Tests\Integration\Documents\ImportExportYamlDriver: ~
 
   ############
