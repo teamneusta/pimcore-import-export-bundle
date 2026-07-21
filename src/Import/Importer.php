@@ -60,9 +60,9 @@ class Importer
             $result = null;
             $typeKey = key($element);
 
-            $repository = $this->repositoryLocator->get($typeKey);
-            $converter = $this->converterLocator->get($typeKey);
-            $mergeStrategy = $this->mergeStrategyLocator->get($typeKey);
+            $repository = $this->getServiceFromLocator($this->repositoryLocator, $typeKey);
+            $converter = $this->getServiceFromLocator($this->converterLocator, $typeKey);
+            $mergeStrategy = $this->getServiceFromLocator($this->mergeStrategyLocator, $typeKey);
 
             if (
                 $repository instanceof ImportRepositoryInterface
@@ -125,5 +125,20 @@ class Importer
     private function bothHaveSameId(AbstractElement $oldElement, AbstractElement $result): bool
     {
         return $oldElement->getId() === $result->getId();
+    }    private function getServiceFromLocator(ServiceLocator $locator, string $typeKey): object
+    {
+        if ($locator->has($typeKey)) {
+            return $locator->get($typeKey);
+        }
+
+        // Backwards-compatible fallback: many test kernels register DataObject
+        // converters/repositories under Pimcore\Model\Concrete only.
+        if ('Pimcore\\Model\\DataObject' === $typeKey && $locator->has('Pimcore\\Model\\Concrete')) {
+            return $locator->get('Pimcore\\Model\\Concrete');
+        }
+
+        // Let the original ServiceLocator produce the error (same behaviour as before)
+        return $locator->get($typeKey);
     }
 }
+
