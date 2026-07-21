@@ -125,7 +125,9 @@ class Importer
     private function bothHaveSameId(AbstractElement $oldElement, AbstractElement $result): bool
     {
         return $oldElement->getId() === $result->getId();
-    }    private function getServiceFromLocator(ServiceLocator $locator, string $typeKey): object
+    }
+
+    private function getServiceFromLocator(ServiceLocator $locator, string $typeKey): object
     {
         if ($locator->has($typeKey)) {
             return $locator->get($typeKey);
