@@ -34,12 +34,11 @@ class AssignedTagsPopulator implements Populator
             return;
         }
 
-        $cType = '';
-        match (true) {
-            $source instanceof Asset => $cType = TagRepository::CTYPE_ASSET,
-            $source instanceof Document => $cType = TagRepository::CTYPE_DOCUMENT,
-            $source instanceof AbstractObject => $cType = TagRepository::CTYPE_DATAOBJECT,
-            default => $cType = 'unknown',
+        $cType = match (true) {
+            $source instanceof Asset => TagRepository::CTYPE_ASSET,
+            $source instanceof Document => TagRepository::CTYPE_DOCUMENT,
+            $source instanceof AbstractObject => TagRepository::CTYPE_DATAOBJECT,
+            default => 'unknown',
         };
 
         if ('unknown' !== $cType) {
