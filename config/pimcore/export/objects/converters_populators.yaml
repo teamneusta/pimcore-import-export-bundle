@@ -10,6 +10,7 @@ neusta_converter:
       target: Neusta\Pimcore\ImportExportBundle\Model\Object\Folder
       populators:
         - Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator
+        - neusta_pimcore_import_export.assigned_tags.populator
       properties:
         key: ~
         type: ~
@@ -21,6 +22,7 @@ neusta_converter:
         - Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator
         - neusta_pimcore_import_export.export_object.fields.populator
         - neusta_pimcore_import_export.export_object.relations.populator
+        - neusta_pimcore_import_export.assigned_tags.populator
       properties:
         className: ~
         key: ~

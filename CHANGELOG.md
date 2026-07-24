@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+### Add
+ - Export and import assigned tags for assets, documents, folders, and data objects.
+
 ## 4.0.0
 
 - update: add Pimcore 12 support and drop support for Pimcore <11.5

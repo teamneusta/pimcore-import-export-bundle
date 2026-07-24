@@ -14,6 +14,7 @@ neusta_converter:
         - neusta_pimcore_import_export.assets.import.populator.type
         - neusta_pimcore_import_export.assets.import.populator.path
         - neusta_pimcore_import_export.assets.import.populator.parentId
+        - neusta_pimcore_import_export.import.tags.populator
 
 services:
   _defaults:
