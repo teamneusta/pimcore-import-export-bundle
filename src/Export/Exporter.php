@@ -5,6 +5,7 @@ namespace Neusta\Pimcore\ImportExportBundle\Export;
 use Neusta\ConverterBundle\Converter;
 use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Exception\ConverterException;
+use Neusta\Pimcore\ImportExportBundle\Converter\Context\ImportExportContext;
 use Neusta\Pimcore\ImportExportBundle\Import\Event\ImportEvent;
 use Neusta\Pimcore\ImportExportBundle\Import\Event\ImportStatus;
 use Neusta\Pimcore\ImportExportBundle\Model\Element;
@@ -31,18 +32,12 @@ class Exporter
     /**
      * Exports one or more Pimcore Elements in the given format (yaml, json, ...)).
      *
-     * @param iterable<TSource>    $elements
-     * @param array<string, mixed> $ctxParams
+     * @param iterable<TSource> $elements
      *
      * @throws ConverterException
      */
-    public function export(iterable $elements, string $format, array $ctxParams = []): string
+    public function export(iterable $elements, string $format, ImportExportContext $ctx): string
     {
-        $ctx = new GenericContext();
-        foreach ($ctxParams as $key => $value) {
-            $ctx->setValue($key, $value);
-        }
-
         $yamlExportElements = [];
         foreach ($elements as $element) {
             foreach (array_keys($this->typeToConverterMap) as $type) {

@@ -2,6 +2,7 @@
 
 namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
+use Neusta\Pimcore\ImportExportBundle\Converter\Context\ImportExportContext;
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
 use Neusta\Pimcore\ImportExportBundle\Model\Object\DataObject;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DataObjectRepository;
@@ -80,9 +81,9 @@ final class ExportDataObjectsController
             $yaml = $this->exporter->export(
                 $objects,
                 $format,
-                [
+                new ImportExportContext([
                     'includeIds' => $includeIds,
-                ],
+                ]),
             );
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);

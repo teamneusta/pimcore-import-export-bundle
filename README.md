@@ -71,6 +71,8 @@ Fur usage, run the commands with the `--help` option to see all available option
   - Both files share the same base name (e.g., `assets.yaml` and `assets.zip`).
 - `neusta:pimcore:export:objects`
   - Exports Pimcore DataObjects into a YAML file. The objects can be filtered by ID or exported in full.
+  - Object relations are exported as ID references only to avoid circular references during serialization.
+  - `Localizedfield` values are exported as plain locale arrays and re-imported accordingly.
 - `neusta:pimcore:import:documents`
   - Imports Pimcore documents (e.g., pages, snippets) from a YAML file.
 - `neusta:pimcore:import:assets`

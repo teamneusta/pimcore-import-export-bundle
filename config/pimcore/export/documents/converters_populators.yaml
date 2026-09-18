@@ -11,6 +11,7 @@ neusta_converter:
       populators:
         - Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator
         - neusta_pimcore_import_export.document.properties.populator
+        - neusta_pimcore_import_export.assigned_tags.populator
       properties:
         key: ~
         type: ~
@@ -22,6 +23,7 @@ neusta_converter:
       populators:
         - Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator
         - neusta_pimcore_import_export.document.properties.populator
+        - neusta_pimcore_import_export.assigned_tags.populator
       properties:
         key: ~
         type: ~
@@ -35,6 +37,7 @@ neusta_converter:
         - neusta_pimcore_import_export.snippet.controller.populator
         - neusta_pimcore_import_export.snippet.editables.populator
         - neusta_pimcore_import_export.document.properties.populator
+        - neusta_pimcore_import_export.assigned_tags.populator
       properties:
         key: ~
         type: ~
@@ -49,6 +52,7 @@ neusta_converter:
         - neusta_pimcore_import_export.snippet.editables.populator
         - neusta_pimcore_import_export.page.title.populator
         - neusta_pimcore_import_export.document.properties.populator
+        - neusta_pimcore_import_export.assigned_tags.populator
       properties:
         key: ~
         type: ~

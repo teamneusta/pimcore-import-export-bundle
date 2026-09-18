@@ -10,6 +10,7 @@ neusta_converter:
       target: Neusta\Pimcore\ImportExportBundle\Model\Asset\Asset
       populators:
         - Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator
+        - neusta_pimcore_import_export.assigned_tags.populator
       properties:
         key: ~
         type: ~

@@ -2,6 +2,8 @@
 
 namespace Neusta\Pimcore\ImportExportBundle\Model;
 
+use Neusta\Pimcore\ImportExportBundle\Model\Tag\Tag;
+
 class Element
 {
     public const ELEMENTS = 'elements';
@@ -11,4 +13,6 @@ class Element
     public string $type = 'element';
     public string $path = '';
     public string $key = '';
+    /** @var array<Tag> */
+    public array $tags; // important not to set default value here to avoid exporting empty arrays automatically
 }
