@@ -2,6 +2,7 @@
 
 namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
+use Neusta\Pimcore\ImportExportBundle\Converter\Context\ImportExportContext;
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
 use Neusta\Pimcore\ImportExportBundle\Export\Service\ZipService;
 use Neusta\Pimcore\ImportExportBundle\Model\Asset\Asset;
@@ -84,7 +85,7 @@ final class ExportAssetsController
             $yaml = $this->exporter->export(
                 $assets,
                 $format,
-                ['includeIds' => $includeIds],
+                new ImportExportContext(['includeIds' => $includeIds]),
             );
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);

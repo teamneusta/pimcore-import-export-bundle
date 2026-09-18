@@ -2,6 +2,7 @@
 
 namespace Neusta\Pimcore\ImportExportBundle\Controller\Admin;
 
+use Neusta\Pimcore\ImportExportBundle\Converter\Context\ImportExportContext;
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
 use Neusta\Pimcore\ImportExportBundle\Model\Document\Document;
 use Neusta\Pimcore\ImportExportBundle\Toolbox\Repository\DocumentRepository;
@@ -80,9 +81,9 @@ final class ExportDocumentsController
             $yaml = $this->exporter->export(
                 $documents,
                 $format,
-                [
+                new ImportExportContext([
                     'includeIds' => $includeIds,
-                ]
+                ]),
             );
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);

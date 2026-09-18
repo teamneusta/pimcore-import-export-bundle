@@ -15,6 +15,7 @@ neusta_converter:
         - neusta_pimcore_import_export.documents.import.populator.published
         - neusta_pimcore_import_export.documents.import.populator.path
         - neusta_pimcore_import_export.documents.import.populator.parentId
+        - neusta_pimcore_import_export.import.tags.populator
 
     neusta_pimcore_import_export.import_page:
       target: Pimcore\Model\Document\Page
@@ -30,6 +31,7 @@ neusta_converter:
         - Neusta\Pimcore\ImportExportBundle\Populator\Document\EditablesPopulator
         - Neusta\Pimcore\ImportExportBundle\Populator\Document\PropertiesPopulator
         - Neusta\Pimcore\ImportExportBundle\Populator\Document\PageTitlePopulator
+        - neusta_pimcore_import_export.import.tags.populator
 
     neusta_pimcore_import_export.import_snippet:
       target: Pimcore\Model\Document\Snippet
@@ -43,6 +45,7 @@ neusta_converter:
         - neusta_pimcore_import_export.documents.import.populator.parentId
         - Neusta\Pimcore\ImportExportBundle\Populator\Document\EditablesPopulator
         - Neusta\Pimcore\ImportExportBundle\Populator\Document\PropertiesPopulator
+        - neusta_pimcore_import_export.import.tags.populator
 
 services:
   _defaults:

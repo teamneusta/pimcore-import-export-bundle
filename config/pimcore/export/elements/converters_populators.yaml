@@ -4,7 +4,7 @@
 neusta_converter:
   converter:
     ###########################################################
-    # Export Converter (Pimcore Asset -> Folder)
+    # Export Converter (Basic Elements)
     ###########################################################
     neusta_pimcore_import_export.export_element:
       target: Neusta\Pimcore\ImportExportBundle\Model\Element
@@ -15,9 +15,28 @@ neusta_converter:
         type: ~
         path: ~
 
+    ###########################################################
+    # Export Converter (\Pimcore\Model\Element\Tag -> Neusta\Pimcore\ImportExportBundle\Model\Tag\Tag)
+    ###########################################################
+    neusta_pimcore_import_export.export_tag:
+      target: Neusta\Pimcore\ImportExportBundle\Model\Tag\Tag
+      populators:
+        - neusta_pimcore_import_export.tag.populator
+      properties:
+        key: name
+
 services:
   _defaults:
     autowire: true
     autoconfigure: true
 
   Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator: ~
+
+  neusta_pimcore_import_export.tag.populator:
+    class:
+      Neusta\Pimcore\ImportExportBundle\Populator\Tag\TagPopulator
+
+  neusta_pimcore_import_export.assigned_tags.populator:
+    class: Neusta\Pimcore\ImportExportBundle\Populator\AssignedTagsPopulator
+    arguments:
+      $tagConverter: '@neusta_pimcore_import_export.export_tag'

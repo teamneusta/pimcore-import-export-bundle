@@ -3,6 +3,7 @@
 namespace Neusta\Pimcore\ImportExportBundle\Command;
 
 use Neusta\Pimcore\ImportExportBundle\Command\Base\AbstractExportBaseCommand;
+use Neusta\Pimcore\ImportExportBundle\Converter\Context\ImportExportContext;
 use Neusta\Pimcore\ImportExportBundle\Export\Exporter;
 use Neusta\Pimcore\ImportExportBundle\Export\Service\ZipService;
 use Neusta\Pimcore\ImportExportBundle\Model\Asset\Asset;
@@ -80,7 +81,7 @@ class ExportAssetsCommand extends AbstractExportBaseCommand
 
     protected function exportInFile(array $allElements, InputInterface $input): bool
     {
-        $yamlContent = $this->exporter->export($allElements, $input->getOption('format'), ['include-ids' => $input->getOption('include-ids')]);
+        $yamlContent = $this->exporter->export($allElements, $input->getOption('format'), new ImportExportContext(['includeIds' => $input->getOption('include-ids')]));
 
         $zipFilename = $input->getOption('output');
         try {

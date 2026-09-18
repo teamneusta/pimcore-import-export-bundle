@@ -8,7 +8,6 @@ services:
     arguments:
       $converters: !tagged_iterator {tag: 'neusta_pimcore_import_export.objects.import.converter', default_priority_method: 'getPriority'}
     tags:
-      - { name: 'neusta.import_export.converter', type: 'Pimcore\Model\Concrete' }
       - { name: 'neusta.import_export.converter', type: 'Pimcore\Model\DataObject' }
 
 
@@ -28,6 +27,7 @@ services:
         - '@neusta_pimcore_import_export.dataobject.import.populator.parentId'
         - '@Neusta\Pimcore\ImportExportBundle\Populator\DataObjectImportRelationsPopulator'
         - '@Neusta\Pimcore\ImportExportBundle\Populator\DataObjectImportFieldsPopulator'
+        - '@neusta_pimcore_import_export.import.tags.populator'
 
   neusta_pimcore_import_export.import_object.supports_aware:
     class: Neusta\Pimcore\ImportExportBundle\Converter\SupportsAwareGenericConverter
