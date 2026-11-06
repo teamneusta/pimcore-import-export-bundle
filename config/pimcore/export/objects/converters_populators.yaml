@@ -19,18 +19,19 @@ neusta_converter:
         published: ~
         path: ~
 
+    # Used for related data objects: relations are not exported recursively,
+    # but IDs are only exported if "includeIds" is set (see IdsPopulator).
     neusta_pimcore_import_export.export_object.without.relations:
       target: Neusta\Pimcore\ImportExportBundle\Model\Object\DataObject
       populators:
+        - Neusta\Pimcore\ImportExportBundle\Populator\IdsPopulator
         - neusta_pimcore_import_export.export_object.fields.populator
       properties:
         className: ~
-        id: ~
         key: ~
         type: ~
         published: ~
         path: ~
-        parentId: ~
 
 services:
   _defaults:

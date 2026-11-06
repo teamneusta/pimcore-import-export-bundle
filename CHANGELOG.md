@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+- feature: Relations are exported and imported consistently for all element types
+  - With IDs a relation is referenced by the ID of the related element, without IDs by its type, path and key
+  - Data object relation fields, document properties and `relation`/`relations` editables are supported
+  - Relation collections (incl. advanced relations with metadata columns) are supported
+  - Import resolves relations by ID if one is given, otherwise by path and key
+- bugfix: Import of data objects was not wired up (missing converter/repository/merge strategy registrations)
+- bugfix: `ContextBaseTargetFactory` rejected the class name of the data object class
+- bugfix: Export of relation fields no longer loses the exported relation
+- bugfix: Export of assets without a concrete asset subtype no longer fails
+
 ## 3.0.0
 
 - BC-break: bugfix: Import of exported Page Snippet documents by changing type to `Pimcore\Model\Document\Snippet`

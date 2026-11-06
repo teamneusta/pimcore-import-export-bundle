@@ -35,6 +35,8 @@ services:
         Pimcore\Model\Asset\Video: '@neusta_pimcore_import_export.export_asset_video'
         Pimcore\Model\Asset\Folder: '@neusta_pimcore_import_export.export_asset_folder'
         Pimcore\Model\Asset\Unknown: '@neusta_pimcore_import_export.export_asset_unknown'
+        # fallback for assets which are not one of the concrete subtypes
+        Pimcore\Model\Asset: '@neusta_pimcore_import_export.export_asset_unknown'
 
   neusta_pimcore_import_export.export_asset_archive:
     class: Neusta\Pimcore\ImportExportBundle\Converter\ExtendedConverter

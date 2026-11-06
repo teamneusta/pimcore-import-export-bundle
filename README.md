@@ -141,6 +141,43 @@ adopted, regardless of whether it makes sense or not, and without checking wheth
 If multiple pages are imported and a path specification changes by the applied rules, this path specification will be
 replaced with the new, correct path specification in all provided page configurations.
 
+### Relations
+
+Relations between elements (data object relation fields, document properties and `relation`/`relations`
+editables) are exported and imported in one of two ways, depending on whether IDs are exported:
+
+**With IDs** (`--include-ids` / `include_ids`):
+
+A relation only references the ID of the related element. The importer resolves the relation by this ID.
+This is the variant to use if you want to reproduce exactly the same system (or parts of it).
+
+**Without IDs** (default):
+
+A relation references the related element by its type, path and key (its "business key"):
+
+```yaml
+relations:
+    relatedAsset:
+        Pimcore\Model\Asset:
+            type: unknown
+            path: /
+            key: logo.svg
+    relatedDocuments:
+        - Pimcore\Model\Document:
+            type: page
+            path: /
+            key: my-page
+```
+
+The importer resolves the relation by path and key, so the data can be imported into a system with different
+IDs. This is the variant to use if you only want to back up the maintained data (e.g. for a test environment).
+
+A single relation is exported as one reference, a relation collection as a list of references. Advanced
+relation fields additionally contain the `metadata` columns of the relation entry.
+
+Assets themselves have no relations. Relations pointing to assets are handled on the referencing side
+(data object relation field, document property or document editable).
+
 ### Parameterize your yaml files
 
 You can parameterize your yaml files with placeholders. The placeholders will be replaced by the values you provide in your fixtures.

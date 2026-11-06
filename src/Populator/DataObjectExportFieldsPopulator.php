@@ -6,11 +6,16 @@ use Neusta\ConverterBundle\Converter\Context\GenericContext;
 use Neusta\ConverterBundle\Populator;
 use Neusta\Pimcore\ImportExportBundle\Model\Object\DataObject;
 use Pimcore\Model\DataObject as PimcoreDataObject;
-use Pimcore\Model\Element\AbstractElement;
+use Pimcore\Model\DataObject\ClassDefinition\Data\Relations\AbstractRelations;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
+ * Exports all non-relation fields of a data object.
+ *
+ * Relation fields are handled by {@see DataObjectExportRelationsPopulator}, because
+ * related elements must not be serialized as plain field values.
+ *
  * @implements Populator<PimcoreDataObject, DataObject, GenericContext|null>
  */
 class DataObjectExportFieldsPopulator implements Populator
@@ -35,10 +40,11 @@ class DataObjectExportFieldsPopulator implements Populator
         }
 
         foreach ($source->getClass()->getFieldDefinitions() as $fieldName => $definition) {
-            $value = $this->propertyAccessor->getValue($source, $fieldName);
-            if (!$value instanceof AbstractElement) {
-                $target->fields[$fieldName] = $value;
+            if ($definition instanceof AbstractRelations) {
+                continue;
             }
+
+            $target->fields[$fieldName] = $this->propertyAccessor->getValue($source, $fieldName);
         }
     }
 }
